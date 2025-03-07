@@ -1,101 +1,105 @@
+"use client";
+
+import { ApplyNow } from "@/components/buttons/ApplyNow";
+import { QuickLinks } from "@/components/QuickLinks";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className='min-h-screen'>
+      {/* Hero Section */}
+      <section className='relative w-full min-h-[500px] lg:h-[calc(100vh-8rem)] flex items-center justify-center overflow-hidden'>
+        {/* Background Image with Gradient Overlay */}
+        <div className='absolute inset-0 z-0'>
+          <Image
+            src='/hero-bg.jpg' // Replace with your actual hero image
+            alt='GO University Campus'
+            fill
+            priority
+            className='object-cover object-center'
+            quality={100}
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
+          />
+          <div className='absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80 dark:from-black/90 dark:to-secondary/80' />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Hero Content */}
+        <div className='relative w-full z-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row-reverse items-center justify-between gap-4 md:gap-0 py-7'>
+          {/* Student Image Container */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className='relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full md:w-[40%]'>
+            <Image
+              src='/student.png'
+              alt='Postgraduate student'
+              fill
+              priority
+              quality={90}
+              className='object-contain object-center'
+              sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 500px'
+            />
+          </motion.div>
+
+          {/* Text Container */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className='md:w-[60%] text-center md:text-left lg:pl-6 xl:pl-12'>
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className='text-5xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
+              Elevate Your Academic Journey at
+              <span className='block text-[#FEDA37]'>
+                GO Postgraduate School
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className='sm:text-lg md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
+              Join a community of scholars pushing boundaries in research and
+              innovation
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className='flex gap-3 sm:gap-4 justify-center md:justify-start'>
+              <ApplyNow />
+
+              <Button
+                size='lg'
+                className='text-sm xs:text-base sm:text-lg p-4 sm:p-5 md:p-6 bg-white text-gray-900'
+                asChild>
+                <Link href='/programs'>Explore Programs</Link>
+              </Button>
+              {/* <Button
+                variant='ghost'
+                size='lg'
+                className='text-sm xs:text-base sm:text-lg p-4 sm:p-5 md:p-6 border border-gray-800 dark:border-gray-400 text-white'
+                asChild>
+                <Link href='/programs'>Explore Programs</Link>
+              </Button> */}
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Quick Links Section */}
+      <section className='py-16 bg-muted'>
+        <QuickLinks />
+      </section>
     </div>
   );
 }
