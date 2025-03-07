@@ -15,7 +15,7 @@ export default function HomePage() {
         {/* Background Image with Gradient Overlay */}
         <div className='absolute inset-0 z-0'>
           <Image
-            src='/hero-bg.jpg' // Replace with your actual hero image
+            src='/hero-bg.avif' // Replace with your actual hero image
             alt='GO University Campus'
             fill
             priority
@@ -35,7 +35,7 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className='relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full md:w-[40%]'>
             <Image
-              src='/student.png'
+              src='/student.avif'
               alt='Postgraduate student'
               fill
               priority
