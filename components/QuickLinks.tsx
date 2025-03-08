@@ -62,7 +62,7 @@ export function QuickLinks() {
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 150 }}
-                    className='mb-4 inline-block p-3 text-[#FEDA37] bg-[#FEDA37]/20 rounded-lg w-fit'>
+                    className='mb-4 inline-block p-3 text-[#FEDA37] bg-gray-100 dark:bg-[#FEDA37]/20 rounded-lg w-fit'>
                     {item.icon}
                   </motion.div>
 

@@ -2,11 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-
+@layer utilities {
+  .step-complete {
+    @apply bg-primary text-white;
+  }
+  
+  .step-current {
+    @apply border-2 border-primary bg-background text-primary;
+  }
+  
+  .step-upcoming {
+    @apply bg-muted text-muted-foreground;
+  }
+}
 
 @layer base {
   :root {
-
     --background: 0 0% 100%;
 
     --foreground: 222.2 84% 4.9%;
@@ -55,10 +66,9 @@
 
     --chart-5: 27 87% 67%;
 
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
-
     --background: 222.2 84% 4.9%;
 
     --foreground: 210 40% 98%;
@@ -105,23 +115,33 @@
 
     --chart-4: 280 65% 60%;
 
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 
 @-webkit-keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .animate-blink {
   -webkit-animation: blink 1s step-end infinite;
-          animation: blink 1s step-end infinite;
+  animation: blink 1s step-end infinite;
 }
 
 .typewriter {
@@ -129,34 +149,48 @@
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  -webkit-animation: 
-    typing 3.5s steps(40, end),
+  -webkit-animation: typing 3.5s steps(40, end),
     blink-caret 0.75s step-end infinite;
-          animation: 
-    typing 3.5s steps(40, end),
-    blink-caret 0.75s step-end infinite;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
 @-webkit-keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 @-webkit-keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: white; }
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
 }
 
 @keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: white; }
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
 }
-
 
 @layer base {
   * {

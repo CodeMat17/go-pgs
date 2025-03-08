@@ -2,7 +2,7 @@ import React from 'react'
 
 const ContactPage = () => {
   return (
-    <div>ContactPage</div>
+    <div className='w-full min-h-screen px-4 py-12'>ContactPage</div>
   )
 }
 

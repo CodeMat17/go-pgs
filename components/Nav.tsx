@@ -55,50 +55,51 @@ export function Nav() {
             GO Postgrad
           </span>
         </Link>
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
 
-          {/* Desktop Navigation */}
-          <div className='hidden lg:flex items-center gap-6'>
-            {navLinks.map((link) => (
-              <div key={link.name} className='relative group'>
-                {link.subLinks ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className='flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary focus:outline-none'>
-                      {link.name}
-                      <span className='h-4 w-4 ml-1 transform group-hover:rotate-180 transition-transform'>
-                        ▼
-                      </span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align='start'
-                      className='min-w-[200px] rounded-lg shadow-lg'>
-                      {link.subLinks.map((subLink) => (
-                        <DropdownMenuItem key={subLink.name} asChild>
-                          <Link
-                            href={subLink.href}
-                            className='px-4 py-2 hover:bg-accent rounded-md transition-colors'>
-                            {subLink.name}
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Link
-                    href={link.href}
-                    className='text-sm font-medium transition-colors hover:text-primary'>
+        {/* Desktop Navigation */}
+        <div className='hidden lg:flex items-center gap-6'>
+          {navLinks.map((link) => (
+            <div key={link.name} className='relative group'>
+              {link.subLinks ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger className='flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary focus:outline-none'>
                     {link.name}
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
+                    <span className='h-4 w-4 ml-1 transform group-hover:rotate-180 transition-transform'>
+                      ▼
+                    </span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align='start'
+                    className='min-w-[200px] rounded-lg shadow-lg'>
+                    {link.subLinks.map((subLink) => (
+                      <DropdownMenuItem key={subLink.name} asChild>
+                        <Link
+                          href={subLink.href}
+                          className='px-4 py-2 hover:bg-accent rounded-md transition-colors'>
+                          {subLink.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  href={link.href}
+                  className='text-sm font-medium transition-colors hover:text-primary'>
+                  {link.name}
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className='flex items-center gap-4'>
+          <ThemeToggle />
 
           {/* Apply Button - Desktop */}
           <div className='hidden lg:flex items-center gap-4'>
             <Button asChild variant='secondary'>
-              <Link href='/apply'>Apply Now</Link>
+              <Link href='/admissions/apply'>Apply Now</Link>
             </Button>
           </div>
 
@@ -143,7 +144,9 @@ export function Nav() {
                   </div>
                 ))}
                 <Button className='mt-4 mx-4' asChild>
-                  <Link href='/apply' onClick={() => setIsOpen(false)}>
+                  <Link
+                    href='/admissions/apply'
+                    onClick={() => setIsOpen(false)}>
                     Apply Now
                   </Link>
                 </Button>
