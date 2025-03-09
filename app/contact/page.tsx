@@ -1,13 +1,14 @@
 // app/contact/page.tsx
 "use client";
-import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
-import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import UniversityMap from "@/components/UniversityMap";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { Clock, Mail, MapPin, Phone, Send } from "lucide-react";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 // Define validation schema
@@ -202,24 +203,11 @@ export default function ContactPage() {
           </motion.div>
         </div>
 
+
+        <UniversityMap />
+
         {/* Map Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className='mt-12'>
-          <Card className='overflow-hidden'>
-            <iframe
-              src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.753060515625!2d7.489272315356622!3d6.441545295348322!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1044a3d61a9c4d9f%3A0x6719e67b8d4a4b0f!2sGodfrey%20Okoye%20University!5e0!3m2!1sen!2sng!4v1717688424167!5m2!1sen!2sng'
-              width='100%'
-              height='450'
-              className='border-0'
-              allowFullScreen
-              loading='lazy'
-              title='Godfrey Okoye University, Thinkers Corner Campus'
-            />
-          </Card>
-        </motion.div>
+      
       </motion.div>
     </div>
   );
