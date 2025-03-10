@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { AlignRightIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { BorderBeam } from "./magicui/border-beam";
 import ThemeToggle from "./theme/theme-toggle";
 
 export function Nav() {
@@ -98,8 +99,22 @@ export function Nav() {
 
           {/* Apply Button - Desktop */}
           <div className='hidden lg:flex items-center gap-4'>
-            <Button asChild variant='secondary'>
-              <Link href='/admissions/apply'>Apply Now</Link>
+            <Button asChild variant='secondary' className='relative'>
+              <Link href='/admissions/apply'>
+                <>
+                  Apply Now
+                  <BorderBeam
+                    size={40}
+                    initialOffset={20}
+                    className='from-red-500 via-yellow-500 to-red-500'
+                    transition={{
+                      type: "spring",
+                      stiffness: 60,
+                      damping: 20,
+                    }}
+                  />
+                </>
+              </Link>
             </Button>
           </div>
 

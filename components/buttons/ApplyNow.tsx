@@ -9,7 +9,7 @@ export function ApplyNow() {
       className='relative overflow-hidden text-sm xs:text-base sm:text-lg p-5 sm:p-5 md:p-6 text-white bg-gray-950 border-gray-950'
       size='lg'
       variant='outline'>
-      <Link href='apply'>
+      <Link href='/admissions/apply'>
         <>
           Apply Now
           <BorderBeam
