@@ -1,6 +1,7 @@
 "use client";
 
 import { ApplyNow } from "@/components/buttons/ApplyNow";
+import DescriptionAnimation from "@/components/DescriptionAnimation";
 import { QuickLinks } from "@/components/QuickLinks";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -8,6 +9,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
+
+
+
+
   return (
     <div className='min-h-screen'>
       {/* Hero Section */}
@@ -62,14 +67,16 @@ export default function HomePage() {
               </span>
             </motion.h1>
 
-            <motion.p
+            {/* <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               className='sm:text-lg md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
               Join a community of scholars pushing boundaries in research and
               innovation
-            </motion.p>
+            </motion.p> */}
+
+          <DescriptionAnimation />
 
             <motion.div
               initial={{ opacity: 0 }}

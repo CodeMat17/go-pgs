@@ -40,6 +40,7 @@ export function Nav() {
       ],
     },
     { name: "Research", href: "/research" },
+    { name: "Alumni", href: "/alumni" },
     { name: "Contact", href: "/contact" },
   ];
 
