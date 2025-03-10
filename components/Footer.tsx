@@ -138,7 +138,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className='border-t py-6'>
         <div className='container px-4 sm:px-6 lg:px-8 text-center md:text-left'>
-          <p className='text-sm text-muted-foreground'>
+          <p className='text-sm text-gray-400'>
             © {new Date().getFullYear()} Godfrey Okoye University Postgraduate
             School. All rights reserved.
           </p>
