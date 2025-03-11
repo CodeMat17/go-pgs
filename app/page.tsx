@@ -32,13 +32,13 @@ export default function HomePage() {
         </div>
 
         {/* Hero Content */}
-        <div className='relative w-full z-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row-reverse items-center justify-between gap-4 md:gap-0 py-7'>
+        <div className='relative w-full z-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row-reverse items-center justify-between gap-2 md:gap-0 pb-7 sm:pt-7'>
           {/* Student Image Container */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className='relative ml-5 sm:ml-0 h-[350px] md:h-[400px] lg:h-[500px] w-full md:w-[40%]'>
+            className='relative ml-5 sm:ml-0 h-[320px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full md:w-[50%]'>
             <Image
               src='/student.avif'
               alt='Postgraduate student'
@@ -60,7 +60,7 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className='text-5xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
+              className='text-4xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
               Elevate Your Academic Journey at
               <span className='block text-[#FEDA37]'>
                 GO Postgraduate School
