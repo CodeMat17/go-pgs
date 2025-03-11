@@ -1,11 +1,10 @@
-// app/admissions/apply/page.tsx
 "use client";
 import { Stepper } from "@/components/ui/stepper";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-
+import { Download } from "lucide-react";
 
 interface FormData {
   programId: string;
@@ -19,12 +18,11 @@ interface FormData {
 
 export default function ApplyPage() {
   const [currentStep, setCurrentStep] = useState(0);
- const {
-   register,
-   handleSubmit,
-   formState: { errors },
- } = useForm<FormData>();
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const steps = [
     { title: "Program Selection" },
@@ -40,12 +38,23 @@ export default function ApplyPage() {
 
   return (
     <div className='w-full min-h-screen max-w-5xl mx-auto px-4 py-12'>
-      <h2 className='text-center mb-6 text-4xl'>Apply Now</h2>
+      <div className='flex flex-col md:flex-row justify-between items-center mb-6 gap-4'>
+        <h2 className='text-4xl text-center md:text-left'>Apply Now</h2>
+        <Button asChild variant='outline' className='gap-2'>
+          <a
+            href='/forms/application-form.pdf' // Update this path to your actual PDF
+            download='GO-University-PGS-Application-Form.pdf'>
+            <Download className='w-4 h-4' />
+            Download Application Form
+          </a>
+        </Button>
+      </div>
 
       <Card className='p-6'>
         <Stepper currentStep={currentStep} steps={steps} />
 
         <form onSubmit={handleSubmit(onSubmit)} className='mt-8 space-y-6'>
+          {/* Existing form steps */}
           {currentStep === 0 && (
             <div className='space-y-4'>
               <h2 className='text-2xl font-semibold'>Select Your Program</h2>
