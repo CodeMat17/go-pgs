@@ -38,7 +38,7 @@ export default function HomePage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className='relative h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full md:w-[40%]'>
+            className='relative ml-5 sm:ml-0 h-[350px] md:h-[400px] lg:h-[500px] w-full md:w-[40%]'>
             <Image
               src='/student.avif'
               alt='Postgraduate student'
