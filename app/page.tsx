@@ -87,7 +87,7 @@ export default function HomePage() {
 
               <Button
                 size='lg'
-                className='text-sm xs:text-base sm:text-lg p-4 sm:p-5 md:p-6 bg-white text-gray-900'
+                className='text-sm xs:text-base sm:text-lg p-4 sm:p-5 md:p-6 bg-white hover:bg-gray-300 hover:text-gray-700 text-gray-900'
                 asChild>
                 <Link href='/programs'>Explore Programs</Link>
               </Button>
