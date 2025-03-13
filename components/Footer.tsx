@@ -20,7 +20,7 @@ import {Logo} from '@/components/Logo'
 export default function Footer() {
   return (
     <footer className='bg-gray-900 text-white border-t'>
-      <div className='w-full border px-4 sm:px-6 lg:px-8 py-12'>
+      <div className='w-full px-4 sm:px-6 lg:px-8 py-12'>
         <Logo text='' width={70} height={70} />
 
         <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-5'>
@@ -30,7 +30,10 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className='col-span-2 md:col-span-1'>
-            <h3 className='text-xl font-medium mb-4'>Godfrey Okoye University <span className='block'>Postgraduate School</span></h3>
+            <h3 className='text-xl font-medium mb-4'>
+              Godfrey Okoye University{" "}
+              <span className='block'>Postgraduate School</span>
+            </h3>
             <div className='space-y-2 mt-2'>
               <div className='flex items-center gap-2'>
                 <MapPin className='w-4 h-4 shrink-0' />
@@ -67,7 +70,7 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className='text-sm hover:text-primary transition-colors'>
+                    className='text-sm hover:text-[#FEDA37]'>
                     {link.name}
                   </Link>
                 </li>
@@ -91,7 +94,7 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className='text-sm hover:text-primary transition-colors'>
+                    className='text-sm hover:text-[#FEDA37]'>
                     {link.name}
                   </Link>
                 </li>
@@ -116,7 +119,7 @@ export default function Footer() {
                 <Link
                   key={index}
                   href={social.href}
-                  className='p-2 hover:bg-accent rounded-full transition-colors'
+                  className=' rounded-full overflow-hidden p-2 hover:bg-[#FEDA37]/10 hover:text-[#FEDA37] transition-all duration-300 ease-in'
                   aria-label={`Follow us on ${social.icon.name}`}>
                   <social.icon className='w-5 h-5' />
                 </Link>
@@ -141,7 +144,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className='border-t py-6'>
+      <div className='border-t border-gray-700 py-6'>
         <div className='container px-4 sm:px-6 lg:px-8 text-center md:text-left'>
           <p className='text-sm text-gray-400'>
             © {new Date().getFullYear()} Godfrey Okoye University Postgraduate
