@@ -1,6 +1,7 @@
 // components/Nav.tsx
 "use client";
 
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -52,11 +53,7 @@ export function Nav() {
       className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className=' flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8'>
         {/* Logo */}
-        <Link href='/' className='flex items-center gap-2'>
-          <span className='text-xl font-bold tracking-tight text-primary'>
-            GO Postgrad
-          </span>
-        </Link>
+        <Logo text='PGS' width={50} height={50} />
 
         {/* Desktop Navigation */}
         <div className='hidden lg:flex items-center gap-6'>
