@@ -3,7 +3,8 @@ import Image from 'next/image'
 
 export function Logo({text, width, height}: {text: string, width: number, height: number}) {
     return (
-      <Link href='/' className='flex items-center gap-2'>
+      
+            <Link href='/' className='flex items-center gap-2 w-fit'>
         <>
           <Image
             alt='logo'
@@ -16,6 +17,8 @@ export function Logo({text, width, height}: {text: string, width: number, height
           {text}
           </span>
         </>
-      </Link>
+      </Link>  
+    
+    
     );
 }
