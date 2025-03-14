@@ -1,4 +1,3 @@
-// components/Nav.tsx
 "use client";
 
 import { Logo } from "@/components/Logo";
@@ -13,41 +12,35 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion } from "framer-motion";
 import { AlignRightIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BorderBeam } from "./magicui/border-beam";
 import ThemeToggle from "./theme/theme-toggle";
 
 export function Nav() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname(); // Get the current route
 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about-us" },
-
     {
       name: "Admissions",
       href: "/admissions",
       subLinks: [
         { name: "Requirements", href: "/admissions/requirements" },
-        // { name: "How to Apply", href: "/admissions/apply" },
         { name: "Deadlines", href: "/admissions/deadlines" },
       ],
     },
     { name: "Programs", href: "/programs" },
-    // {
-    //   name: "Programs",
-    //   href: "/programs",
-    //   subLinks: [
-    //     { name: "Master's Degrees", href: "/programs/masters" },
-    //     { name: "PhD Programs", href: "/programs/phd" },
-    //     { name: "Certificates", href: "/programs/certificates" },
-    //   ],
-    // },
     { name: "Research", href: "/research" },
     { name: "Alumni", href: "/alumni" },
     { name: "Staff", href: "/staff" },
     { name: "Contact", href: "/contact" },
   ];
+
+  // Check if a link is active
+  const isActive = (href: string) => pathname === href;
 
   return (
     <motion.nav
@@ -55,7 +48,7 @@ export function Nav() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-      <div className=' flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8'>
+      <div className='flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8'>
         {/* Logo */}
         <Logo text='PGS' width={50} height={50} />
 
@@ -65,7 +58,12 @@ export function Nav() {
             <div key={link.name} className='relative group'>
               {link.subLinks ? (
                 <DropdownMenu>
-                  <DropdownMenuTrigger className='flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary focus:outline-none'>
+                  <DropdownMenuTrigger
+                    className={`flex items-center gap-1 text-sm font-medium transition-colors ${
+                      isActive(link.href)
+                        ? "text-[#FEDA37] bg-primary/10 rounded-md px-3 py-1.5"
+                        : "hover:text-primary"
+                    }`}>
                     {link.name}
                     <span className='h-4 w-4 ml-1 transform group-hover:rotate-180 transition-transform'>
                       ▼
@@ -78,7 +76,11 @@ export function Nav() {
                       <DropdownMenuItem key={subLink.name} asChild>
                         <Link
                           href={subLink.href}
-                          className='px-4 py-2 hover:bg-accent rounded-md transition-colors'>
+                          className={`px-4 py-2 hover:bg-accent rounded-md transition-colors ${
+                            isActive(subLink.href)
+                              ? "text-[#FEDA37] bg-primary/10"
+                              : ""
+                          }`}>
                           {subLink.name}
                         </Link>
                       </DropdownMenuItem>
@@ -88,7 +90,11 @@ export function Nav() {
               ) : (
                 <Link
                   href={link.href}
-                  className='text-sm font-medium transition-colors hover:text-primary'>
+                  className={`text-sm font-medium transition-colors ${
+                    isActive(link.href)
+                      ? "dark:text-[#FEDA37] bg-amber-500/10 rounded-md px-3 py-1.5"
+                      : "hover:text-primary"
+                  }`}>
                   {link.name}
                 </Link>
               )}
@@ -142,7 +148,11 @@ export function Nav() {
                             <DropdownMenuItem key={subLink.name} asChild>
                               <Link
                                 href={subLink.href}
-                                className='block px-4 py-2 text-sm'
+                                className={`block px-4 py-2 text-sm ${
+                                  isActive(subLink.href)
+                                    ? "text-[#FEDA37] bg-primary/10"
+                                    : ""
+                                }`}
                                 onClick={() => setIsOpen(false)}>
                                 {subLink.name}
                               </Link>
@@ -153,7 +163,11 @@ export function Nav() {
                     ) : (
                       <Link
                         href={link.href}
-                        className='block px-4 py-2 font-medium'
+                        className={`block px-4 py-2 font-medium ${
+                          isActive(link.href)
+                            ? "text-[#FEDA37] bg-primary/10 rounded-md"
+                            : ""
+                        }`}
                         onClick={() => setIsOpen(false)}>
                         {link.name}
                       </Link>
