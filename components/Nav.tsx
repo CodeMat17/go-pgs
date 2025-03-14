@@ -22,26 +22,30 @@ export function Nav() {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "About Us", href: "/about-us" },
+
     {
       name: "Admissions",
       href: "/admissions",
       subLinks: [
         { name: "Requirements", href: "/admissions/requirements" },
-        { name: "How to Apply", href: "/admissions/apply" },
+        // { name: "How to Apply", href: "/admissions/apply" },
         { name: "Deadlines", href: "/admissions/deadlines" },
       ],
     },
-    {
-      name: "Programs",
-      href: "/programs",
-      subLinks: [
-        { name: "Master's Degrees", href: "/programs/masters" },
-        { name: "PhD Programs", href: "/programs/phd" },
-        { name: "Certificates", href: "/programs/certificates" },
-      ],
-    },
+    { name: "Programs", href: "/programs" },
+    // {
+    //   name: "Programs",
+    //   href: "/programs",
+    //   subLinks: [
+    //     { name: "Master's Degrees", href: "/programs/masters" },
+    //     { name: "PhD Programs", href: "/programs/phd" },
+    //     { name: "Certificates", href: "/programs/certificates" },
+    //   ],
+    // },
     { name: "Research", href: "/research" },
     { name: "Alumni", href: "/alumni" },
+    { name: "Staff", href: "/staff" },
     { name: "Contact", href: "/contact" },
   ];
 

@@ -23,7 +23,7 @@ export default function Footer() {
       <div className='w-full px-4 sm:px-6 lg:px-8 py-12'>
         <Logo text='' width={70} height={70} />
 
-        <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-5'>
+        <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-1'>
           {/* University Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
