@@ -1,38 +1,48 @@
 "use client";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-const containerStyle = {
-  width: "100%",
-  height: "450px",
-};
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
-const center = {
-  lat: 6.46855,
-  lng: 7.52645,
-};
+const universityPosition: [number, number] = [6.46855, 7.52645]; // Exact coordinates
 
-export default function UniversityMap() {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-  });
-
-  if (!isLoaded) return <div>Loading map...</div>;
-
+const UniversityMap = () => {
   return (
-    <div className="rounded-xl overflow-hidden my-12">
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={16}>
-        <Marker
-          position={center}
-          icon={{
-            path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z",
-            fillColor: "#2A4365",
-            fillOpacity: 1,
-            strokeWeight: 0,
-            scale: 1.5,
-          }}
+    <div className='w-full h-[450px] rounded-xl overflow-hidden my-12'>
+      <MapContainer
+        center={universityPosition}
+        zoom={16}
+        scrollWheelZoom={true}
+        className='w-full h-full'>
+        {/* Tile Layer from OpenStreetMap (Free Alternative to Google Maps) */}
+        <TileLayer
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-      </GoogleMap>
+
+        {/* Marker for Godfrey Okoye University */}
+        <Marker
+          position={universityPosition}
+          icon={L.icon({
+            iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Custom Map Pin
+            iconSize: [40, 40],
+          })}>
+          <Popup>
+            <strong>Godfrey Okoye University</strong>
+            <br />
+            Click{" "}
+            <a
+              href='https://www.google.com/maps/dir/?api=1&destination=6.46855,7.52645'
+              target='_blank'
+              rel='noopener noreferrer'>
+              here
+            </a>{" "}
+            for directions.
+          </Popup>
+        </Marker>
+      </MapContainer>
     </div>
   );
-}
+};
+
+export default UniversityMap;

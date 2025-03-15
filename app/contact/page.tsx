@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import UniversityMap from "@/components/UniversityMap";
+// import UniversityMap from "@/components/UniversityMap";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Clock, Mail, MapPin, Phone, Send } from "lucide-react";
@@ -204,7 +204,7 @@ export default function ContactPage() {
         </div>
 
 
-        <UniversityMap />
+        {/* <UniversityMap /> */}
 
         {/* Map Section */}
       

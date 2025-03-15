@@ -6,4 +6,22 @@ export default defineSchema({
     title: v.string(),
     desc: v.array(v.string()),
   }),
+
+  vision: defineTable({
+    title: v.string(),
+    desc: v.string(),
+  }),
+
+  mission: defineTable({
+    title: v.string(),
+    desc: v.string(),
+  }),
+
+  program: defineTable({
+    title: v.string(),
+    duration: v.string(),
+    mode: v.string(),
+    slug: v.string(),
+    status: v.boolean(),
+  }),
 });

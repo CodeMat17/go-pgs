@@ -14,6 +14,9 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as hero from "../hero.js";
+import type * as mission from "../mission.js";
+import type * as program from "../program.js";
+import type * as vision from "../vision.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -25,6 +28,9 @@ import type * as hero from "../hero.js";
  */
 declare const fullApi: ApiFromModules<{
   hero: typeof hero;
+  mission: typeof mission;
+  program: typeof program;
+  vision: typeof vision;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

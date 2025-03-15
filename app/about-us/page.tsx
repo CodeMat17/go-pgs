@@ -12,8 +12,15 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import Image from "next/image";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function AboutUsPage() {
+
+  const ourVision = useQuery(api.vision.getVision)
+  const ourMission = useQuery(api.mission.getMission);
+
+
   return (
     <div className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12'>
       <motion.div
@@ -107,26 +114,31 @@ export default function AboutUsPage() {
         {/* Our Mission and Vision */}
         <section className='mb-12 sm:mb-16'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
-            <Card className='p-4 sm:p-6'>
-              <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
-                Our Mission
-              </h2>
-              <p className='text-sm sm:text-base text-muted-foreground'>
-                To provide a transformative educational experience that equips
-                students with the knowledge, skills, and values to excel in
-                their careers and contribute meaningfully to society.
-              </p>
-            </Card>
-            <Card className='p-4 sm:p-6'>
-              <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
-                Our Vision
-              </h2>
-              <p className='text-sm sm:text-base text-muted-foreground'>
-                To be a leading global university recognized for academic
-                excellence, innovation, and commitment to sustainable
-                development.
-              </p>
-            </Card>
+            {/* Our Mission */}
+            {ourMission &&
+              ourMission.map((mission) => (
+                <Card key={mission._id} className='p-4 sm:p-6'>
+                  <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
+                  {mission.title}
+                  </h2>
+                  <p className='text-sm sm:text-base text-muted-foreground'>
+                   {mission.desc}
+                  </p>
+                </Card>
+              ))}
+
+            {/* Our Vision */}
+            {ourVision &&
+              ourVision.map((vision) => (
+                <Card key={vision._id} className='p-4 sm:p-6'>
+                  <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
+                    {vision.title}
+                  </h2>
+                  <p className='text-sm sm:text-base text-muted-foreground'>
+                    {vision.desc}
+                  </p>
+                </Card>
+              ))}
           </div>
         </section>
 
