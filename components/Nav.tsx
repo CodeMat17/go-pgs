@@ -150,7 +150,7 @@ export function Nav() {
                                 href={subLink.href}
                                 className={`block px-4 py-2 text-sm ${
                                   isActive(subLink.href)
-                                    ? "text-[#FEDA37] bg-primary/10"
+                                    ? "dark:text-[#FEDA37] bg-primary/10"
                                     : ""
                                 }`}
                                 onClick={() => setIsOpen(false)}>
@@ -165,7 +165,7 @@ export function Nav() {
                         href={link.href}
                         className={`block px-4 py-2 font-medium ${
                           isActive(link.href)
-                            ? "text-[#FEDA37] bg-primary/10 rounded-md"
+                            ? "bg-[#FEDA37]/40 dark:text-[#FEDA37] dark:bg-primary/10 rounded-md"
                             : ""
                         }`}
                         onClick={() => setIsOpen(false)}>

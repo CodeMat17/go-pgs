@@ -4,14 +4,14 @@ import { ApplyNow } from "@/components/buttons/ApplyNow";
 import DescriptionAnimation from "@/components/DescriptionAnimation";
 import { QuickLinks } from "@/components/QuickLinks";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { api } from "../convex/_generated/api";
 
 export default function HomePage() {
-
-
-
+  const heros = useQuery(api.hero.getHero);
 
   return (
     <div className='min-h-screen'>
@@ -51,32 +51,28 @@ export default function HomePage() {
           </motion.div>
 
           {/* Text Container */}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className='md:w-[60%] text-center md:text-left lg:pl-6 xl:pl-12'>
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className='text-4xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
-              Elevate Your Academic Journey at
-              <span className='block text-[#FEDA37]'>
-                GO Postgraduate School
-              </span>
-            </motion.h1>
+            {heros?.map((hero) => (
+              <div key={hero._id}>
+                <motion.h1
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className='text-4xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
+                {hero.title}
+                  <span className='block text-[#FEDA37]'>
+                    Godfrey Okoye Postgraduate School
+                  </span>
+                </motion.h1>
 
-            {/* <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className='sm:text-lg md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
-              Join a community of scholars pushing boundaries in research and
-              innovation
-            </motion.p> */}
-
-          <DescriptionAnimation />
+                <DescriptionAnimation desc={hero.desc} />
+              </div>
+            ))}
 
             <motion.div
               initial={{ opacity: 0 }}
@@ -91,13 +87,6 @@ export default function HomePage() {
                 asChild>
                 <Link href='/programs'>Explore Programs</Link>
               </Button>
-              {/* <Button
-                variant='ghost'
-                size='lg'
-                className='text-sm xs:text-base sm:text-lg p-4 sm:p-5 md:p-6 border border-gray-800 dark:border-gray-400 text-white'
-                asChild>
-                <Link href='/programs'>Explore Programs</Link>
-              </Button> */}
             </motion.div>
           </motion.div>
         </div>

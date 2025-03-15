@@ -152,7 +152,7 @@ export default function AboutUsPage() {
             </div>
             <div className='bg-muted rounded-lg p-4 sm:p-6 flex items-center justify-center'>
               <Image
-                src='/global-education.jpg' // Replace with your image
+                src='/about_us_img.avif' // Replace with your image
                 alt='Global Education'
                 width={600}
                 height={400}
