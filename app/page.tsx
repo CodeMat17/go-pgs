@@ -4,15 +4,11 @@ import { ApplyNow } from "@/components/buttons/ApplyNow";
 import DescriptionAnimation from "@/components/DescriptionAnimation";
 import { QuickLinks } from "@/components/QuickLinks";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "../convex/_generated/api";
 
 export default function HomePage() {
-  const heros = useQuery(api.hero.getHero);
-
   return (
     <div className='min-h-screen'>
       {/* Hero Section */}
@@ -57,22 +53,18 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className='md:w-[60%] text-center md:text-left lg:pl-6 xl:pl-12'>
-            {heros?.map((hero) => (
-              <div key={hero._id}>
-                <motion.h1
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className='text-4xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
-                {hero.title}
-                  <span className='block text-[#FEDA37]'>
-                    Godfrey Okoye Postgraduate School
-                  </span>
-                </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className='text-4xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'>
+              Elevate Your Academic Journey at
+              <span className='block text-[#FEDA37]'>
+                Godfrey Okoye Postgraduate School
+              </span>
+            </motion.h1>
 
-                <DescriptionAnimation desc={hero.desc} />
-              </div>
-            ))}
+            <DescriptionAnimation />
 
             <motion.div
               initial={{ opacity: 0 }}

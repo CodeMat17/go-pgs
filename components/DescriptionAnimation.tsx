@@ -1,18 +1,9 @@
-"use client";
+'use client'
 
 import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
 
-interface DescriptionAnimationProps {
-  desc: string[];
-}
-
-const DescriptionAnimation: React.FC<DescriptionAnimationProps> = ({
-  desc,
-}) => {
-  // Ensure sequence includes text with delay (4000ms)
-  const sequence = desc.flatMap((text) => [text, 4000]);
-
+const DescriptionAnimation = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -20,7 +11,16 @@ const DescriptionAnimation: React.FC<DescriptionAnimationProps> = ({
       transition={{ delay: 0.4 }}
       className='h-[75px] mb-8'>
       <TypeAnimation
-        sequence={sequence}
+        sequence={[
+          "Join a community of scholars pushing boundaries in research and innovation.",
+          4000,
+          "Engage with visionary researchers shaping the future of emerging technologies and sustainable solutions.",
+          4000,
+          "Collaborate with pioneering academics transforming ideas into impactful solutions for global challenges.",
+          4000,
+          "Contribute to groundbreaking discoveries alongside global thinkers driving breakthroughs across disciplines.",
+          4000,
+        ]}
         wrapper='span'
         speed={50}
         repeat={Infinity}

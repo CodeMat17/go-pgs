@@ -15,7 +15,7 @@ import type {
 } from "convex/server";
 import type * as hero from "../hero.js";
 import type * as mission from "../mission.js";
-import type * as program from "../program.js";
+import type * as programs from "../programs.js";
 import type * as vision from "../vision.js";
 
 /**
@@ -29,7 +29,7 @@ import type * as vision from "../vision.js";
 declare const fullApi: ApiFromModules<{
   hero: typeof hero;
   mission: typeof mission;
-  program: typeof program;
+  programs: typeof programs;
   vision: typeof vision;
 }>;
 export declare const api: FilterApi<

@@ -17,11 +17,21 @@ export default defineSchema({
     desc: v.string(),
   }),
 
-  program: defineTable({
-    title: v.string(),
-    duration: v.string(),
-    mode: v.string(),
+  programs: defineTable({
+    programFullName: v.optional(v.string()),
+    programShortName: v.string(),
+    programOverview: v.string(),
+    whyChoose: v.array(
+      v.object({
+        title: v.string(), // e.g., "Cutting-Edge Facilities"
+        description: v.string(), // e.g., "Access to state-of-the-art labs and research equipment"
+      })
+    ),
+    nextIntake: v.string(),
+    studyDuration: v.string(),
+    deliveryMode: v.string(),
+    studyMode: v.string(),
     slug: v.string(),
     status: v.boolean(),
-  }),
+  }).index("by_slug", ["slug"]),
 });
