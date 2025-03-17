@@ -3,10 +3,8 @@
 import { ApplyNow } from "@/components/buttons/ApplyNow";
 import DescriptionAnimation from "@/components/DescriptionAnimation";
 import { QuickLinks } from "@/components/QuickLinks";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -70,15 +68,15 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className='flex gap-3 sm:gap-4 justify-center md:justify-start'>
+              className=''>
               <ApplyNow />
 
-              <Button
+              {/* <Button
                 size='lg'
                 className='text-sm xs:text-base sm:text-lg p-4 sm:p-5 md:p-6 bg-white hover:bg-gray-300 hover:text-gray-700 text-gray-900'
                 asChild>
-                <Link href='/programs'>Explore Programs</Link>
-              </Button>
+                <Link href='/programs'>Explore our Programs</Link>
+              </Button> */}
             </motion.div>
           </motion.div>
         </div>

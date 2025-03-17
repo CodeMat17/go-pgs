@@ -20,10 +20,10 @@ import {Logo} from '@/components/Logo'
 export default function Footer() {
   return (
     <footer className='bg-gray-900 text-white border-t'>
-      <div className='w-full px-4 sm:px-6 lg:px-8 py-12'>
+      <div className='w-full px-4 sm:px-6 lg:px-8 pt-4 pb-12'>
         <Logo text='' width={70} height={70} />
 
-        <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-1'>
+        <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-2'>
           {/* University Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

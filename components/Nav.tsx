@@ -106,7 +106,7 @@ export function Nav() {
           <ThemeToggle />
 
           {/* Apply Button - Desktop */}
-          <div className='hidden lg:flex items-center gap-4'>
+          {/* <div className='hidden lg:flex items-center gap-4'>
             <Button asChild variant='secondary' className='relative'>
               <Link href='/admissions/apply'>
                 <>
@@ -124,7 +124,7 @@ export function Nav() {
                 </>
               </Link>
             </Button>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Toggle */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -174,13 +174,13 @@ export function Nav() {
                     )}
                   </div>
                 ))}
-                <Button className='mt-4 mx-4' asChild>
+                {/* <Button className='mt-4 mx-4' asChild>
                   <Link
                     href='/admissions/apply'
                     onClick={() => setIsOpen(false)}>
                     Apply Now
                   </Link>
-                </Button>
+                </Button> */}
               </div>
             </SheetContent>
           </Sheet>
