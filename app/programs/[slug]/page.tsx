@@ -1,38 +1,39 @@
-'use client'
+"use client";
 
-import { api } from "@/convex/_generated/api"
-import { useQuery } from "convex/react"
-import { useParams } from 'next/navigation'
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
+import { motion } from "framer-motion";
 import {
   Calendar,
   Clock,
-  GraduationCap,
-  FlaskConical,
   Download,
+  FlaskConical,
+  GraduationCap,
 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
 
 const ProgramDetail = () => {
-    
-  const { slug } = useParams()
-  const program = useQuery(api.programs.getProgramBySlug, typeof slug === "string" ? {slug} : 'skip')
-
+  const { slug } = useParams();
+  const program = useQuery(
+    api.programs.getProgramBySlug,
+    typeof slug === "string" ? { slug } : "skip"
+  );
 
   if (program === undefined) {
     return (
-      <div className="flex items-center justify-center py-72">
-        <p className="text-xl text-gray-500">Loading program details...</p>
+      <div className='flex items-center justify-center py-72'>
+        <p className='text-xl text-gray-500'>Loading program details...</p>
       </div>
     );
   }
 
   if (!program) {
     return (
-      <div className="flex items-center justify-center py-72">
-        <p className="text-xl text-gray-500">Program not found.</p>
+      <div className='flex items-center justify-center py-72'>
+        <p className='text-xl text-gray-500'>Program not found.</p>
       </div>
     );
   }
@@ -46,7 +47,7 @@ const ProgramDetail = () => {
         {/* Hero Section */}
         <div className='text-center mb-8 sm:mb-12'>
           <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4'>
-        {program.programFullName}
+            {program.programFullName}
           </h1>
           <div className='flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 text-sm sm:text-base text-muted-foreground'>
             <div className='flex items-center justify-center gap-1'>
@@ -67,41 +68,11 @@ const ProgramDetail = () => {
             {/* Why Choose Us */}
             <Card className='p-4 sm:p-6'>
               <h2 className='text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 flex items-center gap-2'>
-                <FlaskConical className='w-5 h-5 sm:w-6 sm:h-6 text-primary' />
+                <FlaskConical className='w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0' />
                 Why Choose Our {program.programShortName}?
               </h2>
               <div className='space-y-3 sm:space-y-4'>
-                {
-                  
-                  // [
-                  // {
-                  //   title: "Cutting-Edge Facilities",
-                  //   description:
-                  //     "Access to state-of-the-art labs and research equipment",
-                  // },
-                  // {
-                  //   title: "Industry-Aligned Curriculum",
-                  //   description:
-                  //     "Designed with input from leading biotech companies",
-                  // },
-                  // {
-                  //   title: "Expert Faculty",
-                  //   description:
-                  //     "Learn from distinguished professors and industry professionals",
-                  // },
-                  // {
-                  //   title: "Research Opportunities",
-                  //   description: "Participate in ongoing research projects",
-                  // },
-                  // {
-                  //   title: "Career Development",
-                  //   description:
-                  //     "Strong industry connections and career services",
-                  // },
-                  // ]
-                    
-                    
-                    program.whyChoose.map((item, index) => (
+                {program.whyChoose.map((item, index) => (
                   <div key={index} className='flex items-start gap-3 sm:gap-4'>
                     <div className='w-6 h-6 sm:w-8 sm:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0'>
                       <span className='text-primary text-sm sm:text-base'>
@@ -128,7 +99,9 @@ const ProgramDetail = () => {
               </h2>
               <div className='space-y-3 sm:space-y-4 dark:text-muted-foreground text-sm sm:text-base'>
                 {program.programOverview}
-                <p className="mt-4"> Change the above text <br/>
+                <p className='mt-4'>
+                  {" "}
+                  Change the above text <br />
                   Our Postgraduate Diploma in Biotechnology is an intensive
                   12-month program designed to provide advanced theoretical
                   knowledge and practical skills in modern biotechnology.
@@ -185,7 +158,7 @@ const ProgramDetail = () => {
               </h2>
               <div className='space-y-3'>
                 <Button className='w-full text-sm sm:text-base' asChild>
-                  <a href='#apply-now'>Apply Online</a>
+                  <a href='#'>Apply Now</a>
                 </Button>
                 <Button
                   variant='outline'
@@ -221,11 +194,9 @@ const ProgramDetail = () => {
             </Card>
           </div>
         </div>
-
-       
       </motion.div>
     </div>
   );
-}
+};
 
-export default ProgramDetail
+export default ProgramDetail;
