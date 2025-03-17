@@ -13,9 +13,11 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as alumni from "../alumni.js";
 import type * as hero from "../hero.js";
 import type * as mission from "../mission.js";
 import type * as programs from "../programs.js";
+import type * as staff from "../staff.js";
 import type * as vision from "../vision.js";
 
 /**
@@ -27,9 +29,11 @@ import type * as vision from "../vision.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  alumni: typeof alumni;
   hero: typeof hero;
   mission: typeof mission;
   programs: typeof programs;
+  staff: typeof staff;
   vision: typeof vision;
 }>;
 export declare const api: FilterApi<

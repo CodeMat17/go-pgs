@@ -34,4 +34,27 @@ export default defineSchema({
     slug: v.string(),
     status: v.boolean(),
   }).index("by_slug", ["slug"]),
+
+  alumni: defineTable({
+    name: v.string(),
+    photo: v.string(),
+    degree: v.string(),
+    year: v.number(),
+    currentPosition: v.string(),
+    company: v.string(),
+    testimonial: v.string(),
+    linkedin: v.string(),
+  }),
+
+  staff: defineTable({
+    name: v.string(),
+    role: v.string(),
+    image: v.string(),
+    bio: v.string(),
+    email: v.string(),
+    social: v.object({
+      linkedin: v.string(),
+      twitter: v.string(),
+    }),
+  }),
 });

@@ -1,21 +1,21 @@
 // components/Footer.tsx
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 import {
-  Twitter,
+  Clock,
   Facebook,
-  Linkedin,
   Instagram,
+  Linkedin,
+  Mail,
   MapPin,
   Phone,
-  Mail,
-  Clock,
+  Twitter,
 } from "lucide-react";
-import {Logo} from '@/components/Logo'
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -86,15 +86,15 @@ export default function Footer() {
             <h4 className='text-lg font-medium mb-4'>Programs</h4>
             <ul className='space-y-2'>
               {[
-                { name: "Master's Degrees", href: "/programs/masters" },
-                { name: "PhD Programs", href: "/programs/phd" },
-                { name: "Certificates", href: "/programs/certificates" },
-                { name: "Online Learning", href: "/online" },
+                { name: "Master's Degrees", href: "/programs" },
+                { name: "PhD Programs", href: "/programs" },
+                { name: "Online Learning", href: "/programs" },
+                { name: "SEE ALL PROGRAMS", href: "/programs" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className='text-sm hover:text-[#FEDA37]'>
+                    className={`text-sm hover:text-[#FEDA37] ${link.name === "SEE ALL PROGRAMS" ? "text-[#FEDA37] font-medium" : ""}`}>
                     {link.name}
                   </Link>
                 </li>
