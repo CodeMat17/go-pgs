@@ -1,153 +1,55 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useState } from "react";
-import { Calendar, Monitor, BookOpen, Users, MinusIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-
-// const programs = [
-//   {
-//     id: "pgd-education",
-//     name: "PGD Education",
-//     duration: "12 Months",
-//     mode: "Online + Workshops",
-//   },
-//   {
-//     id: "pgd-biotech",
-//     name: "PGD Biotechnology",
-//     duration: "12 Months",
-//     mode: "Offline",
-//   },
-//   {
-//     id: "pgd-microbiology",
-//     name: "PGD Microbiology",
-//     duration: "12 Months",
-//     mode: "Offline",
-//   },
-//   {
-//     id: "pgd-accounting",
-//     name: "PGD Accounting",
-//     duration: "12 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "pgd-banking-finance",
-//     name: "PGD Banking and Finance",
-//     duration: "12 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "pgd-management",
-//     name: "PGD Management",
-//     duration: "12 Months",
-//     mode: "Online + Workshops",
-//   },
-//   {
-//     id: "pgd-public-admin",
-//     name: "PGD Public Administration",
-//     duration: "12 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "pgd-political-science",
-//     name: "PGD Political Science",
-//     duration: "12 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "pgd-intl-relations",
-//     name: "PGD International Relations",
-//     duration: "12 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "pgd-mass-comm",
-//     name: "PGD Mass Communication",
-//     duration: "12 Months",
-//     mode: "Online + Workshops",
-//   },
-//   {
-//     id: "pgd-sociology",
-//     name: "PGD Sociology",
-//     duration: "12 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "ma-english-lit",
-//     name: "M.A. English and Literary Studies",
-//     duration: "18 Months",
-//     mode: "Offline",
-//   },
-//   {
-//     id: "msc-compsci",
-//     name: "M.Sc. Computer Science",
-//     duration: "18 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "msc-management",
-//     name: "M.Sc. Management",
-//     duration: "18 Months",
-//     mode: "Online + Workshops",
-//   },
-//   {
-//     id: "msc-psychology",
-//     name: "M.Sc. Applied Social Psychology",
-//     duration: "18 Months",
-//     mode: "Offline",
-//   },
-//   { id: "msc-law", name: "LLM Law", duration: "18 Months", mode: "Online" },
-//   {
-//     id: "phd-english-lit",
-//     name: "Ph.D. English Language and Literary Studies",
-//     duration: "36 Months",
-//     mode: "Offline",
-//   },
-//   {
-//     id: "phd-math-education",
-//     name: "Ph.D. Mathematics Education",
-//     duration: "36 Months",
-//     mode: "Online + Workshops",
-//   },
-//   {
-//     id: "phd-accounting",
-//     name: "Ph.D. Accounting",
-//     duration: "36 Months",
-//     mode: "Online",
-//   },
-//   {
-//     id: "phd-political-science",
-//     name: "Ph.D. Political Science",
-//     duration: "36 Months",
-//     mode: "Online",
-//   },
-//   { id: "llm-law", name: "LLM Law", duration: "18 Months", mode: "Online" },
-// ];
+import { useQuery } from "convex/react";
+import { BookOpen, Calendar, MinusIcon, Monitor, Users } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function ProgramsPage() {
-
-  const programs = useQuery(api.programs.getPrograms) ?? [];
-  
+  const fetchedPrograms = useQuery(api.programs.getPrograms);
+  const [programs, setPrograms] = useState(fetchedPrograms ?? []);
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredPrograms = searchTerm
-    ? programs?.filter((program) =>
-        program.programShortName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPrograms = programs
+    ? programs.filter((program) =>
+        program?.programShortName
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase())
       )
-    : programs;
-  
-  if (programs.length === 0) {
+    : [];
+
+  useEffect(() => {
+    if (fetchedPrograms !== undefined) {
+      setPrograms(fetchedPrograms); // Only update state when data arrives
+    }
+  }, [fetchedPrograms]);
+
+  if (fetchedPrograms === undefined) {
     return (
-      <div className="w-full min-h-96 flex items-center justify-center">
+      <div className='w-full min-h-96 flex items-center justify-center'>
         <MinusIcon className='animate-spin mr-3' /> Loading programs
       </div>
-    )
+    );
+  }
+
+  if (!fetchedPrograms) return (
+    <div className='w-full min-h-96 flex items-center justify-center'>
+      <MinusIcon className='animate-spin mr-3' /> Loading programs
+    </div>
+  );
+
+  if (fetchedPrograms.length === 0) {
+    return (
+      <div className='w-full min-h-96 flex items-center justify-center'>
+        <MinusIcon className='animate-spin mr-3' /> Loading programs
+      </div>
+    );
   }
 
   return (
@@ -179,8 +81,10 @@ export default function ProgramsPage() {
             filteredPrograms.map((program) => (
               <Card
                 key={program._id}
-                className={`p-4 hover:shadow-lg transition-shadow ${program.status ? '' : 'bg-red-800/10 dark:bg-red-800/20'}`}>
-                <h3 className='text-lg font-semibold mb-2'>{program.programShortName}</h3>
+                className={`p-4 hover:shadow-lg transition-shadow ${program.status ? "" : "bg-red-800/10 dark:bg-red-800/20"}`}>
+                <h3 className='text-lg font-semibold mb-2'>
+                  {program.programShortName}
+                </h3>
                 <div className='flex flex-col gap-2 text-sm text-muted-foreground'>
                   <div className='flex items-center gap-2'>
                     <Calendar className='w-4 h-4' />
@@ -205,7 +109,9 @@ export default function ProgramsPage() {
                   </Button>
                 ) : (
                   <div className='flex items-center gap-2 mt-2'>
-                    <Badge variant='destructive' className="flex gap-2 items-center pt-1 pb-2">
+                    <Badge
+                      variant='destructive'
+                      className='flex gap-2 items-center pt-1 pb-2'>
                       Closed
                     </Badge>
                   </div>

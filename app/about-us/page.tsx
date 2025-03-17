@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import Link from "next/link";
 
 export default function AboutUsPage() {
 
@@ -183,7 +184,7 @@ export default function AboutUsPage() {
             Take the first step toward a transformative educational experience.
           </p>
           <Button size='lg' className='text-sm sm:text-base' asChild>
-            <a href='/apply'>Apply Now</a>
+            <Link href='/programs'>Explore our programs</Link>
           </Button>
         </section>
       </motion.div>
