@@ -1,7 +1,6 @@
 "use client";
 
 import { Logo } from "@/components/Logo";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +13,6 @@ import { AlignRightIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BorderBeam } from "./magicui/border-beam";
 import ThemeToggle from "./theme/theme-toggle";
 
 export function Nav() {

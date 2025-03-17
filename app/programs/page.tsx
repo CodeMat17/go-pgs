@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function ProgramsPage() {
-  const fetchedPrograms = useQuery(api.programs.getPrograms);
+  const fetchedPrograms = useQuery(api.programs.getFewProgramsData);
   const [programs, setPrograms] = useState(fetchedPrograms ?? []);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,8 +70,8 @@ export default function ProgramsPage() {
             placeholder='Search for a program...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <p className='text-sm text-muted-foreground mt-2'>
+          className="border-amber-500 bg-amber-50 dark:bg-amber-500/20 py-5"/>
+          <p className='text-sm text-muted-foreground mt-2 text-amber-700 dark:text-amber-500'>
             Start typing to find a specific program.
           </p>
         </div>

@@ -1,7 +1,16 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 
-export const getPrograms = query({
+
+export const getFewProgramsData = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("programs").collect().then((programs) => programs.map(({ _id, programShortName, status, studyDuration, deliveryMode, slug }) => ({
+      _id, programShortName, status, studyDuration, deliveryMode, slug
+    })));
+  },
+});
+
+export const getAllProgramsData = query({
   handler: async (ctx) => {
     return await ctx.db.query("programs").collect();
   },
