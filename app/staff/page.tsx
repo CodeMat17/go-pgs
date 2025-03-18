@@ -126,7 +126,7 @@ export default function StaffPage() {
           className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
           onClick={closeModal}>
           <div
-            className='bg-white max-w-lg w-full rounded-lg shadow-lg p-6 relative flex flex-col max-h-[90vh] overflow-hidden'
+            className='bg-white dark:bg-gray-800 max-w-lg w-full rounded-lg shadow-lg p-6 relative flex flex-col max-h-[90vh] overflow-hidden'
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
           >
             {/* Close Button */}
