@@ -52,6 +52,7 @@ export default defineSchema({
     image: v.string(),
     bio: v.string(),
     email: v.string(),
+    profile: v.optional(v.string()),
     social: v.object({
       linkedin: v.string(),
       twitter: v.string(),

@@ -46,9 +46,14 @@ export function Nav() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-      <div className='flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8'>
+      <div className='flex h-[68px] items-center justify-between px-4 sm:px-6 lg:px-8'>
         {/* Logo */}
-        <Logo text='PGS' width={50} height={50} />
+        <Logo
+          text_one='Godfrey Okoye University'
+          text_two='Postgraduate School'
+          width={50}
+          height={50}
+        />
 
         {/* Desktop Navigation */}
         <div className='hidden lg:flex items-center gap-6'>
@@ -100,7 +105,7 @@ export function Nav() {
           ))}
         </div>
 
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-3'>
           <ThemeToggle />
 
           {/* Apply Button - Desktop */}
