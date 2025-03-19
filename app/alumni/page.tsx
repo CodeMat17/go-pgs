@@ -75,9 +75,10 @@ export default function AlumniPage() {
             placeholder='Search alumni...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className='bg-gray-50 dark:bg-amber-500/10 py-5'
           />
           <Select onValueChange={setSelectedProgram}>
-            <SelectTrigger>
+            <SelectTrigger className='bg-gray-50 dark:bg-amber-500/10 py-5'>
               <SelectValue placeholder='Filter by program' />
             </SelectTrigger>
             <SelectContent>
@@ -90,7 +91,7 @@ export default function AlumniPage() {
             </SelectContent>
           </Select>
           <Select onValueChange={setSelectedYear}>
-            <SelectTrigger>
+            <SelectTrigger className='bg-gray-50 dark:bg-amber-500/10 py-5'>
               <SelectValue placeholder='Filter by year' />
             </SelectTrigger>
             <SelectContent>
@@ -156,31 +157,30 @@ export default function AlumniPage() {
                   </Card>
                 </motion.div>
               ))}
-              </div>
-              <div className="mt-12 bg-gray-100 dark:bg-gray-800 py-3 border">
-                  <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <Button
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage(currentPage - 1)}>
-                 <ChevronsLeftIcon />
-                  </Button>
-                </PaginationItem>
-                <PaginationItem className="px-4">
-                  Page {currentPage} of {totalPages}
-                </PaginationItem>
-                <PaginationItem>
-                  <Button
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage(currentPage + 1)}>
-                 <ChevronsRightIcon />
-                  </Button>
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-              </div>
-          
+            </div>
+            <div className='mt-12 bg-gray-100 dark:bg-gray-800 py-3 border'>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <Button
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage(currentPage - 1)}>
+                      <ChevronsLeftIcon />
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem className='px-4'>
+                    Page {currentPage} of {totalPages}
+                  </PaginationItem>
+                  <PaginationItem>
+                    <Button
+                      disabled={currentPage === totalPages}
+                      onClick={() => setCurrentPage(currentPage + 1)}>
+                      <ChevronsRightIcon />
+                    </Button>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
           </>
         ) : (
           <p className='text-center text-lg text-muted-foreground'>

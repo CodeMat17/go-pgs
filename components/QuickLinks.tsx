@@ -1,18 +1,18 @@
 // components/QuickLinks.tsx
 "use client";
 
-import { motion } from "framer-motion";
+import { BorderBeam } from "@/components/magicui/border-beam"; // Ensure you have this component
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { GraduationCap, Microscope, Users } from "lucide-react";
 import Link from "next/link";
-import { Microscope, GraduationCap, Users } from "lucide-react";
-import { BorderBeam } from "@/components/magicui/border-beam"; // Ensure you have this component
 
 export function QuickLinks() {
   const items = [

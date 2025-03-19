@@ -48,34 +48,40 @@ export default function AboutUsPage() {
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
             {[
               {
-                icon: <Globe className='w-6 h-6 sm:w-8 sm:h-8 text-primary' />,
+                icon: (
+                  <Globe className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
+                ),
                 title: "Global Recognition",
                 description:
                   "Our programs are internationally accredited, ensuring your degree is recognized worldwide.",
               },
               {
-                icon: <Award className='w-6 h-6 sm:w-8 sm:h-8 text-primary' />,
+                icon: (
+                  <Award className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
+                ),
                 title: "Academic Excellence",
                 description:
                   "Ranked among the top universities in Africa, we offer rigorous, globally competitive curricula.",
               },
               {
                 icon: (
-                  <BookOpen className='w-6 h-6 sm:w-8 sm:h-8 text-primary' />
+                  <BookOpen className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
                 ),
                 title: "Innovative Learning",
                 description:
                   "Cutting-edge teaching methods, including blended learning and research-driven programs.",
               },
               {
-                icon: <Users className='w-6 h-6 sm:w-8 sm:h-8 text-primary' />,
+                icon: (
+                  <Users className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
+                ),
                 title: "Diverse Community",
                 description:
                   "Join a vibrant community of students and faculty from over 20 countries.",
               },
               {
                 icon: (
-                  <Briefcase className='w-6 h-6 sm:w-8 sm:h-8 text-primary' />
+                  <Briefcase className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
                 ),
                 title: "Career Readiness",
                 description:
@@ -83,7 +89,7 @@ export default function AboutUsPage() {
               },
               {
                 icon: (
-                  <HeartHandshake className='w-6 h-6 sm:w-8 sm:h-8 text-primary' />
+                  <HeartHandshake className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
                 ),
                 title: "Values-Driven Education",
                 description:
@@ -96,7 +102,7 @@ export default function AboutUsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}>
-                <Card className='p-4 sm:p-6 h-full'>
+                <Card className='p-4 sm:p-6 h-full border-amber-300 dark:border-amber-300/20'>
                   <div className='flex flex-col items-center text-center'>
                     <div className='mb-3 sm:mb-4'>{item.icon}</div>
                     <h3 className='text-lg sm:text-xl font-semibold mb-2'>
@@ -120,10 +126,10 @@ export default function AboutUsPage() {
               ourMission.map((mission) => (
                 <Card key={mission._id} className='p-4 sm:p-6'>
                   <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
-                  {mission.title}
+                    {mission.title}
                   </h2>
                   <p className='text-sm sm:text-base text-muted-foreground'>
-                   {mission.desc}
+                    {mission.desc}
                   </p>
                 </Card>
               ))}
