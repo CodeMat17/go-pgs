@@ -41,7 +41,7 @@ export default function StaffPage() {
       {/* Page Header */}
       <div className='text-center mb-12'>
         <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Staff</h1>
-        <p className='text-lg text-muted-foreground'>
+        <p className='text-lg text-muted-foreground max-w-xl mx-auto '>
           Meet the dedicated and accomplished staff members who are shaping the
           future of education at GO University PGS.
         </p>

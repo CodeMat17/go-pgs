@@ -51,6 +51,7 @@ export function Nav() {
         <Logo
           text_one='Godfrey Okoye University'
           text_two='Postgraduate School'
+          classnames="sm:font-semibold"
           width={50}
           height={50}
         />
