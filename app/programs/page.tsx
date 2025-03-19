@@ -53,7 +53,7 @@ export default function ProgramsPage() {
   }
 
   return (
-    <div className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
+    <div className='bg-gray-50 dark:bg-gray-900 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
       <h1 className='text-3xl sm:text-4xl font-bold mb-4'>
         Our Programs
       </h1>
@@ -82,7 +82,7 @@ export default function ProgramsPage() {
             filteredPrograms.map((program) => (
               <Card
                 key={program._id}
-                className={`p-4 hover:shadow-lg transition-shadow ${program.status ? "" : "bg-red-800/10 dark:bg-red-800/20"}`}>
+                className={`p-4 hover:shadow-lg transition-shadow ${program.status ? "bg-white dark:bg-gray-800" : "bg-red-800/10 dark:bg-red-800/20"}`}>
                 <h3 className='text-lg font-semibold mb-2'>
                   {program.programShortName}
                 </h3>
