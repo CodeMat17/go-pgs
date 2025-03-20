@@ -37,7 +37,7 @@ export default function StaffPage() {
   const closeModal = () => setSelectedStaff(null);
 
   return (
-    <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 dark:bg-gray-950'>
+    <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 dark:bg-inherit'>
       {/* Page Header */}
       <div className='text-center mb-12'>
         <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Staff</h1>
@@ -67,7 +67,7 @@ export default function StaffPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true }}>
-                <Card className=' hover:shadow-lg transition-shadow rounded-lg overflow-hidden'>
+                <Card className=' hover:shadow-lg transition-shadow rounded-lg overflow-hidden border-amber-100 dark:border-gray-500/50'>
                   {/* Staff Image */}
                   <div className='relative w-full h-64  mb-4'>
                     <Image
