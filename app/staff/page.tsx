@@ -37,7 +37,7 @@ export default function StaffPage() {
   const closeModal = () => setSelectedStaff(null);
 
   return (
-    <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
+    <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 dark:bg-gray-950'>
       {/* Page Header */}
       <div className='text-center mb-12'>
         <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Staff</h1>
