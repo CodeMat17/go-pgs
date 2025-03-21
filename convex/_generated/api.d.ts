@@ -14,6 +14,8 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as alumni from "../alumni.js";
+import type * as askAI from "../askAI.js";
+import type * as getAllContent from "../getAllContent.js";
 import type * as hero from "../hero.js";
 import type * as mission from "../mission.js";
 import type * as programs from "../programs.js";
@@ -30,6 +32,8 @@ import type * as vision from "../vision.js";
  */
 declare const fullApi: ApiFromModules<{
   alumni: typeof alumni;
+  askAI: typeof askAI;
+  getAllContent: typeof getAllContent;
   hero: typeof hero;
   mission: typeof mission;
   programs: typeof programs;

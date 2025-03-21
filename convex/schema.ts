@@ -58,4 +58,13 @@ export default defineSchema({
       twitter: v.string(),
     }),
   }),
+
+  whyChoose: defineTable({
+    reasons: v.array(
+      v.object({
+        title: v.string(), 
+        description: v.string(), 
+      })
+    ),
+  }),
 });

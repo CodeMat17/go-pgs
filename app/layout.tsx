@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import {ConvexClientProvider} from '@/app/ConvexClientProvider'
+// import ChatWidget from "@/components/ChatWidget";
 // import ChatBot from "@/components/ChatBot";
 
 const geistSans = localFont({
@@ -38,10 +39,12 @@ export default function RootLayout({
           defaultTheme='system'
           enableSystem
           disableTransitionOnChange>
-          <Nav />
-          <ConvexClientProvider>{children}</ConvexClientProvider>
-          {/* <ChatBot /> */}
-          <Footer />
+          <ConvexClientProvider>
+            <Nav />
+            {children}
+            <Footer />
+            {/* <ChatWidget /> */}
+          </ConvexClientProvider>
         </ThemeProvider>
       </body>
     </html>
