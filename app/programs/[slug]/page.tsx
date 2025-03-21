@@ -166,9 +166,7 @@ const ProgramDetail = () => {
                   variant='outline'
                   className='w-full text-sm sm:text-base'
                   asChild>
-                  <a href='#'
-               
-                  >
+                  <a href='#'>
                     <Download className='mr-2 h-4 w-4' />
                     Download Application
                   </a>
