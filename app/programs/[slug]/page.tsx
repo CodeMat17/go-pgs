@@ -158,13 +158,17 @@ const ProgramDetail = () => {
               </h2>
               <div className='space-y-3'>
                 <Button className='w-full text-sm sm:text-base' asChild>
-                  <a href='#'>Apply Now</a>
+                  <a href='https://form.jotform.com/241452745198362'>
+                    Apply Now
+                  </a>
                 </Button>
                 <Button
                   variant='outline'
                   className='w-full text-sm sm:text-base'
                   asChild>
-                  <a href='/downloads/pgd-biotech-application.pdf' download>
+                  <a href='#'
+               
+                  >
                     <Download className='mr-2 h-4 w-4' />
                     Download Application
                   </a>
