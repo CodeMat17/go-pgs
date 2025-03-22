@@ -1,12 +1,12 @@
 "use client";
 
 import { Logo } from "@/components/Logo";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion } from "framer-motion";
 import { AlignRightIcon } from "lucide-react";
@@ -22,14 +22,15 @@ export function Nav() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about-us" },
-    {
-      name: "Admissions",
-      href: "/admissions",
-      subLinks: [
-        { name: "Requirements", href: "/admissions/requirements" },
-        { name: "Deadlines", href: "/admissions/deadlines" },
-      ],
-    },
+    { name: "Requirements", href: "/requirements" },
+    // {
+    //   name: "Admissions",
+    //   href: "/admissions",
+    //   subLinks: [
+    //     { name: "Requirements", href: "/admissions/requirements" },
+    //     { name: "Deadlines", href: "/admissions/deadlines" },
+    //   ],
+    // },
     { name: "Programs", href: "/programs" },
     { name: "Research", href: "/research" },
     { name: "Alumni", href: "/alumni" },
@@ -51,7 +52,7 @@ export function Nav() {
         <Logo
           text_one='Godfrey Okoye University'
           text_two='Postgraduate School'
-          classnames="sm:font-semibold"
+          classnames='sm:font-semibold'
           width={50}
           height={50}
         />
@@ -60,7 +61,17 @@ export function Nav() {
         <div className='hidden lg:flex items-center gap-6'>
           {navLinks.map((link) => (
             <div key={link.name} className='relative group'>
-              {link.subLinks ? (
+              <Link
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  isActive(link.href)
+                    ? "dark:text-[#FEDA37] bg-amber-500/10 rounded-md px-3 py-1.5"
+                    : "hover:text-primary"
+                }`}>
+                {link.name}
+              </Link>
+
+              {/* {link.subLinks ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     className={`flex items-center gap-1 text-sm font-medium transition-colors ${
@@ -101,7 +112,7 @@ export function Nav() {
                   }`}>
                   {link.name}
                 </Link>
-              )}
+              )} */}
             </div>
           ))}
         </div>
@@ -141,7 +152,20 @@ export function Nav() {
               <div className='flex flex-col h-full pt-8'>
                 {navLinks.map((link) => (
                   <div key={link.name} className='border-b py-2'>
-                    {link.subLinks ? (
+                    <Link
+                      href={link.href}
+                      className={`block px-4 py-2 font-medium ${
+                        isActive(link.href)
+                          ? "bg-[#FEDA37]/40 dark:text-[#FEDA37] dark:bg-primary/10 rounded-md"
+                          : ""
+                      }`}
+                      onClick={() => setIsOpen(false)}>
+                      {link.name}
+                    </Link>
+
+
+
+                    {/* {link.subLinks ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger className='w-full text-left px-4 py-2 font-medium flex justify-between items-center'>
                           {link.name}
@@ -175,7 +199,7 @@ export function Nav() {
                         onClick={() => setIsOpen(false)}>
                         {link.name}
                       </Link>
-                    )}
+                    )} */}
                   </div>
                 ))}
                 {/* <Button className='mt-4 mx-4' asChild>

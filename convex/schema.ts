@@ -62,9 +62,19 @@ export default defineSchema({
   whyChoose: defineTable({
     reasons: v.array(
       v.object({
-        title: v.string(), 
-        description: v.string(), 
+        title: v.string(),
+        description: v.string(),
       })
     ),
+  }),
+
+  admissionRequirements: defineTable({
+    title: v.string(),
+    requirements: v.array(v.string()),
+  }),
+
+  alternativeAdmissions: defineTable({
+    title: v.string(),
+    description: v.string(),
   }),
 });

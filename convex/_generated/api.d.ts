@@ -13,6 +13,8 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as admissionRequirements from "../admissionRequirements.js";
+import type * as alternativeAdmissions from "../alternativeAdmissions.js";
 import type * as alumni from "../alumni.js";
 import type * as askAI from "../askAI.js";
 import type * as getAllContent from "../getAllContent.js";
@@ -31,6 +33,8 @@ import type * as vision from "../vision.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  admissionRequirements: typeof admissionRequirements;
+  alternativeAdmissions: typeof alternativeAdmissions;
   alumni: typeof alumni;
   askAI: typeof askAI;
   getAllContent: typeof getAllContent;
