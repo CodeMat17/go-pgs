@@ -1,5 +1,6 @@
 "use client";
 
+import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -98,25 +99,8 @@ const ProgramDetail = () => {
                 Program Overview
               </h2>
               <div className='space-y-3 sm:space-y-4 dark:text-muted-foreground text-sm sm:text-base'>
-                {program.programOverview}
-                <p className='mt-4'>
-                  {" "}
-                  Change the above text <br />
-                  Our Postgraduate Diploma in Biotechnology is an intensive
-                  12-month program designed to provide advanced theoretical
-                  knowledge and practical skills in modern biotechnology.
-                </p>
-                <p>
-                  The curriculum covers essential areas including molecular
-                  biology, genetic engineering, bioprocess technology, and
-                  bioinformatics.
-                </p>
-                <ul className='list-disc pl-6 space-y-2'>
-                  <li>Comprehensive coverage of biotechnological concepts</li>
-                  <li>Practical training in laboratory techniques</li>
-                  <li>Industry visits and guest lectures</li>
-                  <li>Interdisciplinary research projects</li>
-                </ul>
+              
+                <SafeHTMLRenderer htmlContent={program.programOverview} className="text-gray-950 dark:text-muted-foreground" />
               </div>
             </Card>
 
