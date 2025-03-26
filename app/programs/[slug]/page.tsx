@@ -64,7 +64,7 @@ const ProgramDetail = () => {
         </div>
 
         {/* Program Details */}
-        <div className='grid gap-6 lg:grid-cols-[1fr_350px] xl:grid-cols-[1fr_400px]'>
+        <div className='grid gap-6 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_300px]'>
           {/* Main Content */}
           <div className='space-y-6'>
             {/* Why Choose Us */}
@@ -107,33 +107,6 @@ const ProgramDetail = () => {
               </div>
             </Card>
 
-            {/* Program Structure */}
-            {/* <Tabs defaultValue='core'>
-              <TabsList className='grid w-full grid-cols-2'>
-                <TabsTrigger value='core'>Core Modules</TabsTrigger>
-                <TabsTrigger value='electives'>Electives</TabsTrigger>
-              </TabsList>
-              <TabsContent value='core'>
-                <Card className='p-4 sm:p-6'>
-                  <ul className='space-y-2 text-sm sm:text-base'>
-                    <li>Molecular Biology Techniques</li>
-                    <li>Biostatistics</li>
-                    <li>Genetic Engineering</li>
-                    <li>Bioprocess Technology</li>
-                  </ul>
-                </Card>
-              </TabsContent>
-              <TabsContent value='electives'>
-                <Card className='p-4 sm:p-6'>
-                  <ul className='space-y-2 text-sm sm:text-base'>
-                    <li>Bioinformatics</li>
-                    <li>Nanobiotechnology</li>
-                    <li>Industrial Biotechnology</li>
-                    <li>Environmental Biotechnology</li>
-                  </ul>
-                </Card>
-              </TabsContent>
-            </Tabs> */}
           </div>
 
           {/* Sidebar */}
