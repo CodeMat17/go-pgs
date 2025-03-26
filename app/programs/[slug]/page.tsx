@@ -3,7 +3,8 @@
 import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import dayjs from 'dayjs'
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
@@ -99,13 +100,15 @@ const ProgramDetail = () => {
                 Program Overview
               </h2>
               <div className='space-y-3 sm:space-y-4 dark:text-muted-foreground text-sm sm:text-base'>
-              
-                <SafeHTMLRenderer htmlContent={program.programOverview} className="text-gray-950 dark:text-muted-foreground" />
+                <SafeHTMLRenderer
+                  htmlContent={program.programOverview}
+                  className='text-gray-950 dark:text-muted-foreground'
+                />
               </div>
             </Card>
 
             {/* Program Structure */}
-            <Tabs defaultValue='core'>
+            {/* <Tabs defaultValue='core'>
               <TabsList className='grid w-full grid-cols-2'>
                 <TabsTrigger value='core'>Core Modules</TabsTrigger>
                 <TabsTrigger value='electives'>Electives</TabsTrigger>
@@ -130,7 +133,7 @@ const ProgramDetail = () => {
                   </ul>
                 </Card>
               </TabsContent>
-            </Tabs>
+            </Tabs> */}
           </div>
 
           {/* Sidebar */}
@@ -165,16 +168,21 @@ const ProgramDetail = () => {
               </h2>
               <div className='space-y-3 text-sm sm:text-base'>
                 <div className='flex items-center gap-2'>
-                  <Calendar className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
-                  <span>Next Intake: {program.nextIntake}</span>
-                </div>
-                <div className='flex items-center gap-2'>
                   <Clock className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
                   <span>Duration: {program.studyDuration}</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <GraduationCap className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
                   <span>Mode: {program.studyMode}</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <Calendar className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
+                  <span>
+                    Next Intake:{" "}
+                    {program.nextIntake === "NO-DATE-SET"
+                      ? program.nextIntake
+                      : dayjs(program.nextIntake).format("MMM DD, YYYY")}
+                  </span>
                 </div>
               </div>
             </Card>
