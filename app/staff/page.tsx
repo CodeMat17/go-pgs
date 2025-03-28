@@ -1,5 +1,6 @@
 "use client";
 
+import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
@@ -163,9 +164,10 @@ export default function StaffPage() {
 
             {/* Scrollable Content */}
             <div className='overflow-y-auto max-h-[60vh] mt-4 px-2'>
-              <p className='text-sm text-muted-foreground'>
-                {selectedStaff.profile}
-              </p>
+              <SafeHTMLRenderer
+                htmlContent={selectedStaff.profile ?? ''}
+                className='text-sm text-muted-foreground'
+              />
             </div>
 
             {/* Footer */}
