@@ -49,14 +49,20 @@ export default defineSchema({
   staff: defineTable({
     name: v.string(),
     role: v.string(),
-    image: v.string(),
-    bio: v.string(),
+    body: v.optional(v.id("_storage")),
+    imageStorageId: v.optional(v.id("_storage")),
+    bio: v.optional(v.string()),
     email: v.string(),
     profile: v.optional(v.string()),
-    social: v.object({
-      linkedin: v.string(),
-      twitter: v.string(),
-    }),
+    linkedin: v.optional(v.string()),
+    format: v.optional(v.string()),
+    social: v.optional(
+      v.object({
+        linkedin: v.string(),
+        twitter: v.string(),
+      })
+    ),
+    image: v.optional(v.string()),
   }),
 
   whyChoose: defineTable({

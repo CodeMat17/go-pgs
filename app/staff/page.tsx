@@ -6,149 +6,114 @@ import { Card } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import { BookOpen, Linkedin, Mail, MinusIcon, Twitter, X } from "lucide-react";
+import { BookOpen, Linkedin, Mail, MinusIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function StaffPage() {
-  const fetchedStaff = useQuery(api.staff.getStaff);
-  const [staff, setStaff] = useState(fetchedStaff ?? []);
-  const [selectedStaff, setSelectedStaff] = useState<(typeof staff)[0] | null>(
-    null
-  );
+  const staffList = useQuery(api.staff.getStaff);
+  type StaffMember = NonNullable<typeof staffList>[0];
+  const [selectedStaff, setSelectedStaff] = useState<StaffMember |null>(null);
 
   useEffect(() => {
-    if (fetchedStaff !== undefined) {
-      setStaff(fetchedStaff); // Update state when data arrives
-    }
-  }, [fetchedStaff]);
-
-  // Prevent background scroll when modal is open
-  useEffect(() => {
-    if (selectedStaff) {
-      document.body.style.overflow = "hidden"; // Disable scrolling
-    } else {
-      document.body.style.overflow = ""; // Enable scrolling when modal is closed
-    }
+    document.body.style.overflow = selectedStaff ? "hidden" : "";
     return () => {
-      document.body.style.overflow = ""; // Cleanup on unmount
+      document.body.style.overflow = "";
     };
   }, [selectedStaff]);
 
-  const closeModal = () => setSelectedStaff(null);
+  if (staffList === undefined) {
+    return (
+      <div className='px-4 py-64 flex items-center justify-center'>
+        <MinusIcon className='animate-spin mr-3' /> Loading...
+      </div>
+    );
+  }
 
   return (
     <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 dark:bg-inherit'>
-      {/* Page Header */}
       <div className='text-center mb-12'>
         <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Staff</h1>
-        <p className='text-lg text-muted-foreground max-w-xl mx-auto '>
+        <p className='text-lg text-muted-foreground max-w-xl mx-auto'>
           Meet the dedicated and accomplished staff members who are shaping the
           future of education at GO University PGS.
         </p>
       </div>
 
-      {/* Staff Grid */}
-      {!staff && staff === undefined && (
+      {staffList.length === 0 ? (
         <div className='flex items-center justify-center px-4 py-20'>
           No staff list found.
         </div>
-      )}
-      <div>
-        {staff.length === 0 ? (
-          <div className='flex items-center justify-center px-4 py-20'>
-            <MinusIcon className='animate-spin mr-3' /> Loading staff list
-          </div>
-        ) : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-            {staff.map((staffMember) => (
-              <motion.div
-                key={staffMember._id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}>
-                <Card className=' hover:shadow-lg transition-shadow rounded-lg overflow-hidden border-amber-100 dark:border-gray-500/50'>
-                  {/* Staff Image */}
-                  <div className='relative w-full h-64  mb-4'>
-                    <Image
-                      src={staffMember.image}
-                      alt={staffMember.name}
-                      fill
-                      className='object-cover'
-                      sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
-                    />
-                  </div>
-
-                  {/* Staff Details */}
-                  <div className='text-center px-4 pb-4'>
-                    <h2 className='text-xl font-semibold mb-1'>
-                      {staffMember.name}
-                    </h2>
-                    <p className='text-sm text-muted-foreground mb-4'>
-                      {staffMember.role}
-                    </p>
-
-                    {/* Social Links */}
-                    <div className='flex justify-center gap-4 mb-4'>
+      ) : (
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          {staffList.map((staff) => (
+            <motion.div
+              key={staff.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}>
+              <Card className='hover:shadow-lg transition-shadow rounded-lg overflow-hidden border-amber-100 dark:border-gray-500/50'>
+                <div className='relative w-full h-64 mb-4'>
+                  <Image
+                    src={staff.imageUrl ?? "/default-avatar.png"}
+                    alt={staff.name}
+                    fill
+                    className='object-cover'
+                  />
+                </div>
+                <div className='text-center px-4 pb-4'>
+                  <h2 className='text-xl font-semibold mb-1'>{staff.name}</h2>
+                  <p className='text-sm text-muted-foreground mb-4'>
+                    {staff.role}
+                  </p>
+                  <div className='flex justify-center gap-4 mb-4'>
+                    <a
+                      href={`mailto:${staff.email}`}
+                      className='text-primary hover:scale-110'>
+                      <Mail className='w-5 h-5' />
+                    </a>
+                    {staff.linkedin ? (
                       <a
-                        href={`mailto:${staffMember.email}`}
-                        className='text-primary hover:text-primary/80'>
-                        <Mail className='w-5 h-5' />
-                      </a>
-                      <a
-                        href={staffMember.social.linkedin}
+                        href={staff.linkedin}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='text-primary hover:text-primary/80'>
+                        className='text-primary hover:scale-105'>
                         <Linkedin className='w-5 h-5' />
                       </a>
-                      <a
-                        href={staffMember.social.twitter}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='text-primary hover:text-primary/80'>
-                        <Twitter className='w-5 h-5' />
-                      </a>
-                    </div>
-
-                    {/* View Profile Button */}
-                    <Button
-                      variant='outline'
-                      className='w-full'
-                      onClick={() => setSelectedStaff(staffMember)}>
-                      <BookOpen className='mr-2 w-4 h-4' />
-                      View Profile
-                    </Button>
+                    ) : (
+                      <Linkedin className='w-5 h-5 text-gray-400 dark:text-gray-800' />
+                    )}
                   </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        )}
-      </div>
+                  <Button
+                    variant='outline'
+                    className='w-full'
+                    onClick={() => setSelectedStaff(staff)}>
+                    <BookOpen className='mr-2 w-4 h-4' /> View Profile
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      )}
 
-      {/* Modal - Display if selectedStaff is not null */}
       {selectedStaff && (
         <div
           className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
-          onClick={closeModal}>
+          onClick={() => setSelectedStaff(null)}>
           <div
             className='bg-white dark:bg-gray-800 max-w-lg w-full rounded-lg shadow-lg p-6 relative flex flex-col max-h-[90vh] overflow-hidden'
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-          >
-            {/* Close Button */}
+            onClick={(e) => e.stopPropagation()}>
             <button
               className='absolute top-2 right-2 text-gray-500 hover:text-gray-700'
-              onClick={closeModal}>
+              onClick={() => setSelectedStaff(null)}>
               <X className='w-6 h-6' />
             </button>
-
-            {/* Staff Header */}
             <div className='flex items-center gap-4 border-b pb-4'>
               <div className='relative w-16 h-16 rounded-full overflow-hidden'>
                 <Image
-                  src={selectedStaff.image}
+                  src={selectedStaff.imageUrl ?? "/default-avatar.png"}
                   alt={selectedStaff.name}
                   fill
                   className='object-cover'
@@ -161,18 +126,14 @@ export default function StaffPage() {
                 </p>
               </div>
             </div>
-
-            {/* Scrollable Content */}
             <div className='overflow-y-auto max-h-[60vh] mt-4 px-2'>
               <SafeHTMLRenderer
-                htmlContent={selectedStaff.profile ?? ''}
+                htmlContent={selectedStaff.profile ?? ""}
                 className='text-sm text-muted-foreground'
               />
             </div>
-
-            {/* Footer */}
             <div className='mt-4 flex justify-end'>
-              <Button variant='outline' onClick={closeModal}>
+              <Button variant='outline' onClick={() => setSelectedStaff(null)}>
                 Close
               </Button>
             </div>

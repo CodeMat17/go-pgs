@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         hostname: "media.gettyimages.com",
         port: "",
       },
+       {
+        protocol: "https",
+        hostname: "polite-monitor-553.convex.cloud",
+        port: "",
+      },
     ],
   },
 };
