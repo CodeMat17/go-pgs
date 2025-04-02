@@ -67,7 +67,7 @@ export default function StaffPage() {
                   <p className='text-sm text-muted-foreground mb-4'>
                     {staff.role}
                   </p>
-                  <p>{ staff.imageUrl}</p>
+                  {/* <p>{ staff.imageUrl}</p> */}
                   <div className='flex justify-center gap-4 mb-4'>
                     <a
                       href={`mailto:${staff.email}`}
