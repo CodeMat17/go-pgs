@@ -83,7 +83,7 @@ export default function StaffPage() {
                         <Linkedin className='w-5 h-5' />
                       </a>
                     ) : (
-                      <Linkedin className='w-5 h-5 text-gray-400 dark:text-gray-800' />
+                      <Linkedin className='w-5 h-5 text-gray-300 dark:text-gray-600' />
                     )}
                   </div>
                   <Button
