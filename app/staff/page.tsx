@@ -54,19 +54,20 @@ export default function StaffPage() {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}>
               <Card className='hover:shadow-lg transition-shadow rounded-lg overflow-hidden border-amber-100 dark:border-gray-500/50'>
-                <div className='relative w-full h-64 mb-4'>
+                <div className='relative w-full h-64 mb-3'>
                   <Image
-                    src={staff.imageUrl ?? "/default-avatar.png"}
+                    src={staff.imageUrl ?? ''}
                     alt={staff.name}
                     fill
                     className='object-cover'
                   />
                 </div>
-                <div className='text-center px-4 pb-4'>
+                <div className='text-center px-4 pb-3'>
                   <h2 className='text-xl font-semibold mb-1'>{staff.name}</h2>
                   <p className='text-sm text-muted-foreground mb-4'>
                     {staff.role}
                   </p>
+                  <p>{ staff.imageUrl}</p>
                   <div className='flex justify-center gap-4 mb-4'>
                     <a
                       href={`mailto:${staff.email}`}
