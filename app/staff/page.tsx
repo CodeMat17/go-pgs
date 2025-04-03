@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 export default function StaffPage() {
   const staffList = useQuery(api.staff.getStaff);
   type StaffMember = NonNullable<typeof staffList>[0];
-  const [selectedStaff, setSelectedStaff] = useState<StaffMember |null>(null);
+  const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = selectedStaff ? "hidden" : "";
@@ -56,7 +56,7 @@ export default function StaffPage() {
               <Card className='hover:shadow-lg transition-shadow rounded-lg overflow-hidden border-amber-100 dark:border-gray-500/50'>
                 <div className='relative w-full h-64 mb-3'>
                   <Image
-                    src={staff.imageUrl ?? ''}
+                    src={staff.imageUrl ?? ""}
                     alt={staff.name}
                     fill
                     className='object-cover'
@@ -109,7 +109,7 @@ export default function StaffPage() {
             <button
               className='absolute top-2 right-2 text-gray-500 hover:text-gray-700'
               onClick={() => setSelectedStaff(null)}>
-              <X className='w-6 h-6' />
+              <X className='w-6 h-6 text-red-500' />
             </button>
             <div className='flex items-center gap-4 border-b pb-4'>
               <div className='relative w-16 h-16 rounded-full overflow-hidden'>
@@ -130,7 +130,7 @@ export default function StaffPage() {
             <div className='overflow-y-auto max-h-[60vh] mt-4 px-2'>
               <SafeHTMLRenderer
                 htmlContent={selectedStaff.profile ?? ""}
-                className='text-sm text-muted-foreground'
+                className='text-muted-foreground'
               />
             </div>
             <div className='mt-4 flex justify-end'>

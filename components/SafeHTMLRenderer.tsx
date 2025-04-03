@@ -1,5 +1,5 @@
-// components/SafeHTMLRenderer.tsx
 "use client";
+
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 
@@ -37,13 +37,27 @@ export const SafeHTMLRenderer = ({
       ADD_ATTR: ["rel"],
     });
 
+    // Add color inheritance to all elements
+    const styledHTML = `
+      <div class="force-color-inheritance">
+        ${cleanHTML || "<p>&nbsp;</p>"}
+      </div>
+      <style>
+        .force-color-inheritance * {
+          color: inherit !important;
+          font-family: inherit !important;
+        }
+      </style>
+    `;
+
     // Add basic paragraph spacing if empty content
-    setSanitizedContent(cleanHTML || "<p>&nbsp;</p>");
+    setSanitizedContent(
+    styledHTML)
   }, [htmlContent]);
 
   return (
     <div
-      className={`prose prose-p:my-4 prose-p:leading-relaxed ${className}`}
+      className={`prose prose-p:my-3 prose-p:leading-relaxed ${className}`}
       dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
   );
