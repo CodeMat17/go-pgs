@@ -17,7 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FaWhatsapp } from "react-icons/fa";import { api } from "@/convex/_generated/api";
+import { FaWhatsapp } from "react-icons/fa";
+import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import {
@@ -143,11 +144,11 @@ export default function AlumniPage() {
                         ) : (
                           <Avatar className='w-16 h-16'>
                             <AvatarImage src={alumnus.photo} />
-                            <AvatarFallback>{alumnus.name[0]}</AvatarFallback>
+                            <AvatarFallback className='capitalize'>{alumnus.name[0]}</AvatarFallback>
                           </Avatar>
                         )}
                         <div className='flex-1'>
-                          <h3 className='text-xl font-semibold'>
+                          <h3 className='text-xl font-semibold capitalize'>
                             {alumnus.name}
                           </h3>
                           <div className='flex items-center gap-2 mt-1'>
