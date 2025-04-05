@@ -6,29 +6,38 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "@/components/ui/pagination";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
-import { api } from "@/convex/_generated/api";
+import { FaWhatsapp } from "react-icons/fa";import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import { Briefcase, ChevronsLeftIcon, ChevronsRightIcon, Linkedin, MinusIcon } from "lucide-react";
+import {
+  Briefcase,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+  Linkedin,
+  MinusIcon,
+} from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function AlumniPage() {
   const alumni = useQuery(api.alumni.getAlumni) ?? [];
 
   const uniqueYears = Array.from(
-    new Set(alumni.map((alumnus) => alumnus.year))
-  ).sort((a, b) => b - a);
+    new Set(alumni.map((alumnus) => alumnus.graduatedOn))
+  )
+    .filter((y): y is string => typeof y === "string")
+    .sort((a, b) => b.localeCompare(a));
   const uniquePrograms = Array.from(
     new Set(alumni.map((alumnus) => alumnus.degree))
   );
@@ -46,7 +55,7 @@ export default function AlumniPage() {
     const matchesProgram =
       selectedProgram === "all" || alumnus.degree === selectedProgram;
     const matchesYear =
-      selectedYear === "all" || alumnus.year.toString() === selectedYear;
+      selectedYear === "all" || alumnus.graduatedOn === selectedYear;
     return matchesSearch && matchesProgram && matchesYear;
   });
 
@@ -122,17 +131,28 @@ export default function AlumniPage() {
                   <Card className='hover:shadow-lg transition-shadow h-full'>
                     <div className='p-6'>
                       <div className='flex items-start gap-4 mb-4'>
-                        <Avatar className='w-16 h-16'>
-                          <AvatarImage src={alumnus.photo} />
-                          <AvatarFallback>{alumnus.name[0]}</AvatarFallback>
-                        </Avatar>
+                        {alumnus.photo ? (
+                          <div className='relative w-[65px] aspect-square'>
+                            <Image
+                              alt={alumnus.name}
+                              fill
+                              src={alumnus.photo}
+                              className='rounded-full object-cover overflow-hidden'
+                            />
+                          </div>
+                        ) : (
+                          <Avatar className='w-16 h-16'>
+                            <AvatarImage src={alumnus.photo} />
+                            <AvatarFallback>{alumnus.name[0]}</AvatarFallback>
+                          </Avatar>
+                        )}
                         <div className='flex-1'>
                           <h3 className='text-xl font-semibold'>
                             {alumnus.name}
                           </h3>
                           <div className='flex items-center gap-2 mt-1'>
                             <Badge variant='secondary'>{alumnus.degree}</Badge>
-                            <Badge>{alumnus.year}</Badge>
+                            <Badge>{alumnus.graduatedOn}</Badge>
                           </div>
                         </div>
                       </div>
@@ -143,16 +163,40 @@ export default function AlumniPage() {
                         </span>
                       </div>
                       <p className='mb-4 line-clamp-3'>{alumnus.testimonial}</p>
-                      {alumnus.linkedin && (
-                        <Button variant='outline' size='sm' asChild>
-                          <a
-                            href={alumnus.linkedin}
-                            target='_blank'
-                            rel='noopener noreferrer'>
-                            <Linkedin className='mr-2 h-4 w-4' /> Connect
-                          </a>
-                        </Button>
-                      )}
+                      <div className='flex gap-3'>
+                        {alumnus.linkedin && (
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            asChild
+                            className='border-blue-500 dark:border-blue-900'>
+                            <a
+                              href={alumnus.linkedin}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='text-4xl text-blue-500 hover:text-blue-600 transition-colors'>
+                              <Linkedin className='mr-2 h-4 w-4' /> Connect
+                            </a>
+                          </Button>
+                        )}
+                        {alumnus.phone && (
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            asChild
+                            className='border-green-500 dark:border-green-900'>
+                            <a
+                              href={`https://wa.me/${alumnus.phone}`}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='text-4xl text-green-500 hover:text-green-600 transition-colors'
+                              aria-label='Chat on WhatsApp'>
+                              <FaWhatsapp className='w-8 h-8' />
+                              Chat
+                            </a>
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </Card>
                 </motion.div>

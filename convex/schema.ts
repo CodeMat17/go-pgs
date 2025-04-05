@@ -37,13 +37,16 @@ export default defineSchema({
 
   alumni: defineTable({
     name: v.string(),
-    photo: v.string(),
+    photo: v.optional(v.string()),
     degree: v.string(),
-    year: v.number(),
+    year: v.optional(v.number()),
     currentPosition: v.string(),
     company: v.string(),
     testimonial: v.string(),
     linkedin: v.string(),
+    storageId: v.optional(v.string()),
+    graduatedOn: v.optional(v.string()),
+    phone: v.optional(v.number()),
   }),
 
   staff: defineTable({
