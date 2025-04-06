@@ -47,6 +47,7 @@ export default defineSchema({
     storageId: v.optional(v.string()),
     graduatedOn: v.optional(v.string()),
     phone: v.optional(v.number()),
+    email: v.optional(v.string()),
   }),
 
   staff: defineTable({

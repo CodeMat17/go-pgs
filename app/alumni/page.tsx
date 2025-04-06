@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FaWhatsapp } from "react-icons/fa";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
@@ -26,10 +25,12 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
   Linkedin,
+  Mail,
   MinusIcon,
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function AlumniPage() {
   const alumni = useQuery(api.alumni.getAlumni) ?? [];
@@ -144,7 +145,9 @@ export default function AlumniPage() {
                         ) : (
                           <Avatar className='w-16 h-16'>
                             <AvatarImage src={alumnus.photo} />
-                            <AvatarFallback className='capitalize'>{alumnus.name[0]}</AvatarFallback>
+                            <AvatarFallback className='capitalize'>
+                              {alumnus.name[0]}
+                            </AvatarFallback>
                           </Avatar>
                         )}
                         <div className='flex-1'>
@@ -164,7 +167,7 @@ export default function AlumniPage() {
                         </span>
                       </div>
                       <p className='mb-4 line-clamp-3'>{alumnus.testimonial}</p>
-                      <div className='flex gap-3'>
+                      <div className='flex gap-2'>
                         {alumnus.linkedin && (
                           <Button
                             variant='outline'
@@ -176,7 +179,7 @@ export default function AlumniPage() {
                               target='_blank'
                               rel='noopener noreferrer'
                               className='text-4xl text-blue-500 hover:text-blue-600 transition-colors'>
-                              <Linkedin className='mr-2 h-4 w-4' /> Connect
+                              <Linkedin className='h-4 w-4' /> Connect
                             </a>
                           </Button>
                         )}
@@ -194,6 +197,23 @@ export default function AlumniPage() {
                               aria-label='Chat on WhatsApp'>
                               <FaWhatsapp className='w-8 h-8' />
                               Chat
+                            </a>
+                          </Button>
+                        )}
+                        {alumnus.phone && (
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            asChild
+                            className=''>
+                            <a
+                              href={`mailto: ${alumnus.email}`}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='text-4xl'
+                              aria-label='Chat on WhatsApp'>
+                              <Mail className='w-8 h-8' />
+                              Email
                             </a>
                           </Button>
                         )}
