@@ -183,14 +183,14 @@ export default function AlumniPage() {
                             </a>
                           </Button>
                         )}
-                        {alumnus.phone && (
+                        {alumnus.tel && (
                           <Button
                             variant='outline'
                             size='sm'
                             asChild
                             className='border-green-500 dark:border-green-900'>
                             <a
-                              href={`https://wa.me/${alumnus.phone}`}
+                              href={`https://wa.me/${alumnus.tel}`}
                               target='_blank'
                               rel='noopener noreferrer'
                               className='text-4xl text-green-500 hover:text-green-600 transition-colors'
@@ -200,7 +200,7 @@ export default function AlumniPage() {
                             </a>
                           </Button>
                         )}
-                        {alumnus.phone && (
+                        {alumnus.email && (
                           <Button
                             variant='outline'
                             size='sm'
