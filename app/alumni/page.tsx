@@ -1,15 +1,11 @@
 "use client";
 
+import PaginationComponent from "@/components/PaginationComponent";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -22,19 +18,19 @@ import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import {
   Briefcase,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
+  // ChevronsLeftIcon,
+  // ChevronsRightIcon,
   Linkedin,
   Mail,
   MinusIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
+
 
 export default function AlumniPage() {
   const alumni = useQuery(api.alumni.getAlumni) ?? [];
-
   const uniqueYears = Array.from(
     new Set(alumni.map((alumnus) => alumnus.graduatedOn))
   )
@@ -66,6 +62,17 @@ export default function AlumniPage() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // Function to handle page change
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return; // Prevent out-of-range pages
+    setCurrentPage(newPage);
+  };
+
+  useEffect(() => {
+    // Scroll to the top of the page whenever the page changes
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   return (
     <div className='w-full min-h-screen max-w-5xl mx-auto px-4 py-12'>
@@ -117,7 +124,7 @@ export default function AlumniPage() {
         </div>
 
         {/* Alumni Grid */}
-        {alumni === undefined && !alumni ? (
+        {alumni === undefined || alumni.length === 0 ? (
           <div className='w-full flex items-center justify-center py-48'>
             <MinusIcon className='animate-spin mr-3' /> Please wait...
           </div>
@@ -211,7 +218,7 @@ export default function AlumniPage() {
                               target='_blank'
                               rel='noopener noreferrer'
                               className='text-4xl'
-                              aria-label='Chat on WhatsApp'>
+                              aria-label='Send email'>
                               <Mail className='w-8 h-8' />
                               Email
                             </a>
@@ -223,29 +230,13 @@ export default function AlumniPage() {
                 </motion.div>
               ))}
             </div>
-            <div className='mt-12 bg-gray-100 dark:bg-gray-800 py-3 border'>
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <Button
-                      disabled={currentPage === 1}
-                      onClick={() => setCurrentPage(currentPage - 1)}>
-                      <ChevronsLeftIcon />
-                    </Button>
-                  </PaginationItem>
-                  <PaginationItem className='px-4'>
-                    Page {currentPage} of {totalPages}
-                  </PaginationItem>
-                  <PaginationItem>
-                    <Button
-                      disabled={currentPage === totalPages}
-                      onClick={() => setCurrentPage(currentPage + 1)}>
-                      <ChevronsRightIcon />
-                    </Button>
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+
+            {/* Pagination */}
+            <PaginationComponent
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+              currentPage={currentPage}
+            />
           </>
         ) : (
           <p className='text-center text-lg text-muted-foreground'>
