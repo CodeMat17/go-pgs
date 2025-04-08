@@ -125,9 +125,9 @@ export default function AlumniPage() {
 
         {/* Alumni Grid */}
         {alumni === undefined || alumni.length === 0 ? (
-          <div className='w-full flex items-center justify-center py-48'>
-            <MinusIcon className='animate-spin mr-3' /> Please wait...
-          </div>
+          <p className='text-center text-lg text-muted-foreground'>
+            No alumni found matching your search input.
+          </p>
         ) : paginatedAlumni.length > 0 ? (
           <>
             <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
@@ -239,9 +239,9 @@ export default function AlumniPage() {
             />
           </>
         ) : (
-          <p className='text-center text-lg text-muted-foreground'>
-            No alumni found matching your search input.
-          </p>
+          <div className='w-full flex items-center justify-center py-48'>
+            <MinusIcon className='animate-spin mr-3' /> Please wait...
+          </div>
         )}
       </motion.div>
     </div>
