@@ -88,4 +88,58 @@ export default defineSchema({
     title: v.string(),
     description: v.string(),
   }),
+
+  contactUs: defineTable({
+    address: v.string(),
+    email: v.optional(
+      v.array(
+        v.object({
+          email1: v.string(),
+          email2: v.string(),
+        })
+      )
+    ),
+    phone: v.optional(
+      v.array(
+        v.object({
+          tel1: v.string(),
+          tel2: v.string(),
+        })
+      )
+    ),
+    officeHours: v.optional(
+      v.array(
+        v.object({
+          days: v.string(),
+          time: v.string(),
+        })
+      )
+    ),
+    researchOffice: v.optional(
+      v.array(
+        v.object({
+          email: v.string(),
+          tel: v.string(),
+        })
+      )
+    ),
+    studentSupport: v.optional(
+      v.array(
+        v.object({
+          email: v.string(),
+          tel: v.string(),
+        })
+      )
+    ),
+    admissionOffice: v.optional(
+      v.array(
+        v.object({
+          email: v.string(),
+          tel: v.string(),
+        })
+      )
+    ),
+  }),
 });
+
+
