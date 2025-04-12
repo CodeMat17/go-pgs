@@ -7,13 +7,14 @@ import { Eye, Share2 } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
+import { useParams } from "next/navigation";
 
-export default function NewsDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const newsItem = useQuery(api.news.getNewsBySlug, { slug: params.slug });
+export default function NewsDetailPage() {
+
+ const params = useParams();
+ const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+
+  const newsItem = useQuery(api.news.getNewsBySlug, slug ? {slug} : 'skip');
   const incrementViews = useMutation(api.news.incrementViews);
 
   const handleShare = (slug: string) => {
@@ -31,10 +32,10 @@ export default function NewsDetailPage({
   };
 
   useEffect(() => {
-    if (newsItem?.slug) {
-      incrementViews({ slug: params.slug });
+    if (newsItem?.slug && slug) {
+      incrementViews({ slug });
     }
-  }, [newsItem?.slug, params.slug, incrementViews]);
+  }, [newsItem?.slug, slug, incrementViews]);
 
   if (newsItem === null) {
     notFound();

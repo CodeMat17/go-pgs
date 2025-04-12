@@ -4,7 +4,6 @@ import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import dayjs from 'dayjs'
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
