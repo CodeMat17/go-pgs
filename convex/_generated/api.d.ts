@@ -21,6 +21,7 @@ import type * as contactUs from "../contactUs.js";
 import type * as getAllContent from "../getAllContent.js";
 import type * as hero from "../hero.js";
 import type * as mission from "../mission.js";
+import type * as news from "../news.js";
 import type * as programs from "../programs.js";
 import type * as staff from "../staff.js";
 import type * as vision from "../vision.js";
@@ -42,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   getAllContent: typeof getAllContent;
   hero: typeof hero;
   mission: typeof mission;
+  news: typeof news;
   programs: typeof programs;
   staff: typeof staff;
   vision: typeof vision;

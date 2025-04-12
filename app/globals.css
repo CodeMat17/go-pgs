@@ -16,6 +16,15 @@
   }
 }
 
+@layer components {
+  .pagination-button {
+    @apply h-10 w-10 hover:bg-muted/50 transition-colors;
+  }
+  .pagination-disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
