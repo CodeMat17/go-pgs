@@ -1,7 +1,16 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -9,24 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
-} from "@/components/ui/pagination";
-import { MultiSelect } from "@/components/MultiSelect";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import { Eye, Minus, Share2, X } from "lucide-react";
+import { CameraOff, Eye, Minus, Share2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "@/convex/_generated/api";
+import { useEffect, useMemo, useState } from "react";
 
 type SortOption = "default" | "views_asc" | "views_desc";
 const ITEMS_PER_PAGE = 9;
@@ -39,63 +38,44 @@ export default function NewsPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-   const {
-  
-     uniqueAuthors,
-     uniqueTags,
-     totalPages,
-     paginatedNews,
-   } = useMemo(() => {
-     if (!newsList)
-       return {
-     
-         uniqueAuthors: [],
-         uniqueTags: [],
-         totalPages: 0,
-         paginatedNews: [],
-       };
+  const { uniqueAuthors, totalPages, paginatedNews } = useMemo(() => {
+    if (!newsList)
+      return {
+        uniqueAuthors: [],
+        uniqueTags: [],
+        totalPages: 0,
+        paginatedNews: [],
+      };
 
-     const authors = Array.from(new Set(newsList.map((item) => item.author)));
-     const tags = Array.from(new Set(newsList.flatMap((item) => item.tags)));
+    const authors = Array.from(new Set(newsList.map((item) => item.author)));
 
-     let filtered = newsList.filter((item) => {
-       const matchesTitle = item.title
-         .toLowerCase()
-         .includes(titleSearch.toLowerCase());
-       const matchesAuthor = !selectedAuthor || item.author === selectedAuthor;
-       const matchesTags =
-         selectedTags.length === 0 ||
-         selectedTags.every((tag) => item.tags.includes(tag));
+    let filtered = newsList.filter((item) => {
+      const matchesTitle = item.title
+        .toLowerCase()
+        .includes(titleSearch.toLowerCase());
+      const matchesAuthor = !selectedAuthor || item.author === selectedAuthor;
 
-       return matchesTitle && matchesAuthor && matchesTags;
-     });
+      return matchesTitle && matchesAuthor;
+    });
 
-     filtered = [...filtered].sort((a, b) => {
-       if (sortOrder === "views_asc") return a.views - b.views;
-       if (sortOrder === "views_desc") return b.views - a.views;
-       return 0;
-     });
+    filtered = [...filtered].sort((a, b) => {
+      if (sortOrder === "views_asc") return a.views - b.views;
+      if (sortOrder === "views_desc") return b.views - a.views;
+      return 0;
+    });
 
-     const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-     const endIndex = startIndex + ITEMS_PER_PAGE;
-     const paginatedNews = filtered.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedNews = filtered.slice(startIndex, endIndex);
 
-     return {
-       filteredNews: filtered,
-       uniqueAuthors: authors,
-       uniqueTags: tags.sort(),
-       totalPages,
-       paginatedNews,
-     };
-   }, [
-     newsList,
-     titleSearch,
-     selectedAuthor,
-     sortOrder,
-     selectedTags,
-     currentPage,
-   ]);
+    return {
+      filteredNews: filtered,
+      uniqueAuthors: authors,
+      totalPages,
+      paginatedNews,
+    };
+  }, [newsList, titleSearch, selectedAuthor, sortOrder, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -113,8 +93,6 @@ export default function NewsPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentPage, totalPages]);
-
- 
 
   const handleShare = (slug: string) => {
     const url = `${window.location.origin}/news/${slug}`;
@@ -141,7 +119,7 @@ export default function NewsPage() {
 
         {/* Filter Controls */}
         <div className='space-y-8 mb-12'>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4'>
+          <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-4'>
             {/* Title Search */}
             <div className='space-y-0.5'>
               <label className='text-sm font-medium text-foreground/80'>
@@ -206,21 +184,6 @@ export default function NewsPage() {
                   <SelectItem value='views_asc'>Fewest Views</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            {/* Tags Filter */}
-            <div className='space-y-0.5'>
-              <label className='text-sm font-medium text-foreground/80'>
-                Filter by Tags
-              </label>
-              <MultiSelect
-                options={uniqueTags.map((tag) => ({ value: tag, label: tag }))}
-                selected={selectedTags}
-                onChange={setSelectedTags}
-                placeholder='Select tags...'
-                className='bg-background'
-                onClear={() => setSelectedTags([])}
-              />
             </div>
           </div>
 
@@ -303,8 +266,8 @@ export default function NewsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}>
                 <Card className='group h-full flex flex-col overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg hover:border-primary/20 dark:bg-gray-900'>
-                  <div className='relative aspect-video overflow-hidden'>
-                    {news.coverImage && (
+                  {news.coverImage ? (
+                    <div className='relative aspect-video overflow-hidden'>
                       <Image
                         src={news.coverImage}
                         alt={news.title}
@@ -314,17 +277,34 @@ export default function NewsPage() {
                         placeholder='blur'
                         blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+yHgAFWAJ/R8xlVwAAAABJRU5ErkJggg=='
                       />
-                    )}
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent' />
-                    <div className='absolute bottom-4 left-4 right-4'>
-                      <div className='flex items-center gap-2 text-white'>
-                        <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 border border-gray-500'>
-                          By:
-                        </span>
-                        <p className='text-sm leading-4'>{news.author}</p>
+                      <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent' />
+                      {/* Always visible author section */}
+                      <div className='absolute bottom-4 left-4 right-4'>
+                        <div className='flex items-center gap-2 text-white'>
+                          <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 border border-gray-500'>
+                            By
+                          </span>
+                          <p className='text-sm leading-4'>{news.author}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className='relative aspect-video overflow-hidden bg-gradient-to-br from-primary/10 to-muted/50'>
+                      <div className='absolute inset-0 flex items-center justify-center gap-2 text-muted-foreground text-sm'>
+                        <CameraOff className='w-6 h-6' />
+                        <span className='font-medium'>No Image Available</span>
+                      </div>
+                      {/* Always visible author section */}
+                      <div className='absolute bottom-4 left-4 right-4'>
+                        <div className='flex items-center gap-2 text-white'>
+                          <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 border border-gray-500'>
+                            By
+                          </span>
+                          <p className='text-sm text-gray-800 dark:text-gray-400 leading-4'>{news.author}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className='flex-1 px-4 pb-2 pt-2 flex flex-col'>
                     <span className='text-sm text-muted-foreground'>
@@ -340,8 +320,6 @@ export default function NewsPage() {
                           <Eye className='h-4 w-4' />
                           <span className='text-xs'>{news.views}</span>
                         </div>
-
-                      
 
                         <button
                           className='flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-950 px-4 py-2 rounded-full text-xs font-medium'

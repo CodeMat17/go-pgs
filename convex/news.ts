@@ -13,7 +13,6 @@ export const getNewsList = query({
       coverImage: doc.coverImage,
       author: doc.author,
       views: doc.views,
-      tags: doc.tags,
       publicationDate: doc.publicationDate,
     }));
   },
