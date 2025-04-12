@@ -8,29 +8,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 
-
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-// interface NewsItem {
-//   _id: string;
-//   title: string;
-//   slug: string;
-//   content: string;
-//   excerpt: string;
-//   coverImage: string;
-//   author: string;
-//   publicationDate: number;
-//   views: number;
-//   tags: string[];
-// }
-
 export default function NewsDetailPage({
   params,
-}: PageProps) {
+}: {
+  params: { slug: string };
+}) {
   const newsItem = useQuery(api.news.getNewsBySlug, { slug: params.slug });
   const incrementViews = useMutation(api.news.incrementViews);
 
@@ -43,7 +25,6 @@ export default function NewsDetailPage({
         url: url,
       });
     } else {
-      // Fallback for desktop
       navigator.clipboard.writeText(url);
       alert("Link copied to clipboard!");
     }
@@ -85,12 +66,13 @@ export default function NewsDetailPage({
               fill
               className='rounded-lg object-cover'
               sizes='(max-width: 768px) 100vw, 80vw'
+              priority
             />
           </div>
         )}
         <h1 className='text-4xl font-bold mb-4'>{newsItem.title}</h1>
 
-        <div className='flex flex-col sm:flex-row sm:justify-between mb-'>
+        <div className='flex flex-col sm:flex-row sm:justify-between mb-4'>
           <div className='flex items-center gap-2 text-sm'>
             <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0'>
               By
@@ -98,25 +80,24 @@ export default function NewsDetailPage({
             <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
               <p className='text-primary pt-1 sm:pt-0'>{newsItem.author}</p>
               <span className='hidden sm:flex'>|</span>
-              <p> {dayjs(newsItem.publicationDate).format("MMM DD, YYYY")}</p>
+              <p>{dayjs(newsItem.publicationDate).format("MMM DD, YYYY")}</p>
             </div>
           </div>
         </div>
+
         <div className='flex items-center gap-2 text-sm mt-1 mb-8'>
           <div className='flex items-center gap-2 mr-4'>
             <Eye className='w-4 h-4' />
             <p>{newsItem.views} views</p>
           </div>
-
           <p>•</p>
           <button
             className='flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-950 px-4 py-2 rounded-full text-xs font-medium'
-            onClick={() => handleShare(newsItem .slug)}>
+            onClick={() => handleShare(newsItem.slug)}>
             <Share2 className='w-4 h-4' /> Share
           </button>
         </div>
 
-        {/* Secure Content Display */}
         <article className='prose dark:prose-invert max-w-none'>
           <div dangerouslySetInnerHTML={{ __html: newsItem.content }} />
         </article>
