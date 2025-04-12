@@ -8,12 +8,13 @@ export const getNewsList = query({
 
     return results.map((doc) => ({
       _id: doc._id,
+      _creationTime: doc._creationTime,
       title: doc.title,
       slug: doc.slug,
       coverImage: doc.coverImage,
       author: doc.author,
       views: doc.views,
-      publicationDate: doc.publicationDate,
+      updatedOn: doc.updatedOn,
     }));
   },
 });

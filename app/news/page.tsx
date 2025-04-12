@@ -28,7 +28,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type SortOption = "default" | "views_asc" | "views_desc";
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 12;
 
 export default function NewsPage() {
   const newsList = useQuery(api.news.getNewsList);
@@ -109,7 +109,7 @@ export default function NewsPage() {
 
   return (
     <div className='w-full min-h-screen px-4 py-12 bg-gray-50 dark:bg-gray-950'>
-      <div className='max-w-5xl mx-auto'>
+      <div className='max-w-6xl mx-auto'>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -257,7 +257,7 @@ export default function NewsPage() {
         </div>
 
         {/* News Grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
           {paginatedNews.length > 0 ? (
             paginatedNews.map((news, index) => (
               <motion.div
@@ -300,18 +300,28 @@ export default function NewsPage() {
                           <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 border border-gray-500'>
                             By
                           </span>
-                          <p className='text-sm text-gray-800 dark:text-gray-400 leading-4'>{news.author}</p>
+                          <p className='text-sm text-gray-800 dark:text-gray-400 leading-4'>
+                            {news.author}
+                          </p>
                         </div>
                       </div>
                     </div>
                   )}
 
                   <div className='flex-1 px-4 pb-2 pt-2 flex flex-col'>
-                    <span className='text-sm text-muted-foreground'>
-                      {dayjs(news.publicationDate).format("MMM DD, YYYY")}
+                    <span className='text-xs text-muted-foreground'>
+                      Published{" "}
+                      {dayjs(news._creationTime).format("MMM DD, YYYY h: mm a")}
                     </span>
+                    <span className='text-xs text-muted-foreground'>
+                      Updated{" "}
+                      {news
+                        .updatedOn ? dayjs(news._creationTime)
+                        .format("MMM DD, YYYY") : '- (Not Yet)'}
+                    </span>
+                 
                     <div className='space-y-2'>
-                      <h2 className='text-lg sm:text-xl font-bold line-clamp-2 leading-6 pb-1'>
+                      <h2 className='text-lg font-semibold line-clamp-2 leading-6 py-1'>
                         {news.title}
                       </h2>
 

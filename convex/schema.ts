@@ -150,6 +150,7 @@ export default defineSchema({
     author: v.string(),
     publicationDate: v.number(),
     views: v.number(),
+    updatedOn: v.optional(v.number()),
     tags: v.optional(v.array(v.string())),
   })
     .index("by_slug", ["slug"])
