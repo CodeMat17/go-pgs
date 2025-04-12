@@ -8,6 +8,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 
+
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
 // interface NewsItem {
 //   _id: string;
 //   title: string;
@@ -23,9 +30,7 @@ import { useEffect } from "react";
 
 export default function NewsDetailPage({
   params,
-}: {
-  params: { slug: string };
-}) {
+}: PageProps) {
   const newsItem = useQuery(api.news.getNewsBySlug, { slug: params.slug });
   const incrementViews = useMutation(api.news.incrementViews);
 
