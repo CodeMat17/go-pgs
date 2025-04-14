@@ -50,7 +50,7 @@ export default function NewsPage() {
     const authors = Array.from(new Set(newsList.map((item) => item.author)));
 
     let filtered = newsList.filter((item) => {
-      const matchesTitle = item.title
+      const matchesTitle = item.title 
         .toLowerCase()
         .includes(titleSearch.toLowerCase());
       const matchesAuthor = !selectedAuthor || item.author === selectedAuthor;
@@ -311,13 +311,13 @@ export default function NewsPage() {
                   <div className='flex-1 px-4 pb-2 pt-2 flex flex-col'>
                     <span className='text-xs text-muted-foreground'>
                       Published{" "}
-                      {dayjs(news._creationTime).format("MMM DD, YYYY h: mm a")}
+                      {dayjs(news._creationTime).format("MMM DD, YYYY | h: mm a")}
                     </span>
                     <span className='text-xs text-muted-foreground'>
                       Updated{" "}
                       {news
-                        .updatedOn ? dayjs(news._creationTime)
-                        .format("MMM DD, YYYY") : '- (Not Yet)'}
+                        .updatedOn ? dayjs(news.updatedOn)
+                        .format("MMM DD, YYYY | h: mm a") : '- (Not Yet)'}
                     </span>
                  
                     <div className='space-y-2'>

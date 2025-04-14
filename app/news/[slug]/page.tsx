@@ -5,16 +5,14 @@ import { useMutation, useQuery } from "convex/react";
 import dayjs from "dayjs";
 import { Eye, Share2 } from "lucide-react";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
 
 export default function NewsDetailPage() {
+  const params = useParams();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
- const params = useParams();
- const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
-
-  const newsItem = useQuery(api.news.getNewsBySlug, slug ? {slug} : 'skip');
+  const newsItem = useQuery(api.news.getNewsBySlug, slug ? { slug } : "skip");
   const incrementViews = useMutation(api.news.incrementViews);
 
   const handleShare = (slug: string) => {
@@ -81,7 +79,7 @@ export default function NewsDetailPage() {
             <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
               <p className='text-primary pt-1 sm:pt-0'>{newsItem.author}</p>
               <span className='hidden sm:flex'>|</span>
-              <p>{dayjs(newsItem.publicationDate).format("MMM DD, YYYY")}</p>
+              <p>{dayjs(newsItem.publicationDate).format("MMM DD, YYYY h:m a")}</p>
             </div>
           </div>
         </div>
@@ -102,6 +100,8 @@ export default function NewsDetailPage() {
         <article className='prose dark:prose-invert max-w-none'>
           <div dangerouslySetInnerHTML={{ __html: newsItem.content }} />
         </article>
+
+       
       </div>
     </div>
   );

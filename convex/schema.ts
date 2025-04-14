@@ -148,10 +148,11 @@ export default defineSchema({
     excerpt: v.optional(v.string()),
     coverImage: v.string(),
     author: v.string(),
-    publicationDate: v.number(),
+    publicationDate: v.optional(v.number()),
     views: v.number(),
     updatedOn: v.optional(v.number()),
     tags: v.optional(v.array(v.string())),
+    storageId: v.optional(v.id("_storage")),
   })
     .index("by_slug", ["slug"])
     .index("by_date", ["publicationDate"]),
