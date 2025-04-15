@@ -21,13 +21,7 @@ export default function Footer() {
   return (
     <footer className='bg-gray-900 text-white border-t'>
       <div className='w-full px-4 sm:px-6 lg:px-8 pt-4 pb-12'>
-        <Logo
-          text_one=''
-          text_two=''
-          classnames=''
-          width={70}
-          height={70}
-        />
+        <Logo text_one='' text_two='' classnames='' width={70} height={70} />
 
         <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-2'>
           {/* University Info */}
@@ -68,10 +62,13 @@ export default function Footer() {
             <h4 className='text-lg font-medium mb-4'>Quick Links</h4>
             <ul className='space-y-2'>
               {[
-                { name: "Admissions", href: "/admissions" },
+                { name: "About Us", href: "/about-us" },
                 { name: "Programs", href: "/programs" },
+                { name: "Requirements", href: "/requirements" },
                 { name: "Research", href: "/research" },
-                { name: "Library", href: "/library" },
+                { name: "News", href: "/news" },
+                { name: "Alumni", href: "/alumni" },
+                { name: "Staff", href: "/staff" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

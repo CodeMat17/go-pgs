@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 import {
   Calendar,
   Clock,
-  Download,
   FlaskConical,
   GraduationCap,
 } from "lucide-react";
@@ -111,26 +110,15 @@ const ProgramDetail = () => {
           {/* Sidebar */}
           <div className='space-y-6'>
             {/* Application CTA */}
-            <Card className='p-4 sm:p-6 bg-[#FEDA37]/90'>
+            <Card className='p-8 bg-[#FEDA37]/90'>
               <h2 className='text-gray-900 text-lg sm:text-xl font-semibold mb-3 sm:mb-4'>
                 Start Your Application
               </h2>
-              <div className='space-y-3'>
                 <Button className='w-full text-sm sm:text-base' asChild>
                   <a href='https://form.jotform.com/241452745198362'>
                     Apply Now
                   </a>
                 </Button>
-                <Button
-                  variant='outline'
-                  className='w-full text-sm sm:text-base'
-                  asChild>
-                  <a href='#'>
-                    <Download className='mr-2 h-4 w-4' />
-                    Download Application
-                  </a>
-                </Button>
-              </div>
             </Card>
 
             {/* Key Facts */}

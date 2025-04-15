@@ -150,7 +150,7 @@ export default defineSchema({
     author: v.string(),
     publicationDate: v.optional(v.number()),
     views: v.number(),
-    updatedOn: v.optional(v.number()),
+    updatedOn: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     storageId: v.optional(v.id("_storage")),
   })
