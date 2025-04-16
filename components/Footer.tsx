@@ -63,7 +63,7 @@ export default function Footer() {
             <ul className='space-y-2'>
               {[
                 { name: "About Us", href: "/about-us" },
-                { name: "Programs", href: "/programs" },
+                { name: "Courses", href: "/courses" },
                 { name: "Requirements", href: "/requirements" },
                 { name: "Research", href: "/research" },
                 { name: "News", href: "/news" },
@@ -81,7 +81,7 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          {/* Programs */}
+          {/* Courses */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -89,10 +89,10 @@ export default function Footer() {
             <h4 className='text-lg font-medium mb-4'>Programs</h4>
             <ul className='space-y-2'>
               {[
-                { name: "Master's Degrees", href: "/programs" },
-                { name: "PhD Programs", href: "/programs" },
-                { name: "Online Learning", href: "/programs" },
-                { name: "SEE ALL PROGRAMS", href: "/programs" },
+                { name: "Master's Degrees", href: "/courses" },
+                { name: "PhD Programs", href: "/courses" },
+                { name: "Online Learning", href: "/courses" },
+                { name: "SEE ALL PROGRAMS", href: "/courses" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

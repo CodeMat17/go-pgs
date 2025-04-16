@@ -22,7 +22,7 @@ export function Nav() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about-us" },
-    { name: "Programs", href: "/programs" },
+    { name: "Courses", href: "/courses" },
     {
       name: "Academics",
       href: "/academics",

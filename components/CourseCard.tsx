@@ -38,7 +38,7 @@ const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
       </div>
       <div className="mt-auto pt-6">
           <Button asChild variant='outline' className='w-full'>
-        <Link href={`/programs/${slug}`}>Learn More →</Link>
+        <Link href={`/courses/${slug}`}>Learn More →</Link>
       </Button>
       </div>
     
