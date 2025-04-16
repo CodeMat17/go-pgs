@@ -10,7 +10,7 @@ const PgdCourses = () => {
 
   return (
     <div>
-      <h1 className='text-xl font-medium'>Our PGD Courses</h1>
+      <h1 className='text-2xl font-medium'>Our PGD Courses</h1>
       {pgdCourses === undefined ? (
         <div className='flex items-center p-8 text-muted-foreground'>
           <Minus className='animate-spin mr-3' /> PGD courses loading...

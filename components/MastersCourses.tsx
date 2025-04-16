@@ -9,7 +9,7 @@ const mastersCourses = useQuery(api.courses.getCoursesByType, {type: 'masters'})
 
   return (
     <div>
-      <h1 className='text-xl font-medium'>Our Master&apos;s Courses</h1>
+      <h1 className='text-2xl font-medium'>Our Master&apos;s Courses</h1>
       {mastersCourses === undefined ? (
         <div className='flex items-center p-8 text-muted-foreground'>
           <Minus className='animate-spin mr-3' /> Master&apos;s courses loading...

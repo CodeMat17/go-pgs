@@ -8,7 +8,7 @@ const PhdCourses = () => {
 
   return (
     <div>
-      <h1 className='text-xl font-medium'>Our PhD Courses</h1>
+      <h1 className='text-2xl font-medium'>Our PhD Courses</h1>
       {phdCourses === undefined ? (
         <div className='flex items-center p-8 text-muted-foreground'>
           <Minus className='animate-spin mr-3' /> PhD courses loading...
