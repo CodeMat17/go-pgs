@@ -3,37 +3,25 @@
 import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import dayjs from 'dayjs'
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import {
-  Calendar,
-  Clock,
-  FlaskConical,
-  GraduationCap,
-} from "lucide-react";
+import { Calendar, FlaskConical, GraduationCap } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const ProgramDetail = () => {
-  const { slug } = useParams();
-  const program = useQuery(
-    api.programs.getProgramBySlug,
-    typeof slug === "string" ? { slug } : "skip"
+  const params = useParams();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+
+  const course = useQuery(
+    api.courses.getProgramBySlug,
+    slug ? { slug } : "skip"
   );
 
-  if (program === undefined) {
+  if (course === undefined) {
     return (
       <div className='flex items-center justify-center py-72'>
-        <p className='text-xl text-gray-500'>Loading program details...</p>
-      </div>
-    );
-  }
-
-  if (!program) {
-    return (
-      <div className='flex items-center justify-center py-72'>
-        <p className='text-xl text-gray-500'>Program not found.</p>
+        <p className='text-xl text-gray-500'>Loading course details...</p>
       </div>
     );
   }
@@ -46,17 +34,17 @@ const ProgramDetail = () => {
         transition={{ duration: 0.5 }}>
         {/* Hero Section */}
         <div className='text-center mb-8 sm:mb-12'>
-          <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4'>
-            {program.programFullName}
+          <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-2'>
+            {course?.course}
           </h1>
-          <div className='flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 text-sm sm:text-base text-muted-foreground'>
+          <div className='flex justify-center gap-3 sm:gap-4 text-sm text-muted-foreground'>
             <div className='flex items-center justify-center gap-1'>
               <Calendar className='w-4 h-4' />
-              <span>{program.studyDuration}</span>
-            </div>
+              <span>{course?.duration} Months</span>
+            </div> |
             <div className='flex items-center justify-center gap-1'>
               <GraduationCap className='w-4 h-4' />
-              <span>{program.studyMode}</span>
+              <span>{course?.mode}</span>
             </div>
           </div>
         </div>
@@ -69,10 +57,10 @@ const ProgramDetail = () => {
             <Card className='p-4 sm:p-6'>
               <h2 className='text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 flex items-center gap-2'>
                 <FlaskConical className='w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0' />
-                Why Choose Our {program.programShortName}?
+                Why Choose this course and with us?
               </h2>
               <div className='space-y-3 sm:space-y-4'>
-                {program.whyChoose.map((item, index) => (
+                {course?.whyChoose.map((item, index) => (
                   <div key={index} className='flex items-start gap-3 sm:gap-4'>
                     <div className='w-6 h-6 sm:w-8 sm:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0'>
                       <span className='text-primary text-sm sm:text-base'>
@@ -99,12 +87,11 @@ const ProgramDetail = () => {
               </h2>
               <div className='space-y-3 sm:space-y-4 dark:text-muted-foreground text-sm sm:text-base'>
                 <SafeHTMLRenderer
-                  htmlContent={program.programOverview}
+                  htmlContent={course?.overview ?? ""}
                   className='text-gray-950 dark:text-muted-foreground'
                 />
               </div>
             </Card>
-
           </div>
 
           {/* Sidebar */}
@@ -114,11 +101,9 @@ const ProgramDetail = () => {
               <h2 className='text-gray-900 text-lg sm:text-xl font-semibold mb-3 sm:mb-4'>
                 Start Your Application
               </h2>
-                <Button className='w-full text-sm sm:text-base' asChild>
-                  <a href='https://form.jotform.com/241452745198362'>
-                    Apply Now
-                  </a>
-                </Button>
+              <Button className='w-full text-sm sm:text-base' asChild>
+                <a href='https://form.jotform.com/241452745198362'>Apply Now</a>
+              </Button>
             </Card>
 
             {/* Key Facts */}
@@ -128,21 +113,12 @@ const ProgramDetail = () => {
               </h2>
               <div className='space-y-3 text-sm sm:text-base'>
                 <div className='flex items-center gap-2'>
-                  <Clock className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
-                  <span>Duration: {program.studyDuration}</span>
+                  <Calendar className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
+                  <span>Duration: {course?.duration} Months</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <GraduationCap className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
-                  <span>Mode: {program.studyMode}</span>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <Calendar className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
-                  <span>
-                    Next Intake:{" "}
-                    {program.nextIntake === "NO-DATE-SET"
-                      ? program.nextIntake
-                      : dayjs(program.nextIntake).format("MMM DD, YYYY")}
-                  </span>
+                  <span>Study mode: {course?.mode}</span>
                 </div>
               </div>
             </Card>

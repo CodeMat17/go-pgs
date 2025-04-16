@@ -1,69 +1,132 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { BookOpen, Calendar, MinusIcon, Monitor, Users } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import MastersCourses from "@/components/MastersCourses";
+import PgdCourses from "@/components/PgdCourses";
+import PhdCourses from "@/components/PhdCourses";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ProgramsPage() {
-  const fetchedPrograms = useQuery(api.programs.getFewProgramsData);
-  const [programs, setPrograms] = useState(fetchedPrograms ?? []);
+  // const fetchedPrograms = useQuery(api.programs.getFewProgramsData);
+  // const [programs, setPrograms] = useState(fetchedPrograms ?? []);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredPrograms = programs
-    ? programs.filter((program) =>
-        program?.programShortName
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      )
-    : [];
+  // const filteredPrograms = programs
+  //   ? programs.filter((program) =>
+  //       program?.programShortName
+  //         ?.toLowerCase()
+  //         .includes(searchTerm.toLowerCase())
+  //     )
+  //   : [];
 
-  useEffect(() => {
-    if (fetchedPrograms !== undefined) {
-      setPrograms(fetchedPrograms); // Only update state when data arrives
-    }
-  }, [fetchedPrograms]);
+  // useEffect(() => {
+  //   if (fetchedPrograms !== undefined) {
+  //     setPrograms(fetchedPrograms); // Only update state when data arrives
+  //   }
+  // }, [fetchedPrograms]);
 
-  if (fetchedPrograms === undefined) {
-    return (
-      <div className='w-full min-h-96 flex items-center justify-center'>
-        <MinusIcon className='animate-spin mr-3' /> Loading programs
-      </div>
-    );
-  }
+  // if (fetchedPrograms === undefined) {
+  //   return (
+  //     <div className='w-full min-h-96 flex items-center justify-center'>
+  //       <MinusIcon className='animate-spin mr-3' /> Loading programs
+  //     </div>
+  //   );
+  // }
 
-  if (!fetchedPrograms) return (
-    <div className='w-full min-h-96 flex items-center justify-center'>
-      <MinusIcon className='animate-spin mr-3' /> Loading programs
-    </div>
-  );
+  // if (!fetchedPrograms)
+  //   return (
+  //     <div className='w-full min-h-96 flex items-center justify-center'>
+  //       <MinusIcon className='animate-spin mr-3' /> Loading programs
+  //     </div>
+  //   );
 
-  if (fetchedPrograms.length === 0) {
-    return (
-      <div className='w-full min-h-96 flex items-center justify-center'>
-        <MinusIcon className='animate-spin mr-3' /> Loading programs
-      </div>
-    );
-  }
+  // if (fetchedPrograms.length === 0) {
+  //   return (
+  //     <div className='w-full min-h-96 flex items-center justify-center'>
+  //       <MinusIcon className='animate-spin mr-3' /> Loading programs
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
-      <h1 className='text-3xl sm:text-4xl font-bold mb-4'>
-        Our Programs
-      </h1>
+      <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Courses</h1>
       <p className='text-lg text-muted-foreground mb-8'>
-        Explore our diverse range of academic programs. Use the search below to
-        find a specific program.
+        Explore our diverse range of academic courses. Find the right course for
+        you.
       </p>
 
+      <div className='w-full py-12'>
+        <Tabs defaultValue='pgd'>
+          <TabsList className='flex flex-col sm:flex-row gap-3 w-full'>
+            <TabsTrigger
+              value='pgd'
+              className='w-full sm:w-auto justify-start px-6 py-3 sm:py-2 rounded-lg
+          border border-input bg-background hover:bg-accent hover:text-accent-foreground
+          data-[state=active]:bg-primary data-[state=active]:text-primary-foreground
+          data-[state=active]:border-primary data-[state=active]:shadow-lg
+          transition-all duration-200 font-medium
+          dark:border-neutral-700 dark:hover:bg-neutral-800/50
+          dark:data-[state=active]:bg-primary/80 dark:data-[state=active]:border-primary-600
+          dark:data-[state=active]:shadow-primary/20'>
+              PGD Courses
+            </TabsTrigger>
+
+            <TabsTrigger
+              value='masters'
+              className='w-full sm:w-auto justify-start px-6 py-3 sm:py-2 rounded-lg
+          border border-input bg-background hover:bg-accent hover:text-accent-foreground
+          data-[state=active]:bg-primary data-[state=active]:text-primary-foreground
+          data-[state=active]:border-primary data-[state=active]:shadow-lg
+          transition-all duration-200 font-medium
+          dark:border-neutral-700 dark:hover:bg-neutral-800/50
+          dark:data-[state=active]:bg-primary/80 dark:data-[state=active]:border-primary-600
+          dark:data-[state=active]:shadow-primary/20'>
+              Masters Courses
+            </TabsTrigger>
+
+            <TabsTrigger
+              value='phd'
+              className='w-full sm:w-auto justify-start px-6 py-3 sm:py-2 rounded-lg
+          border border-input bg-background hover:bg-accent hover:text-accent-foreground
+          data-[state=active]:bg-primary data-[state=active]:text-primary-foreground
+          data-[state=active]:border-primary data-[state=active]:shadow-lg
+          transition-all duration-200 font-medium
+          dark:border-neutral-700 dark:hover:bg-neutral-800/50
+          dark:data-[state=active]:bg-primary/80 dark:data-[state=active]:border-primary-600
+          dark:data-[state=active]:shadow-primary/20'>
+              PhD Courses
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent
+            value='pgd'
+            className='pt-8 mt-12 sm:mt-0 focus:outline-none'>
+            <div className='text-foreground dark:text-neutral-200'>
+              <PgdCourses />
+            </div>
+          </TabsContent>
+
+          <TabsContent
+            value='masters'
+            className='pt-8 mt-12 sm:mt-0 focus:outline-none'>
+            <div className='text-foreground dark:text-neutral-200'>
+              <MastersCourses />
+            </div>
+          </TabsContent>
+
+          <TabsContent
+            value='phd'
+            className='pt-8 mt-12 sm:mt-0 focus:outline-none'>
+            <div className='text-foreground dark:text-neutral-200'>
+              <PhdCourses />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+
       {/* Program List */}
-      <div className='w-full'>
+      {/* <div className='w-full'>
         <div className='mb-6'>
           <Input
             type='text'
@@ -125,7 +188,7 @@ export default function ProgramsPage() {
             </p>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Requirements Section */}
     </div>

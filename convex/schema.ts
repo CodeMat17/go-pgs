@@ -1,6 +1,12 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+export const courseType = v.union(
+  v.literal("pgd"),
+  v.literal("masters"),
+  v.literal("phd")
+);
+
 export default defineSchema({
   hero: defineTable({
     title: v.string(),
@@ -16,24 +22,6 @@ export default defineSchema({
     title: v.string(),
     desc: v.string(),
   }),
-
-  programs: defineTable({
-    programFullName: v.optional(v.string()),
-    programShortName: v.string(),
-    programOverview: v.string(),
-    whyChoose: v.array(
-      v.object({
-        title: v.string(), // e.g., "Cutting-Edge Facilities"
-        description: v.string(), // e.g., "Access to state-of-the-art labs and research equipment"
-      })
-    ),
-    nextIntake: v.string(),
-    studyDuration: v.string(),
-    deliveryMode: v.string(),
-    studyMode: v.string(),
-    slug: v.string(),
-    status: v.boolean(),
-  }).index("by_slug", ["slug"]),
 
   alumni: defineTable({
     name: v.string(),
@@ -156,6 +144,39 @@ export default defineSchema({
   })
     .index("by_slug", ["slug"])
     .index("by_date", ["publicationDate"]),
+
+  courses: defineTable({
+    course: v.string(),
+    slug: v.string(),
+    duration: v.string(),
+    mode: v.string(),
+    overview: v.string(),
+    type: courseType,
+    whyChoose: v.array(
+      v.object({
+        title: v.string(),
+        description: v.string(),
+      })
+    ),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_type", ["type"]),
+
+  programs: defineTable({
+    programFullName: v.optional(v.string()),
+    programShortName: v.string(),
+    programOverview: v.string(),
+    whyChoose: v.array(
+      v.object({
+        title: v.string(),
+        description: v.string(),
+      })
+    ),
+    nextIntake: v.string(),
+    studyDuration: v.string(),
+    deliveryMode: v.string(),
+    studyMode: v.string(),
+    slug: v.string(),
+    status: v.boolean(),
+  }).index("by_slug", ["slug"]),
 });
-
-
