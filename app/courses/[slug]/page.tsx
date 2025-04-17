@@ -40,7 +40,7 @@ const ProgramDetail = () => {
           <div className='flex justify-center gap-3 sm:gap-4 text-sm text-muted-foreground'>
             <div className='flex items-center justify-center gap-1'>
               <Calendar className='w-4 h-4' />
-              <span>{course?.duration} Months</span>
+              <span>{course?.duration}</span>
             </div> |
             <div className='flex items-center justify-center gap-1'>
               <GraduationCap className='w-4 h-4' />
@@ -114,7 +114,7 @@ const ProgramDetail = () => {
               <div className='space-y-3 text-sm sm:text-base'>
                 <div className='flex items-center gap-2'>
                   <Calendar className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
-                  <span>Duration: {course?.duration} Months</span>
+                  <span>Duration: {course?.duration}</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <GraduationCap className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />

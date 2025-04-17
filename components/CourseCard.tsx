@@ -17,7 +17,7 @@ const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
         <p className='text-lg font-medium'>{course}</p>
         <div className='space-y-0.5'>
           <div className='flex items-center gap-2 text-sm'>
-            <Calendar className='w-4 h-4 text-amber-500' /> {duration} Months
+            <Calendar className='w-4 h-4 text-amber-500' /> {duration}
           </div>
           {mode === "On-line" && (
             <div className='flex items-center gap-2 text-sm'>
