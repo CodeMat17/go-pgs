@@ -11,7 +11,7 @@ export function ApplyNow() {
       variant='outline'>
       <Link href='/programs'>
         <>
-         Explore our Programs
+         Explore our Courses
           <BorderBeam
             size={40}
             initialOffset={20}

@@ -26,6 +26,8 @@ const ProgramDetail = () => {
     );
   }
 
+
+
   return (
     <div className='w-full max-w-5xl mx-auto px-4 py-8 sm:py-12'>
       <motion.div
@@ -41,7 +43,8 @@ const ProgramDetail = () => {
             <div className='flex items-center justify-center gap-1'>
               <Calendar className='w-4 h-4' />
               <span>{course?.duration}</span>
-            </div> |
+            </div>{" "}
+            |
             <div className='flex items-center justify-center gap-1'>
               <GraduationCap className='w-4 h-4' />
               <span>{course?.mode}</span>

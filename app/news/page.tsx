@@ -266,7 +266,7 @@ export default function NewsPage() {
         </div>
 
         {/* News Grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6'>
           {paginatedNews.length > 0 ? (
             paginatedNews.map((news, index) => (
               <motion.div
@@ -279,7 +279,7 @@ export default function NewsPage() {
                   stiffness: 120,
                 }}
                 className='relative'>
-                <Card className='group h-full flex flex-col overflow-hidden transition-all duration-300 shadow-sm hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 dark:bg-gray-900 border-transparent'>
+                <Card className='group h-full flex flex-col overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 dark:bg-gray-900 border-transparent'>
                   {/* Image Section with Gradient Overlay */}
                   <div className='relative aspect-[1.91/1] overflow-hidden'>
                     {news.coverImage ? (
@@ -304,9 +304,6 @@ export default function NewsPage() {
                     {/* Author & Date Badge */}
                     <div className='absolute bottom-4 left-4 right-4 flex items-center justify-between'>
                       <div className='flex items-center gap-2'>
-                        {/* <span className='w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center text-sm font-medium shadow-sm'>
-                          {news.author[0]}
-                        </span> */}
                         <div className='text-white'>
                           <p className='text-sm font-medium leading-tight'>
                             {news.author}
@@ -329,7 +326,7 @@ export default function NewsPage() {
                   <div className='flex-1 flex flex-col p-4 space-y-3'>
                     <div className="flex-1 space-y-3">
                        {/* Title with Gradient Text */}
-                    <h2 className='text-xl font-bold bg-gradient-to-r from-foreground to-foreground/90 bg-clip-text text-transparent line-clamp-2 leading-snug'>
+                    <h2 className='font-semibold bg-gradient-to-r from-foreground to-foreground/90 bg-clip-text text-transparent line-clamp-2 leading-snug'>
                       {news.title}
                       </h2>
                       
@@ -380,11 +377,11 @@ export default function NewsPage() {
                       
                         <Button
                           variant='ghost'
-                          size='icon'
-                          className='rounded-full hover:bg-muted/30'
+                          // size='icon'
+                          className='rounded-full hover:bg-muted/30 text-muted-foreground'
                           onClick={() => handleShare(news.slug)}
                           aria-label='Share article'>
-                          <Share2 className='w-4 h-4 text-muted-foreground' />
+                          <Share2 className='w-4 h-4' /> Share
                         </Button>
                       </div>
                     </div>
