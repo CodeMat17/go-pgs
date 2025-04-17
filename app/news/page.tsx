@@ -94,10 +94,19 @@ export default function NewsPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentPage, totalPages]);
 
-  const handleShare = (slug: string) => {
-    const url = `${window.location.origin}/news/${slug}`;
-    navigator.clipboard.writeText(url);
-  };
+   const handleShare = (slug: string) => {
+     const url = `${window.location.origin}/news/${slug}`;
+
+     if (navigator.share) {
+       navigator.share({
+         title: "Check out this news article",
+         url: url,
+       });
+     } else {
+       navigator.clipboard.writeText(url);
+       alert("Link copied to clipboard!");
+     }
+   };
 
   if (newsList === undefined) {
     return (
@@ -318,18 +327,23 @@ export default function NewsPage() {
 
                   {/* Content Section */}
                   <div className='flex-1 flex flex-col p-4 space-y-3'>
-                    {/* Title with Gradient Text */}
+                    <div className="flex-1 space-y-3">
+                       {/* Title with Gradient Text */}
                     <h2 className='text-xl font-bold bg-gradient-to-r from-foreground to-foreground/90 bg-clip-text text-transparent line-clamp-2 leading-snug'>
                       {news.title}
-                    </h2>
-
-                    {/* Updated Date */}
+                      </h2>
+                      
+                         {/* Updated Date */}
                     {news.updatedOn && (
                       <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                        <span className='h-px w-4 bg-muted-foreground/30' />
-                        Updated {dayjs(news.updatedOn).format("MMM DD, YYYY")}
+                        <span className='h-px w-2 bg-muted-foreground/30' />
+                      Updated {dayjs(news.updatedOn).format("MMM DD, YYYY")}
                       </div>
                     )}
+                    </div>
+                   
+
+                 
 
                     {/* Action Bar */}
                     <div className='mt-auto pt-3 flex items-center justify-between border-t border-muted/20'>
@@ -362,7 +376,7 @@ export default function NewsPage() {
                         </Link>
                       </Button>
 
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-2 mt-auto'>
                       
                         <Button
                           variant='ghost'

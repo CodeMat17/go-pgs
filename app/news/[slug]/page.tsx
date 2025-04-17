@@ -73,7 +73,7 @@ export default function NewsDetailPage() {
 
         <div className='flex flex-col sm:flex-row sm:justify-between mb-4'>
           <div className='flex items-center gap-2 text-sm'>
-            <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0'>
+            <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 text-sm'>
               By
             </span>
             <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
@@ -85,7 +85,7 @@ export default function NewsDetailPage() {
         </div>
 
         <div className='flex items-center gap-2 text-sm mt-1 mb-8'>
-          <div className='flex items-center gap-2 mr-4'>
+          <div className='flex items-center gap-1 mr-3'>
             <Eye className='w-4 h-4' />
             <p>{newsItem.views} views</p>
           </div>

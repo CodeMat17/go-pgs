@@ -16,8 +16,30 @@ import {
   Twitter,
 } from "lucide-react";
 import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { toast } from "sonner";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+
+  const handleEmail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!email || !email.includes("@")) {
+      toast.error("Invalid Email", {
+        description: "Please enter a valid email address",
+      });
+      return;
+    }
+
+    setEmail("");
+    // Show success message
+    toast.success("Subscribed!", {
+      description: "Thank you for joining our newsletter!",
+    });
+  };
+
   return (
     <footer className='bg-gray-900 text-white border-t'>
       <div className='w-full px-4 sm:px-6 lg:px-8 pt-4 pb-12'>
@@ -131,9 +153,12 @@ export default function Footer() {
 
             <div className='space-y-4'>
               <p className='text-sm'>Subscribe to our newsletter</p>
-              <form className='flex gap-2'>
+              <form onSubmit={handleEmail} className='flex gap-2'>
                 <Input
                   type='email'
+                  value={email}
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder='Enter your email'
                   className='rounded-full'
                 />

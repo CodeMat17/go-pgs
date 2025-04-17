@@ -4,9 +4,8 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import {ConvexClientProvider} from '@/app/ConvexClientProvider'
-// import ChatWidget from "@/components/ChatWidget";
-// import ChatBot from "@/components/ChatBot";
+import { ConvexClientProvider } from '@/app/ConvexClientProvider'
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,6 +42,7 @@ export default function RootLayout({
             <Nav />
             {children}
             <Footer />
+            <Toaster />
             {/* <ChatWidget /> */}
           </ConvexClientProvider>
         </ThemeProvider>
