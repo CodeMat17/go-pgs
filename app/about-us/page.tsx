@@ -190,7 +190,7 @@ export default function AboutUsPage() {
             Take the first step toward a transformative educational experience.
           </p>
           <Button size='lg' className='text-sm sm:text-base' asChild>
-            <Link href='/programs'>Explore our programs</Link>
+            <Link href='/courses'>Explore our programs</Link>
           </Button>
         </section>
       </motion.div>

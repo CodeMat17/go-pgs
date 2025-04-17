@@ -22,7 +22,7 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import { CameraOff, Eye, Minus, Share2, X } from "lucide-react";
+import { CameraOff, Minus, Share2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -109,7 +109,7 @@ export default function NewsPage() {
 
   return (
     <div className='w-full min-h-screen px-4 py-12 bg-gray-50 dark:bg-gray-950'>
-      <div className='max-w-6xl mx-auto'>
+      <div className='max-w-5xl mx-auto'>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -257,17 +257,23 @@ export default function NewsPage() {
         </div>
 
         {/* News Grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
           {paginatedNews.length > 0 ? (
             paginatedNews.map((news, index) => (
               <motion.div
                 key={news._id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}>
-                <Card className='group h-full flex flex-col overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg hover:border-primary/20 dark:bg-gray-900'>
-                  {news.coverImage ? (
-                    <div className='relative aspect-video overflow-hidden'>
+                initial={{ opacity: 0, y: 50, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 120,
+                }}
+                className='relative'>
+                <Card className='group h-full flex flex-col overflow-hidden transition-all duration-300 shadow-sm hover:shadow-lg hover:border-primary/30 dark:hover:border-primary/50 dark:bg-gray-900 border-transparent'>
+                  {/* Image Section with Gradient Overlay */}
+                  <div className='relative aspect-[1.91/1] overflow-hidden'>
+                    {news.coverImage ? (
                       <Image
                         src={news.coverImage}
                         alt={news.title}
@@ -275,73 +281,96 @@ export default function NewsPage() {
                         className='object-cover transition-transform duration-500 group-hover:scale-105'
                         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                         placeholder='blur'
-                        blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+yHgAFWAJ/R8xlVwAAAABJRU5ErkJggg=='
+                        blurDataURL='data:image/png;base64,...'
                       />
-                      <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent' />
-                      {/* Always visible author section */}
-                      <div className='absolute bottom-4 left-4 right-4'>
-                        <div className='flex items-center gap-2 text-white'>
-                          <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 border border-gray-500'>
-                            By
-                          </span>
-                          <p className='text-sm leading-4'>{news.author}</p>
-                        </div>
+                    ) : (
+                      <div className='absolute inset-0 bg-gradient-to-br from-primary/10 to-muted/30 flex items-center justify-center'>
+                        <CameraOff className='w-8 h-8 text-muted-foreground/50' />
                       </div>
-                    </div>
-                  ) : (
-                    <div className='relative aspect-video overflow-hidden bg-gradient-to-br from-primary/10 to-muted/50'>
-                      <div className='absolute inset-0 flex items-center justify-center gap-2 text-muted-foreground text-sm'>
-                        <CameraOff className='w-6 h-6' />
-                        <span className='font-medium'>No Image Available</span>
-                      </div>
-                      {/* Always visible author section */}
-                      <div className='absolute bottom-4 left-4 right-4'>
-                        <div className='flex items-center gap-2 text-white'>
-                          <span className='w-8 h-8 bg-gray-500/70 rounded-full flex items-center justify-center text-white shrink-0 border border-gray-500'>
-                            By
-                          </span>
-                          <p className='text-sm text-gray-800 dark:text-gray-400 leading-4'>
+                    )}
+
+                    {/* Gradient Overlay */}
+                    <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
+
+                    {/* Author & Date Badge */}
+                    <div className='absolute bottom-4 left-4 right-4 flex items-center justify-between'>
+                      <div className='flex items-center gap-2'>
+                        {/* <span className='w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center text-sm font-medium shadow-sm'>
+                          {news.author[0]}
+                        </span> */}
+                        <div className='text-white'>
+                          <p className='text-sm font-medium leading-tight'>
                             {news.author}
+                          </p>
+                          <p className='text-xs text-primary-100/90'>
+                            {dayjs(news._creationTime).format("MMM DD, YYYY")}
                           </p>
                         </div>
                       </div>
+
+                      <Badge
+                        variant='secondary'
+                        className='py-1 px-2 text-xs font-medium bg-black/30 text-white backdrop-blur-sm'>
+                        {news.views.toLocaleString()} views
+                      </Badge>
                     </div>
-                  )}
+                  </div>
 
-                  <div className='flex-1 px-4 pb-2 pt-2 flex flex-col'>
-                    <span className='text-xs text-muted-foreground'>
-                      Published{" "}
-                      {dayjs(news._creationTime).format("MMM DD, YYYY | h: mm a")}
-                    </span>
-                    <span className='text-xs text-muted-foreground'>
-                      Updated{" "}
-                      {news
-                        .updatedOn ? dayjs(news.updatedOn)
-                        .format("MMM DD, YYYY | h: mm a") : '- (Not Yet)'}
-                    </span>
-                 
-                    <div className='space-y-2'>
-                      <h2 className='text-lg font-semibold line-clamp-2 leading-6 py-1'>
-                        {news.title}
-                      </h2>
+                  {/* Content Section */}
+                  <div className='flex-1 flex flex-col p-4 space-y-3'>
+                    {/* Title with Gradient Text */}
+                    <h2 className='text-xl font-bold bg-gradient-to-r from-foreground to-foreground/90 bg-clip-text text-transparent line-clamp-2 leading-snug'>
+                      {news.title}
+                    </h2>
 
-                      <div className='flex items-center justify-between mt-4 border-t pt-2'>
-                        <div className='flex items-center gap-2'>
-                          <Eye className='h-4 w-4' />
-                          <span className='text-xs'>{news.views}</span>
-                        </div>
+                    {/* Updated Date */}
+                    {news.updatedOn && (
+                      <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                        <span className='h-px w-4 bg-muted-foreground/30' />
+                        Updated {dayjs(news.updatedOn).format("MMM DD, YYYY")}
+                      </div>
+                    )}
 
-                        <button
-                          className='flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-950 px-4 py-2 rounded-full text-xs font-medium'
-                          onClick={() => handleShare(news.slug)}>
-                          <Share2 className='w-4 h-4' /> Share
-                        </button>
+                    {/* Action Bar */}
+                    <div className='mt-auto pt-3 flex items-center justify-between border-t border-muted/20'>
+                      <Button
+                        asChild
+                        variant='ghost'
+                        size='sm'
+                        className='group/readmore rounded-full px-4 hover:bg-primary/10 transition-colors'>
+                        <Link
+                          href={`/news/${news.slug}`}
+                          className='flex items-center gap-2'>
+                          <span className='bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent'>
+                            Read More
+                          </span>
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='16'
+                            height='16'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                            className='text-primary opacity-80 group-hover/readmore:translate-x-1 transition-transform'>
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3'
+                            />
+                          </svg>
+                        </Link>
+                      </Button>
 
+                      <div className='flex items-center gap-2'>
+                      
                         <Button
-                          asChild
-                          variant='outline'
-                          className='rounded-full text-xs'>
-                          <Link href={`/news/${news.slug}`}>Read More</Link>
+                          variant='ghost'
+                          size='icon'
+                          className='rounded-full hover:bg-muted/30'
+                          onClick={() => handleShare(news.slug)}
+                          aria-label='Share article'>
+                          <Share2 className='w-4 h-4 text-muted-foreground' />
                         </Button>
                       </div>
                     </div>
