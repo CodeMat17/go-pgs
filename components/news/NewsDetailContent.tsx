@@ -8,7 +8,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useEffect } from "react";
 
-export default function NewsDetailContent({slug}: {slug: string}) {
+
+type NewsDetailProps = {
+  slug: string;
+};
+
+
+export default function NewsDetailContent({slug}: NewsDetailProps) {
   // const params = useParams();
   // const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
