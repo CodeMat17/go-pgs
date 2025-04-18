@@ -1,10 +1,33 @@
-"use client";
+
 
 import { ApplyNow } from "@/components/buttons/ApplyNow";
 import DescriptionAnimation from "@/components/DescriptionAnimation";
 import { QuickLinks } from "@/components/QuickLinks";
 import { motion } from "framer-motion";
+import { Metadata } from "next";
 import Image from "next/image";
+
+
+
+export const metadata: Metadata = {
+  title: "Home | Premier Postgraduate Education in Nigeria",
+  description:
+    "Nigeria's leading postgraduate institution offering world-class Masters, PhD and PGD programs. Start your advanced degree journey today.",
+  keywords: [
+    "postgraduate programs Nigeria",
+    "Masters degree Enugu",
+    "PhD courses",
+  ],
+  openGraph: {
+    title: "GO University Postgraduate School",
+    description: "Accredited postgraduate education with research excellence",
+    images: [{ url: "/opengraph-image.jpg" }],
+  },
+};
+
+
+
+
 
 export default function HomePage() {
   return (
@@ -70,8 +93,6 @@ export default function HomePage() {
               transition={{ delay: 0.6 }}
               className=''>
               <ApplyNow />
-
-           
             </motion.div>
           </motion.div>
         </div>
