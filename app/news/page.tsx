@@ -28,5 +28,6 @@ export const metadata: Metadata = {
 };
 
 export default function NewsPageWrapper() {
+
   return <NewsPage />;
 }

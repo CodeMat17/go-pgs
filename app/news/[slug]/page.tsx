@@ -79,6 +79,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function NewsDetailWrapper() {
-  return <NewsDetailContent />;
+export default function NewsDetailWrapper({ params }: Props) {
+  
+const slug = params.slug
+
+  return <NewsDetailContent slug={slug} />;
 }

@@ -5,12 +5,12 @@ import { useMutation, useQuery } from "convex/react";
 import dayjs from "dayjs";
 import { Eye, Share2 } from "lucide-react";
 import Image from "next/image";
-import { notFound, useParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useEffect } from "react";
 
-export default function NewsDetailContent() {
-  const params = useParams();
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+export default function NewsDetailContent({slug}: {slug: string}) {
+  // const params = useParams();
+  // const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
   const newsItem = useQuery(api.news.getNewsBySlug, slug ? { slug } : "skip");
   const incrementViews = useMutation(api.news.incrementViews);
