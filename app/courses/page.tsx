@@ -44,14 +44,16 @@ export default function ProgramsPage() {
  
 
   return (
-    <div className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 dark:bg-gray-950'>
-      <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Courses</h1>
-      <p className='text-lg text-muted-foreground mb-8'>
-        Explore our diverse range of academic courses. Find the right course for
-        you.
-      </p>
+    <div className='w-full  px-4 sm:px-6 lg:px-8 py-12 bg-gray-100 dark:bg-gray-950'>
+      <div className='max-w-5xl mx-auto'>
+        <h1 className='text-3xl sm:text-4xl font-bold mb-4'>Our Courses</h1>
+        <p className='text-lg text-muted-foreground mb-8'>
+          Explore our diverse range of academic courses. Find the right course
+          for you.
+        </p>
 
-      <CoursesTabs />
+        <CoursesTabs />
+      </div>
     </div>
   );
 }

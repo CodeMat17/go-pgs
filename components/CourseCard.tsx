@@ -26,7 +26,7 @@ const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
     if (mode in modeConfig) {
       const { Icon, label } = modeConfig[mode as Mode];
       return (
-        <div className='flex items-center gap-2 text-sm' aria-label={label}>
+        <div className='flex items-center gap-2' aria-label={label}>
           <Icon
             className='w-4 h-4 text-amber-600 dark:text-amber-400'
             aria-hidden='true'
@@ -51,7 +51,7 @@ const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
         </h3>
         <div className='space-y-0.5'>
           <div
-            className='flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300'
+            className='flex items-center gap-2 text-gray-700 dark:text-gray-300'
             aria-label={`Duration: ${duration}`}>
             <Calendar
               className='w-4 h-4 text-amber-600 dark:text-amber-400'

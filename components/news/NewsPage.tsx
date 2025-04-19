@@ -111,7 +111,7 @@ export default function NewsPage() {
   }
 
   return (
-    <div className='w-full min-h-screen px-4 py-12 bg-gray-50 dark:bg-gray-950'>
+    <div className='w-full min-h-screen px-4 py-12 bg-gray-100 dark:bg-gray-950'>
       <div className='max-w-5xl mx-auto'>
         <motion.h1
           initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
@@ -124,7 +124,7 @@ export default function NewsPage() {
         <section aria-label='News filters' className='space-y-8 mb-12'>
           <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-4'>
             {/* Title Search */}
-            <div className='space-y-0.5'>
+            <div className='space-y-1'>
               <label
                 htmlFor='search'
                 className='text-sm font-medium text-foreground/80'>
@@ -136,7 +136,7 @@ export default function NewsPage() {
                   placeholder='Type to search...'
                   value={titleSearch}
                   onChange={(e) => setTitleSearch(e.target.value)}
-                  className='bg-background pr-10'
+                  className='bg-background pr-10 py-5'
                   aria-label='Search news articles'
                 />
                 {titleSearch && (
@@ -151,7 +151,7 @@ export default function NewsPage() {
             </div>
 
             {/* Author Filter */}
-            <div className='space-y-0.5'>
+            <div className='space-y-1'>
               <label
                 htmlFor='author'
                 className='text-sm font-medium text-foreground/80'>
@@ -162,7 +162,7 @@ export default function NewsPage() {
                 onValueChange={(value: string) =>
                   setSelectedAuthor(value === "all" ? undefined : value)
                 }>
-                <SelectTrigger id='author' className='bg-background'>
+                <SelectTrigger id='author' className='bg-background py-5'>
                   <SelectValue placeholder='All authors' />
                 </SelectTrigger>
                 <SelectContent>
@@ -177,7 +177,7 @@ export default function NewsPage() {
             </div>
 
             {/* View Sorting */}
-            <div className='space-y-0.5'>
+            <div className='space-y-1'>
               <label
                 htmlFor='sort'
                 className='text-sm font-medium text-foreground/80'>
@@ -186,7 +186,7 @@ export default function NewsPage() {
               <Select
                 value={sortOrder}
                 onValueChange={(value: SortOption) => setSortOrder(value)}>
-                <SelectTrigger id='sort' className='bg-background'>
+                <SelectTrigger id='sort' className='bg-background py-5'>
                   <SelectValue placeholder='Sort order' />
                 </SelectTrigger>
                 <SelectContent>
