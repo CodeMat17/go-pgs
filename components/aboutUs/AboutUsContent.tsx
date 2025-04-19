@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,15 +17,14 @@ import { api } from "@/convex/_generated/api";
 import Link from "next/link";
 
 export default function AboutUsContent() {
-
-  const ourVision = useQuery(api.vision.getVision)
+  const shouldReduceMotion = useReducedMotion();
+  const ourVision = useQuery(api.vision.getVision);
   const ourMission = useQuery(api.mission.getMission);
-
 
   return (
     <div className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12'>
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}>
         {/* Hero Section */}
@@ -49,7 +48,10 @@ export default function AboutUsContent() {
             {[
               {
                 icon: (
-                  <Globe className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FEDA37]' />
+                  <Globe
+                    className='w-6 h-6 sm:w-8 sm:h-8 dark:text-[#FFDC55]'
+                    aria-hidden='true'
+                  />
                 ),
                 title: "Global Recognition",
                 description:
@@ -98,17 +100,19 @@ export default function AboutUsContent() {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+                whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}>
+                viewport={{ once: true, margin: "100px" }}>
                 <Card className='p-4 sm:p-6 h-full border-amber-300 dark:border-amber-300/20'>
                   <div className='flex flex-col items-center text-center'>
-                    <div className='mb-3 sm:mb-4'>{item.icon}</div>
+                    <div className='mb-3 sm:mb-4' aria-hidden='true'>
+                      {item.icon}
+                    </div>
                     <h3 className='text-lg sm:text-xl font-semibold mb-2'>
                       {item.title}
                     </h3>
-                    <p className='text-sm sm:text-base text-muted-foreground'>
+                    <p className='text-sm sm:text-base text-muted-foreground dark:text-gray-300'>
                       {item.description}
                     </p>
                   </div>
@@ -121,31 +125,26 @@ export default function AboutUsContent() {
         {/* Our Mission and Vision */}
         <section className='mb-12 sm:mb-16'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
-            {/* Our Mission */}
-            {ourMission &&
-              ourMission.map((mission) => (
-                <Card key={mission._id} className='p-4 sm:p-6'>
-                  <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
-                    {mission.title}
-                  </h2>
-                  <p className='text-sm sm:text-base text-muted-foreground'>
-                    {mission.desc}
-                  </p>
-                </Card>
-              ))}
-
-            {/* Our Vision */}
-            {ourVision &&
-              ourVision.map((vision) => (
-                <Card key={vision._id} className='p-4 sm:p-6'>
-                  <h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
-                    {vision.title}
-                  </h2>
-                  <p className='text-sm sm:text-base text-muted-foreground'>
-                    {vision.desc}
-                  </p>
-                </Card>
-              ))}
+            {ourMission?.map((mission) => (
+              <Card key={mission._id} className='p-4 sm:p-6 min-h-[200px]'>
+                <h3 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
+                  {mission.title}
+                </h3>
+                <p className='text-sm sm:text-base text-muted-foreground dark:text-gray-300'>
+                  {mission.desc}
+                </p>
+              </Card>
+            ))}
+            {ourVision?.map((vision) => (
+              <Card key={vision._id} className='p-4 sm:p-6 min-h-[200px]'>
+                <h3 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>
+                  {vision.title}
+                </h3>
+                <p className='text-sm sm:text-base text-muted-foreground dark:text-gray-300'>
+                  {vision.desc}
+                </p>
+              </Card>
+            ))}
           </div>
         </section>
 
@@ -156,13 +155,13 @@ export default function AboutUsContent() {
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
             <div className='space-y-3 sm:space-y-4'>
-              <p className='text-sm sm:text-base text-muted-foreground'>
+              <p className='text-sm sm:text-base text-muted-foreground dark:text-gray-300'>
                 At GO University, we combine global best practices with local
                 relevance. Our programs are designed to meet international
                 standards while addressing the unique challenges and
                 opportunities of our region.
               </p>
-              <ul className='list-disc pl-6 space-y-2 text-sm sm:text-base text-muted-foreground'>
+              <ul className='list-disc pl-6 space-y-2 text-sm sm:text-base text-muted-foreground dark:text-gray-300'>
                 <li>Internationally accredited programs</li>
                 <li>Collaborations with top global universities</li>
                 <li>State-of-the-art facilities and resources</li>
@@ -170,13 +169,17 @@ export default function AboutUsContent() {
               </ul>
             </div>
             <div className='bg-muted rounded-lg p-4 sm:p-6 flex items-center justify-center'>
-              <Image
-                src='/about_us_img.avif' // Replace with your image
-                alt='Global Education'
-                width={600}
-                height={400}
-                className='rounded-lg object-cover'
-              />
+              <div className='relative w-full h-full min-h-[300px]'>
+                <Image
+                  src='/about_us_img.avif'
+                  alt='Diverse group of postgraduate students collaborating in modern campus facilities'
+                  fill
+                  quality={85}
+                  className='rounded-lg object-cover'
+                  sizes='(max-width: 768px) 100vw, 50vw'
+                  priority={false}
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -186,11 +189,16 @@ export default function AboutUsContent() {
           <h2 className='text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4'>
             Ready to Join Us?
           </h2>
-          <p className='text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6'>
+          <p className='text-sm sm:text-base text-muted-foreground dark:text-gray-300 mb-4 sm:mb-6'>
             Take the first step toward a transformative educational experience.
           </p>
-          <Button size='lg' className='text-sm sm:text-base' asChild>
-            <Link href='/courses'>Explore our Courses</Link>
+          <Button
+            size='lg'
+            className='text-sm sm:text-base bg-[#006400] hover:bg-[#004d00] dark:bg-[#FFDC55] dark:text-gray-900'
+            asChild>
+            <Link href='/courses' aria-label='Explore available courses'>
+              Explore our Courses
+            </Link>
           </Button>
         </section>
       </motion.div>
