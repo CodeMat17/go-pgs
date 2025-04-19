@@ -1,9 +1,5 @@
-
-
 import HomeContent from "@/components/home/HomeContent";
 import { Metadata } from "next";
-
-
 
 export const metadata: Metadata = {
   title: "Home | Premier Postgraduate Education in Nigeria",
@@ -21,12 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-
-
-
-
 export default function HomePage() {
-  return (
-  <HomeContent />
-  );
+  return <HomeContent />;
 }

@@ -1,8 +1,17 @@
-import Image from 'next/image';
-import {motion} from 'framer-motion'
-import DescriptionAnimation from '../DescriptionAnimation';
-import { ApplyNow } from '../buttons/ApplyNow';
-import { QuickLinks } from '../QuickLinks';
+"use client"; // Add this at the top for client-side components
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { ApplyNow } from "../buttons/ApplyNow";
+import { QuickLinks } from "../QuickLinks";
+
+// Dynamically load client-side only components
+
+const DescriptionAnimation = dynamic(() => import("../DescriptionAnimation"), {
+  ssr: false,
+  loading: () => <div className='h-8' />, // Loading placeholder
+});
 
 const HomeContent = () => {
   return (
@@ -12,7 +21,7 @@ const HomeContent = () => {
         {/* Background Image with Gradient Overlay */}
         <div className='absolute inset-0 z-0'>
           <Image
-            src='/hero-bg.avif' // Replace with your actual hero image
+            src='/hero-bg.avif'
             alt='GO University Campus'
             fill
             priority
@@ -43,7 +52,6 @@ const HomeContent = () => {
           </motion.div>
 
           {/* Text Container */}
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,8 +73,7 @@ const HomeContent = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className=''>
+              transition={{ delay: 0.6 }}>
               <ApplyNow />
             </motion.div>
           </motion.div>
@@ -79,6 +86,6 @@ const HomeContent = () => {
       </section>
     </div>
   );
-}
+};
 
-export default HomeContent
+export default HomeContent;
