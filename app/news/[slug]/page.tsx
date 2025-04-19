@@ -5,7 +5,12 @@ import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
 
 
-export async function generateMetadata({ params }: {params: {slug: string}}): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  // Await params first
   const { slug } = await params;
 
   const news = await fetchQuery(api.news.getNewsBySlug, { slug });
@@ -21,18 +26,18 @@ export async function generateMetadata({ params }: {params: {slug: string}}): Pr
   const baseUrl = process.env.SITE_URL || "http://localhost:3000";
 
   return {
-    title: `${news.title} | GOUNI Postgrad`,
+    title: `${news.title}`,
     description: truncate(news.content, 160),
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: `${baseUrl}/news/${slug}`,
+      canonical: `/news/${slug}`,
     },
     openGraph: {
       title: news.title,
       description: truncate(news.content, 160),
       type: "article",
       publishedTime: new Date(news._creationTime).toISOString(),
-      url: `${baseUrl}/news/${slug}`,
+      url: `/news/${slug}`,
       images: news.coverImage
         ? [
             {
