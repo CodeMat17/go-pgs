@@ -66,15 +66,15 @@ const HomeContent = () => {
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className='text-4xl md:text-[48px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0_2px_4px_rgba(0,0,0,0.25)]'>
+              className='text-3xl md:text-[45px] xl:text-5xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0_2px_4px_rgba(0,0,0,0.25)]'>
               Elevate Your Academic Journey at
               <span className='block text-[#FFDC55]'>
                 {" "}
                 {/* Adjusted for better contrast */}
-                Godfrey Okoye Postgraduate School
+                Godfrey Okoye University School of Postgraduate Studies
               </span>
             </motion.h1>
-
+           
             <DescriptionAnimation />
 
             <motion.div
