@@ -1,25 +1,15 @@
 import NewsContent from "@/components/news/NewsContent";
 import { api } from "@/convex/_generated/api";
 // import { notFound } from "next/navigation";
-import {fetchQuery} from 'convex/nextjs'
+import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
 
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
+export async function generateMetadata({ params }: {params: {slug: string}}): Promise<Metadata> {
+  const { slug } = await params;
 
-export async function generateMetadata({
-  params,
-}: Props): Promise<Metadata> {
+  const news = await fetchQuery(api.news.getNewsBySlug, { slug });
 
-  const { slug } = await params
-  
-  const news = await fetchQuery(api.news.getNewsBySlug, { slug })
-
-  
   if (!news) {
     return {
       title: "Article Not Found",
@@ -28,8 +18,7 @@ export async function generateMetadata({
     };
   }
 
-     const baseUrl = process.env.SITE_URL || "http://localhost:3000";
- 
+  const baseUrl = process.env.SITE_URL || "http://localhost:3000";
 
   return {
     title: `${news.title} | GOUNI Postgrad`,
@@ -73,9 +62,5 @@ export default async function NewsDetailPage() {
 
   // if (!news) return notFound();
 
-  return (
-   
-      <NewsContent />
- 
-  );
+  return <NewsContent />;
 }
