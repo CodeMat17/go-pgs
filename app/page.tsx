@@ -12,8 +12,26 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "GO University Postgraduate School",
-    description: "Accredited postgraduate education with research excellence",
-    images: [{ url: "/opengraph-image.jpg" }],
+    description:
+      "Nigeria's leading postgraduate institution offering world-class Masters, PhD and PGD programs. Start your advanced degree journey today.",
+    images: [
+      {
+        url: "/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "GO University",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GO Uni Postgrad",
+    description:
+      "Nigeria's leading postgraduate institution offering world-class Masters, PhD and PGD programs. Start your advanced degree journey today.",
+    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+  },
+  alternates: {
+    canonical: "https://pg.gouni.edu.ng",
   },
 };
 

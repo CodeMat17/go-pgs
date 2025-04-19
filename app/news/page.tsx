@@ -27,6 +27,9 @@ export const metadata: Metadata = {
       "Latest updates from Nigeria's leading postgraduate institution",
     images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
   },
+  alternates: {
+    canonical: "https://pg.gouni.edu.ng/news",
+  },
 };
 
 export default function NewsPageWrapper() {

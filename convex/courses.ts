@@ -2,6 +2,12 @@ import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { courseType } from "./schema";
 
+export const getAll = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("courses").collect();
+  },
+});
+
 export const getCoursesByType = query({
     args: { type: courseType },
     handler: async (ctx, { type }) => {

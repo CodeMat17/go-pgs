@@ -8,7 +8,26 @@ export const metadata: Metadata = {
   keywords: ["postgraduate lecturers", "academic staff profiles"],
   openGraph: {
     title: "Postgraduate staff Members",
-    images: [{ url: "/opengraph-image.jpg" }],
+    description:
+      "Meet our distinguished staff members and postgraduate program coordinators.",
+    images: [
+      {
+        url: "/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "GO University News Bulletin",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Postgraduate staff Members",
+    description:
+      "Meet our distinguished staff members and postgraduate program coordinators.",
+    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+  },
+  alternates: {
+    canonical: "https://pg.gouni.edu.ng/staff",
   },
 };
 

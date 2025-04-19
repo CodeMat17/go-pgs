@@ -2,6 +2,14 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 
+
+export const getAll = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("news").collect();
+  },
+});
+
+
 export const getNewsList = query({
   handler: async (ctx) => {
     const results = await ctx.db.query("news").order("desc").take(100);
