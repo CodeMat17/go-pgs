@@ -87,7 +87,7 @@ const CoursesTabs = () => {
         <TabsContent
           value='pgd'
           id='pgd-content'
-          className='pt-6 mt-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/80'
+          className='pt-6 mt-16 sm:mt-12 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/80'
           role='tabpanel'
           tabIndex={0}>
           <motion.div
@@ -101,7 +101,7 @@ const CoursesTabs = () => {
         <TabsContent
           value='masters'
           id='masters-content'
-          className='pt-6 mt-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/80'
+          className='pt-6  mt-16 sm:mt-12  focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/80'
           role='tabpanel'
           tabIndex={0}>
           <motion.div
@@ -115,7 +115,7 @@ const CoursesTabs = () => {
         <TabsContent
           value='phd'
           id='phd-content'
-          className='pt-6 mt-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/80'
+          className='pt-6  mt-16 sm:mt-12  focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/80'
           role='tabpanel'
           tabIndex={0}>
           <motion.div
