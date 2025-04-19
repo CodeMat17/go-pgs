@@ -59,7 +59,7 @@ const CourseContent = () => {
   }
 
   return (
-    <div className='w-full max-w-5xl mx-auto px-4 py-8 sm:py-12'>
+    <div className='w-full max-w-5xl mx-auto px-4 py-8 sm:py-12 '>
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}

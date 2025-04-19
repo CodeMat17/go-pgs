@@ -40,7 +40,7 @@ const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
 
   return (
     <Card
-      className='p-6 bg-background dark:bg-neutral-900/30 dark:border-neutral-800 flex flex-col'
+      className='p-6 bg-white dark:bg-neutral-900/30 dark:border-neutral-800 flex flex-col'
       role='article'
       aria-labelledby={`course-${slug}-title`}>
       <div className='space-y-4'>
