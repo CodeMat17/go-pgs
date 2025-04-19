@@ -1,3 +1,5 @@
+
+
 import NewsPage from "@/components/news/NewsPage";
 import { Metadata } from "next";
 
@@ -29,5 +31,9 @@ export const metadata: Metadata = {
 
 export default function NewsPageWrapper() {
 
-  return <NewsPage />;
+ 
+
+  return (
+  <NewsPage />
+  );
 }

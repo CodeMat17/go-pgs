@@ -1,24 +1,30 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import dayjs from "dayjs";
 import { Eye, Share2 } from "lucide-react";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { useEffect } from "react";
 
-
-type NewsDetailProps = {
+export type News = {
+  _id: string;
+  title: string;
+  author: string;
   slug: string;
+  content: string;
+  coverImage?: string;
+  views: number;
+  publicationDate?: string | number | Date;
+  updatedOn?: string;
+  _creationTime: number;
 };
 
+type NewsContentProps = {
+  news: News;
+};
 
-export default function NewsDetailContent({slug}: NewsDetailProps) {
-  // const params = useParams();
-  // const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
-
-  const newsItem = useQuery(api.news.getNewsBySlug, slug ? { slug } : "skip");
+export default function NewsContent({ news }: NewsContentProps) {
   const incrementViews = useMutation(api.news.incrementViews);
 
   const handleShare = (slug: string) => {
@@ -27,7 +33,7 @@ export default function NewsDetailContent({slug}: NewsDetailProps) {
     if (navigator.share) {
       navigator.share({
         title: "Check out this news article",
-        url: url,
+        url,
       });
     } else {
       navigator.clipboard.writeText(url);
@@ -36,38 +42,19 @@ export default function NewsDetailContent({slug}: NewsDetailProps) {
   };
 
   useEffect(() => {
-    if (newsItem?.slug && slug) {
-      incrementViews({ slug });
+    if (news?.slug) {
+      incrementViews({ slug: news.slug });
     }
-  }, [newsItem?.slug, slug, incrementViews]);
-
-  if (newsItem === null) {
-    notFound();
-  }
-
-  if (!newsItem) {
-    return (
-      <div className='w-full min-h-screen px-4 py-12 max-w-4xl mx-auto'>
-        <div className='animate-pulse space-y-8'>
-          <div className='h-48 bg-muted rounded-lg mb-8' />
-          <div className='h-8 bg-muted rounded w-3/4 mb-4' />
-          <div className='space-y-4'>
-            <div className='h-4 bg-muted rounded w-full' />
-            <div className='h-4 bg-muted rounded w-2/3' />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [news?.slug, incrementViews]);
 
   return (
     <div className='w-full min-h-screen px-4 py-12'>
       <div className='max-w-3xl mx-auto'>
-        {newsItem.coverImage && (
+        {news.coverImage && (
           <div className='mb-6 relative h-72 w-full object-cover aspect-video'>
             <Image
-              src={newsItem.coverImage}
-              alt={newsItem.title}
+              src={news.coverImage}
+              alt={news.title}
               fill
               className='rounded-lg object-cover'
               sizes='(max-width: 768px) 100vw, 80vw'
@@ -75,7 +62,7 @@ export default function NewsDetailContent({slug}: NewsDetailProps) {
             />
           </div>
         )}
-        <h1 className='text-4xl font-bold mb-4'>{newsItem.title}</h1>
+        <h1 className='text-4xl font-bold mb-4'>{news.title}</h1>
 
         <div className='flex flex-col sm:flex-row sm:justify-between mb-4'>
           <div className='flex items-center gap-2 text-sm'>
@@ -83,11 +70,9 @@ export default function NewsDetailContent({slug}: NewsDetailProps) {
               By
             </span>
             <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
-              <p className='text-primary pt-1 sm:pt-0'>{newsItem.author}</p>
+              <p className='text-primary pt-1 sm:pt-0'>{news.author}</p>
               <span className='hidden sm:flex'>|</span>
-              <p>
-                {dayjs(newsItem.publicationDate).format("MMM DD, YYYY h:m a")}
-              </p>
+              <p>{dayjs(news.publicationDate).format("MMM DD, YYYY h:mm a")}</p>
             </div>
           </div>
         </div>
@@ -95,18 +80,18 @@ export default function NewsDetailContent({slug}: NewsDetailProps) {
         <div className='flex items-center gap-2 text-sm mt-1 mb-8'>
           <div className='flex items-center gap-1 mr-3'>
             <Eye className='w-4 h-4' />
-            <p>{newsItem.views} views</p>
+            <p>{news.views} views</p>
           </div>
           <p>•</p>
           <button
             className='flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-950 px-4 py-2 rounded-full text-xs font-medium'
-            onClick={() => handleShare(newsItem.slug)}>
+            onClick={() => handleShare(news.slug)}>
             <Share2 className='w-4 h-4' /> Share
           </button>
         </div>
 
         <article className='prose dark:prose-invert max-w-none'>
-          <div dangerouslySetInnerHTML={{ __html: newsItem.content }} />
+          <div dangerouslySetInnerHTML={{ __html: news.content }} />
         </article>
       </div>
     </div>

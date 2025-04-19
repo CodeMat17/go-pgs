@@ -1,7 +1,9 @@
 import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
-import NewsDetailContent from "@/components/news/NewsDetailContent";
+import dynamic from "next/dynamic";
+
+const NewsContent = dynamic(() => import("@/components/news/NewsContent"));
 
 type Props = {
   params: {
@@ -9,78 +11,105 @@ type Props = {
   };
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const news = await fetchQuery(api.news.getNewsBySlug, { slug: params.slug });
 
-  const baseUrl = process.env.NODE_ENV === "production" ? "https://pg.gouni.edu.ng" : "http://localhost:3000"
+const fetchNewsItem = async (slug: string) => {
+  try {
+    return await fetchQuery(api.news.getNewsBySlug, { slug });
+  } catch (error) {
+    console.error("News fetch error:", error);
+    return null;
+  }
+};
 
-  if (!news) {
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  // Ensure slug is properly decoded and validated
+  const newsItem = await fetchNewsItem(params.slug);
+
+  if (!newsItem) {
     return {
-      title: "News Not Found - GO University",
-      description: "The requested news article could not be found",
-      robots: {
-        index: false,
-        follow: false,
-      },
+      title: "Article Not Found",
+      description: "The requested article could not be found",
+      robots: "noindex, nofollow",
     };
   }
 
+  // Construct metadata values
+  const baseUrl = process.env.SITE_URL || "http://localhost:3000";
+  const metadataBase = new URL(baseUrl);
+
+  // Convert Convex timestamps to ISO strings
+  const publishedTime = new Date(newsItem._creationTime).toISOString();
+  const modifiedTime = newsItem.updatedOn
+    ? new Date(newsItem.updatedOn).toISOString()
+    : publishedTime;
+  
+  
+  const canonicalUrl = `${baseUrl}/news/${params.slug}`;
+
+  const description = newsItem.excerpt
+    ? truncate(newsItem.excerpt, 160)
+    : truncate(newsItem.content || "", 160);
+
+  // Structured metadata configuration
   return {
-    title: `${news.title} | GO University News`,
-    description:
-      news.content.slice(0, 160).replace(/<[^>]+>/g, "") ||
-      `Latest news update: ${news.title}`,
+    metadataBase,
+    title: `${newsItem.title} | GOUNI Postgrad`,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: news.title,
-      description:
-        news.content.slice(0, 160).replace(/<[^>]+>/g, "") ||
-        `Read the full article about ${news.title}`,
-      images: news.coverImage
+      type: "article",
+      publishedTime,
+      modifiedTime,
+      url: canonicalUrl,
+      images: newsItem.coverImage
         ? [
             {
-              url: new URL(news.coverImage, baseUrl).toString(),
+              url: new URL(newsItem.coverImage, metadataBase).toString(),
               width: 1200,
               height: 630,
-              alt: news.title,
+              alt: newsItem.title,
             },
           ]
-        : [
-            {
-              url: `${baseUrl}/opengraph-image.jpg`,
-              width: 1200,
-              height: 630,
-              alt: "GO University News",
-            },
-          ],
-      publishedTime: news._creationTime.toLocaleString(),
-      modifiedTime: news.updatedOn?.toString(),
-      authors: [news.author],
-      type: "article",
+        : [],
     },
     twitter: {
       card: "summary_large_image",
-      title: news.title,
-      description:
-        news.content.slice(0, 150).replace(/<[^>]+>/g, "") + "..." ||
-        `Read about ${news.title}`,
-      images: news.coverImage
-        ? new URL(news.coverImage, baseUrl).toString()
-        : `${baseUrl}/opengraph-image.jpg`,
+      title: newsItem.title,
+      description,
+      images: newsItem.coverImage
+        ? [new URL(newsItem.coverImage, metadataBase).toString()]
+        : [],
     },
-    alternates: {
-      canonical: `/news/${params.slug}`,
-    },
-    other: {
-      "article:published_time": news._creationTime.toLocaleString(),
-      "article:modified_time": news.updatedOn?.toString() || "",
-      "article:author": news.author,
-      "article:section": "Education News",
-    },
+    ...(newsItem.tags?.length && { keywords: newsItem.tags.join(", ") }),
   };
 }
 
-export default function NewsDetailWrapper({params}: Props) {
-  
+// Utility function for text truncation
+const truncate = (text: string, maxLength: number): string =>
+  text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
 
-  return <NewsDetailContent slug={params.slug} />;
+export default async function NewsDetailPage({ params }: Props) {
+  const { slug } = params;
+  const news = await fetchQuery(api.news.getNewsBySlug, { slug });
+
+  if (!news) {
+    return (
+      <div className='w-full min-h-screen px-4 py-12 max-w-4xl mx-auto'>
+        <div className='animate-pulse space-y-8'>
+          <div className='h-48 bg-muted rounded-lg mb-8' />
+          <div className='h-8 bg-muted rounded w-3/4 mb-4' />
+          <div className='space-y-4'>
+            <div className='h-4 bg-muted rounded w-full' />
+            <div className='h-4 bg-muted rounded w-2/3' />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <NewsContent news={news} />;
 }
