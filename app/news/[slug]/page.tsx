@@ -1,9 +1,9 @@
+import NewsContent from "@/components/news/NewsContent";
 import { api } from "@/convex/_generated/api";
-import { fetchQuery } from "convex/nextjs";
+// import { notFound } from "next/navigation";
+import {fetchQuery} from 'convex/nextjs'
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 
-const NewsContent = dynamic(() => import("@/components/news/NewsContent"));
 
 type Props = {
   params: {
@@ -11,23 +11,16 @@ type Props = {
   };
 };
 
-
-const fetchNewsItem = async (slug: string) => {
-  try {
-    return await fetchQuery(api.news.getNewsBySlug, { slug });
-  } catch (error) {
-    console.error("News fetch error:", error);
-    return null;
-  }
-};
-
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
-  // Ensure slug is properly decoded and validated
-  const newsItem = await fetchNewsItem(params.slug);
 
-  if (!newsItem) {
+  const { slug } = await params
+  
+  const news = await fetchQuery(api.news.getNewsBySlug, { slug })
+
+  
+  if (!news) {
     return {
       title: "Article Not Found",
       description: "The requested article could not be found",
@@ -35,81 +28,54 @@ export async function generateMetadata({
     };
   }
 
-  // Construct metadata values
-  const baseUrl = process.env.SITE_URL || "http://localhost:3000";
-  const metadataBase = new URL(baseUrl);
+     const baseUrl = process.env.SITE_URL || "http://localhost:3000";
+ 
 
-  // Convert Convex timestamps to ISO strings
-  const publishedTime = new Date(newsItem._creationTime).toISOString();
-  const modifiedTime = newsItem.updatedOn
-    ? new Date(newsItem.updatedOn).toISOString()
-    : publishedTime;
-  
-  
-  const canonicalUrl = `${baseUrl}/news/${params.slug}`;
-
-  const description = newsItem.excerpt
-    ? truncate(newsItem.excerpt, 160)
-    : truncate(newsItem.content || "", 160);
-
-  // Structured metadata configuration
   return {
-    metadataBase,
-    title: `${newsItem.title} | GOUNI Postgrad`,
-    description,
+    title: `${news.title} | GOUNI Postgrad`,
+    description: truncate(news.content, 160),
+    metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: canonicalUrl,
+      canonical: `${baseUrl}/news/${slug}`,
     },
     openGraph: {
+      title: news.title,
+      description: truncate(news.content, 160),
       type: "article",
-      publishedTime,
-      modifiedTime,
-      url: canonicalUrl,
-      images: newsItem.coverImage
+      publishedTime: new Date(news._creationTime).toISOString(),
+      url: `${baseUrl}/news/${slug}`,
+      images: news.coverImage
         ? [
             {
-              url: new URL(newsItem.coverImage, metadataBase).toString(),
+              url: news.coverImage,
               width: 1200,
               height: 630,
-              alt: newsItem.title,
+              alt: news.title,
             },
           ]
         : [],
     },
     twitter: {
       card: "summary_large_image",
-      title: newsItem.title,
-      description,
-      images: newsItem.coverImage
-        ? [new URL(newsItem.coverImage, metadataBase).toString()]
-        : [],
+      title: news.title,
+      description: truncate(news.content, 160),
+      images: news.coverImage ? [news.coverImage] : [],
     },
-    ...(newsItem.tags?.length && { keywords: newsItem.tags.join(", ") }),
   };
 }
 
-// Utility function for text truncation
 const truncate = (text: string, maxLength: number): string =>
   text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
 
-export default async function NewsDetailPage({ params }: Props) {
-  const { slug } = params;
-  const news = await fetchQuery(api.news.getNewsBySlug, { slug });
+export default async function NewsDetailPage() {
+  //  const {slug} = await params;
+  // const news = await fetchQuery(api.news.getNewsBySlug, { slug });
 
-  if (!news) {
-    return (
-      <div className='w-full min-h-screen px-4 py-12 max-w-4xl mx-auto'>
-        <div className='animate-pulse space-y-8'>
-          <div className='h-48 bg-muted rounded-lg mb-8' />
-          <div className='h-8 bg-muted rounded w-3/4 mb-4' />
-          <div className='space-y-4'>
-            <div className='h-4 bg-muted rounded w-full' />
-            <div className='h-4 bg-muted rounded w-2/3' />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (!news) return notFound();
 
-  return <NewsContent news={news} />;
+  return (
+   
+      <NewsContent />
+ 
+  );
 }
