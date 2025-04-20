@@ -22,14 +22,14 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const baseUrl = 'https://pg.gouni.edu.ng';
 
   return {
     title: `${news.title}`,
     description: truncate(news.content, 160),
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: `/news/${slug}`,
+      canonical: `${baseUrl}/news/${slug}`,
     },
     openGraph: {
       title: news.title,
@@ -57,8 +57,13 @@ export async function generateMetadata({
   };
 }
 
-const truncate = (text: string, maxLength: number): string =>
-  text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
+const truncate = (text: string, maxLength: number): string => {
+  // Remove first 3 characters before truncating
+  const trimmedText = text.slice(3);
+  return trimmedText.length > maxLength
+    ? `${trimmedText.slice(0, maxLength - 1)}…`
+    : trimmedText;
+};
 
 export default async function NewsDetailPage() {
   return <NewsContent />;
