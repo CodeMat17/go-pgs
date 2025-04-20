@@ -12,7 +12,7 @@ export const metadata: Metadata = {
       "Discover our history, mission, and commitment to postgraduate education excellence in Nigeria.",
     images: [
       {
-        url: "/opengraph-image.jpg",
+        url: "/about-us/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "About GO University Postgraduate School Bulletin",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "About GO Uni Postgraduate School",
     description:
       "Discover our history, mission, and commitment to postgraduate education excellence in Nigeria.",
-    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/about-us/opengraph-image.jpg"],
   },
   alternates: {
     canonical: "https://pg.gouni.edu.ng/about-us",
