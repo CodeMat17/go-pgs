@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description: "Join our global network of successful postgraduate alumni",
     images: [
       {
-        url: "/opengraph-image.jpg",
+        url: "/alumni/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "GO University Postgrad Alumni Network",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GO Uni Postgrad Alumni Community",
     description: "Join our global network of successful postgraduate alumni",
-    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/alumni/opengraph-image.jpg"],
   },
   alternates: {
     canonical: "https://pg.gouni.edu.ng/alumni",

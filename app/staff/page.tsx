@@ -12,7 +12,7 @@ export const metadata: Metadata = {
       "Meet our distinguished staff members and postgraduate program coordinators.",
     images: [
       {
-        url: "/opengraph-image.jpg",
+        url: "/staff/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "GO University News Bulletin",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Postgraduate staff Members",
     description:
       "Meet our distinguished staff members and postgraduate program coordinators.",
-    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/staff/opengraph-image.jpg"],
   },
   alternates: {
     canonical: "https://pg.gouni.edu.ng/staff",

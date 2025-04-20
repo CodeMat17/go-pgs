@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description: "Entry requirements for Masters, PhD, and PGD programs",
     images: [
       {
-        url: "/opengraph-image.jpg",
+        url: "/requirements/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "GO University News Bulletin",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Postgraduate Admission Requirements",
     description: "Entry requirements for Masters, PhD, and PGD programs",
-    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/requirements/opengraph-image.jpg"],
   },
   alternates: {
     canonical: "https://pg.gouni.edu.ng/requirements",

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       "Discover our cutting-edge postgraduate programs in Business, Sciences, Humanities, and Technology. Accredited qualifications with flexible learning options.",
     images: [
       {
-        url: "https://pg.gouni.edu.ng/opengraph-image.jpg",
+        url: "https://pg.gouni.edu.ng/courses/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "GO University Postgraduate Students",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title: "GO Uni Postgraduate Programs",
     description:
       "Nigeria's leading postgraduate courses with industry-aligned curriculum and research excellence",
-    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/courses/opengraph-image.jpg"],
   },
   alternates: {
     canonical: "https://pg.gouni.edu.ng/courses",

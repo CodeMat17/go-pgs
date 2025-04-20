@@ -11,7 +11,7 @@ export const metadata: Metadata = {
       "Official news portal for Godfrey Okoye University postgraduate programs and research initiatives",
     images: [
       {
-        url: "https://pg.gouni.edu.ng/opengraph-image.jpg",
+        url: "https://pg.gouni.edu.ng/news/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "GO University News Bulletin",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: "GO Uni Postgrad News",
     description:
       "Latest updates from Nigeria's leading postgraduate institution",
-    images: ["https://pg.gouni.edu.ng/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/news/opengraph-image.jpg"],
   },
   alternates: {
     canonical: "https://pg.gouni.edu.ng/news",

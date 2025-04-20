@@ -38,7 +38,7 @@ export async function generateMetadata({
       url: `/news/${slug}`,
       images: [
         {
-          url: `${baseUrl}/opengraph-image.jpg`,
+          url: `${baseUrl}/courses/opengraph-image.jpg`,
           width: 1200,
           height: 630,
           alt: course.course,
@@ -49,7 +49,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: course.course,
       description: truncate(course.overview, 80),
-      images: `${baseUrl}/opengraph-image.jpg`,
+      images: `${baseUrl}/courses/opengraph-image.jpg`,
     },
     
   };
