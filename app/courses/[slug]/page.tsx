@@ -21,7 +21,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.SITE_URL || "http://localhost:3000";
+  const baseUrl = "https://pg.gouni.edu.ng";
 
   return {
     title: `${course.course}`,
@@ -51,7 +51,7 @@ export async function generateMetadata({
       description: truncate(course.overview, 80),
       images: `${baseUrl}/opengraph-image.jpg`,
     },
-   
+    
   };
 }
 
