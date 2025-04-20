@@ -4,7 +4,6 @@ import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
 
-
 export async function generateMetadata({
   params,
 }: {
@@ -23,7 +22,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.SITE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   return {
     title: `${news.title}`,
@@ -62,10 +61,5 @@ const truncate = (text: string, maxLength: number): string =>
   text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
 
 export default async function NewsDetailPage() {
-  //  const {slug} = await params;
-  // const news = await fetchQuery(api.news.getNewsBySlug, { slug });
-
-  // if (!news) return notFound();
-
   return <NewsContent />;
 }
