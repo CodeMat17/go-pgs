@@ -23,9 +23,9 @@ export function QuickLinks() {
       icon: <Microscope className='w-8 h-8 md:w-10 md:h-10' />,
     },
     {
-      title: "Student Resources",
-      href: "/resources",
-      description: "Access academic tools and support",
+      title: "Admission Requirements",
+      href: "/requirements",
+      description: "Explore our admission requirements",
       icon: <GraduationCap className='w-8 h-8 md:w-10 md:h-10' />,
     },
     {
