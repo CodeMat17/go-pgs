@@ -20,33 +20,35 @@ const CourseContent = () => {
     slug ? { slug } : "skip"
   );
 
-  // Add structured data for SEO
- useEffect(() => {
-   if (course) {
-     const structuredData = {
-       "@context": "https://schema.org",
-       "@type": "Course",
-       name: course.course,
-       description: course.overview,
-       courseMode: course.mode,
-       timeRequired: course.duration,
-       provider: {
-         "@type": "Organization",
-         name: "Godfrey Okoye University",
-         sameAs: process.env.NEXT_PUBLIC_SITE_URL,
-       },
-     };
-     const script = document.createElement("script");
-     script.type = "application/ld+json";
-     script.text = JSON.stringify(structuredData);
-     document.head.appendChild(script);
+  const howToApply = useQuery(api.howToApply.getAll);
 
-     // Return cleanup function with void return type
-     return () => {
-       document.head.removeChild(script);
-     };
-   }
- }, [course]);
+  // Add structured data for SEO
+  useEffect(() => {
+    if (course) {
+      const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        name: course.course,
+        description: course.overview,
+        courseMode: course.mode,
+        timeRequired: course.duration,
+        provider: {
+          "@type": "Organization",
+          name: "Godfrey Okoye University",
+          sameAs: process.env.NEXT_PUBLIC_SITE_URL,
+        },
+      };
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.text = JSON.stringify(structuredData);
+      document.head.appendChild(script);
+
+      // Return cleanup function with void return type
+      return () => {
+        document.head.removeChild(script);
+      };
+    }
+  }, [course]);
 
   if (course === undefined) {
     return (
@@ -85,7 +87,7 @@ const CourseContent = () => {
         </article>
 
         {/* Program Details */}
-        <div className='grid gap-6 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_300px]'>
+        <div className='grid gap-6 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_400px]'>
           {/* Main Content */}
           <main className='space-y-6'>
             {/* Why Choose Us */}
@@ -130,7 +132,7 @@ const CourseContent = () => {
               </h2>
               <div className='space-y-3 sm:space-y-4'>
                 <SafeHTMLRenderer
-                  htmlContent={course?.overview ?? ''}
+                  htmlContent={course?.overview ?? ""}
                   className='text-gray-950 dark:text-muted-foreground prose dark:prose-invert max-w-none'
                 />
               </div>
@@ -142,19 +144,30 @@ const CourseContent = () => {
             {/* Application CTA */}
             <Card className='p-6 bg-[#FFD700]/90 dark:bg-[#FFD700]/20'>
               <h2 className='text-gray-900 dark:text-gray-100 text-lg sm:text-xl font-semibold mb-3 sm:mb-4'>
-                Start Your Application
+                HOW TO APPLY
               </h2>
-              <Button
-                className='w-full text-sm sm:text-base bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200'
-                asChild>
-                <a
-                  href='https://form.jotform.com/241452745198362'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='Apply now through online form'>
-                  Apply Now
-                </a>
-              </Button>
+              {howToApply &&
+                howToApply.map((apply) => (
+                  <div key={apply._id}>
+                    <div className="mb-6">
+                      <SafeHTMLRenderer
+                        htmlContent={apply.text}
+                        className='text-gray-950 dark:text-muted-foreground prose dark:prose-invert max-w-none leading-5'
+                      />
+                    </div>
+                    <Button
+                      className='w-full text-sm sm:text-base bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200'
+                      asChild>
+                      <a
+                        href={apply.link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='Apply now through online form'>
+                        Apply Now
+                      </a>
+                    </Button>
+                  </div>
+                ))}
             </Card>
 
             {/* Key Facts */}

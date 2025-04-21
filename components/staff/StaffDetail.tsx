@@ -46,8 +46,8 @@ export default function StaffDetail() {
             Our Academic Staff
           </h1>
           <p className='text-lg text-muted-foreground max-w-xl mx-auto'>
-            Meet the dedicated faculty members shaping education at GO
-            University PGS
+            Meet the dedicated staff members shaping education at GO
+            University School of Postgraduate Studies.
           </p>
         </header>
 
@@ -83,10 +83,10 @@ export default function StaffDetail() {
                         />
                       </figure>
                       <div className='text-center px-4 pb-3 flex-1 flex flex-col'>
-                        <h2 className='text-xl font-semibold mb-1'>
+                        <h2 className='text-xl font-semibold'>
                           {staff.name}
                         </h2>
-                        <p className='text-sm text-muted-foreground mb-4'>
+                        <p className='text-muted-foreground mb-4'>
                           {staff.role}
                         </p>
                         <div className='flex justify-center gap-4 mb-4'>

@@ -26,6 +26,7 @@ const PhdCourses = () => {
               slug={phd.slug}
               duration={phd.duration}
               mode={phd.mode}
+              faculty={phd.faculty ?? ""}
             />
           ))}
         </div>

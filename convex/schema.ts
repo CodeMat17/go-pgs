@@ -158,6 +158,7 @@ export default defineSchema({
         description: v.string(),
       })
     ),
+    faculty: v.optional(v.string()),
   })
     .index("by_slug", ["slug"])
     .index("by_type", ["type"]),
@@ -179,4 +180,9 @@ export default defineSchema({
     slug: v.string(),
     status: v.boolean(),
   }).index("by_slug", ["slug"]),
+
+  howToApply: defineTable({
+    text: v.string(),
+    link: v.string(),
+  }),
 });

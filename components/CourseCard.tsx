@@ -19,9 +19,10 @@ type CourseProps = {
   slug: string;
   duration: string;
   mode: string;
+  faculty: string
 };
 
-const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
+const CourseCard = ({ course, slug, duration, mode, faculty }: CourseProps) => {
   const renderModeIndicator = () => {
     if (mode in modeConfig) {
       const { Icon, label } = modeConfig[mode as Mode];
@@ -44,11 +45,15 @@ const CourseCard = ({ course, slug, duration, mode }: CourseProps) => {
       role='article'
       aria-labelledby={`course-${slug}-title`}>
       <div className='space-y-4'>
+        <div>
+           <h2 className="text-muted-foreground">{faculty}</h2>
         <h3
           id={`course-${slug}-title`}
-          className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+          className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
           {course}
         </h3>
+        </div>
+       
         <div className='space-y-0.5'>
           <div
             className='flex items-center gap-2 text-gray-700 dark:text-gray-300'

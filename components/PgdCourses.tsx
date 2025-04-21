@@ -22,14 +22,15 @@ const PgdCourses = () => {
       ) : (
         <div className='mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
           {pgdCourses.map((pgd) => (
-              <CourseCard
-                key={pgd._id}
-                course={pgd.course}
-                slug={pgd.slug}
-                duration={pgd.duration}
-                mode={pgd.mode}
-              />
-            ))}
+            <CourseCard
+              key={pgd._id}
+              course={pgd.course}
+              slug={pgd.slug}
+              duration={pgd.duration}
+              mode={pgd.mode}
+              faculty={pgd.faculty ?? ""}
+            />
+          ))}
         </div>
       )}
     </div>
