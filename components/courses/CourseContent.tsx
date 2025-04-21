@@ -142,7 +142,7 @@ const CourseContent = () => {
           {/* Sidebar */}
           <aside className='space-y-6'>
             {/* Application CTA */}
-            <Card className='p-6 bg-[#FFD700]/90 dark:bg-[#FFD700]/20'>
+            <Card className='p-6 bg-[#FFD700]/30 dark:bg-[#FFD700]/20'>
               <h2 className='text-gray-900 dark:text-gray-100 text-lg sm:text-xl font-semibold mb-3 sm:mb-4'>
                 HOW TO APPLY
               </h2>
