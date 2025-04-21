@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Globe, MinusIcon } from "lucide-react";
+import { CheckCircle2, Globe, Minus, MinusIcon } from "lucide-react";
 
 export default function RequirementsContent() {
   const requirements =
@@ -12,6 +12,16 @@ export default function RequirementsContent() {
   const otherRoutes = useQuery(
     api.alternativeAdmissions.getAlternativeAdmissionRoute
   );
+
+
+  if (!requirements && requirements === undefined) {
+    return (
+       <div className="px-4 py-32 flex items-center justify-center"><Minus className="mr-3 animate-spin" /> loading...</div>
+    )
+  }
+
+  
+
 
   return (
     <div className='w-full min-h-screen max-w-5xl mx-auto px-4 py-12'>

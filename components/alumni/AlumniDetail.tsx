@@ -32,7 +32,7 @@ const alumni = useMemo(() => rawAlumni ?? [], [rawAlumni]);  const shouldReduceM
       new Set(alumni.map((alumnus) => alumnus.graduatedOn))
     )
       .filter((y): y is string => typeof y === "string")
-      .sort((a, b) => b.localeCompare(a));
+      .sort((a, b) => Number(b) - Number(a));
     const programs = Array.from(
       new Set(alumni.map((alumnus) => alumnus.degree))
     );
