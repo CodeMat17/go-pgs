@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
-import { courseType } from "./schema";
+import { courseType, facultyType } from "./schema";
 
 export const getAll = query({
   handler: async (ctx) => {
@@ -9,11 +9,28 @@ export const getAll = query({
 });
 
 export const getCoursesByType = query({
-    args: { type: courseType },
-    handler: async (ctx, { type }) => {
-        return await ctx.db.query("courses").withIndex("by_type", q => q.eq("type", type)).collect()
-    }
-})
+  args: { type: courseType },
+  handler: async (ctx, { type }) => {
+    return await ctx.db
+      .query("courses")
+      .withIndex("by_type", (q) => q.eq("type", type))
+      .collect();
+  },
+});
+
+export const getCoursesByFaculty = query({
+  args: {
+    faculty: facultyType,
+  },
+  handler: async (ctx, args) => {
+    const all = await ctx.db
+      .query("courses")
+      .withIndex("by_faculty", (q) => q.eq("faculty", args.faculty))
+      .collect();
+
+    return all;
+  },
+});
 
 export const getProgramBySlug = query({
   args: { slug: v.string() },

@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 @layer utilities {
+
+
+/* globals.css or tailwind.config.js via plugin */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+
+  
   .step-complete {
     @apply bg-primary text-white;
   }
