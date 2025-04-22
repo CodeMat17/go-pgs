@@ -71,7 +71,7 @@ export default function FacultyCourseBrowser() {
           onValueChange={(val) =>
             setSelectedFaculty(val as (typeof faculties)[number])
           }>
-          <SelectTrigger className='w-full sm:max-w-md rounded-lg py-6'>
+          <SelectTrigger className='w-full sm:max-w-md rounded-lg py-6 bg-white dark:bg-gray-800'>
             <SelectValue placeholder='Select faculty' />
           </SelectTrigger>
           <SelectContent>
@@ -107,7 +107,7 @@ export default function FacultyCourseBrowser() {
             return (
               <Card
                 key={level}
-                className='rounded-2xl border shadow-sm transition hover:shadow-md duration-200 flex flex-col'>
+                className='rounded-2xl border shadow-sm transition hover:shadow-md duration-200 flex flex-col dark:bg-gray-900'>
                 <CardHeader>
                   <CardTitle className={`text-2xl font-bold ${levelColor}`}>
                     {levelHeaders[level]}{" "}
