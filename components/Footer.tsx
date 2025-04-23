@@ -54,7 +54,7 @@ export default function Footer() {
             className='col-span-2 md:col-span-1'>
             <h3 className='text-xl font-medium mb-4'>
               Godfrey Okoye University{" "}
-              <span className='block'>Postgraduate School</span>
+              <span className='block'>School of Postgraduate Studies</span>
             </h3>
             <div className='space-y-2 mt-2'>
               <div className='flex items-center gap-2'>
@@ -67,7 +67,7 @@ export default function Footer() {
               </div>
               <div className='flex items-center gap-2'>
                 <Mail className='w-4 h-4 shrink-0' />
-                <p className='text-sm'>pg.admissions@gouni.edu.ng</p>
+                <p className='text-sm'>pg@gouni.edu.ng</p>
               </div>
               <div className='flex items-center gap-2'>
                 <Clock className='w-4 h-4 shrink-0' />

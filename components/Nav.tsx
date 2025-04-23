@@ -56,7 +56,7 @@ export function Nav() {
       <div className='flex h-[68px] items-center justify-between px-4 sm:px-6 lg:px-8'>
         <Logo
           text_one='Godfrey Okoye University'
-          text_two='Postgraduate School'
+          text_two='School of Postgraduate Studies'
           classnames='sm:font-semibold'
           width={50}
           height={50}
