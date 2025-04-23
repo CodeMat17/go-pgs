@@ -76,15 +76,18 @@ export default function Footer() {
               <div className='flex items-center gap-2'>
                 <Mail className='w-4 h-4 shrink-0' />
                 {footer?.email?.map((mail, i) => (
-                  <p key={i} className='text-sm'>{mail.email1}</p>
+                  <p key={i} className='text-sm'>
+                    {mail.email1}
+                  </p>
                 ))}
               </div>
               <div className='flex items-center gap-2'>
                 <Clock className='w-4 h-4 shrink-0' />
                 {footer?.officeHours?.map((days, i) => (
-                  <p key={i} className='text-sm'>{days.days} : {days.time}</p>
+                  <p key={i} className='text-sm'>
+                    {days.days} : {days.time}
+                  </p>
                 ))}
-               
               </div>
             </div>
           </motion.div>

@@ -53,7 +53,7 @@ export function Nav() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-      <div className='flex h-[68px] items-center justify-between px-4 sm:px-6 lg:px-8'>
+      <div className='flex h-[68px] items-center justify-between px-3 sm:px-6 lg:px-8'>
         <Logo
           text_one='Godfrey Okoye University'
           text_two='School of Postgraduate Studies'
@@ -106,7 +106,7 @@ export function Nav() {
           ))}
         </div>
 
-        <div className='flex items-center gap-3'>
+        <div className='flex items-center gap-2'>
           <ThemeToggle />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className='lg:hidden'>
