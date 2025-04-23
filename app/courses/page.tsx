@@ -49,9 +49,8 @@ export default function ProgramsPage() {
         </p>
         <div>
           <CourseBrowser />
-             {/* <FacultyTabs /> */}
+          {/* <FacultyTabs /> */}
         </div>
-     
       </div>
     </div>
   );
