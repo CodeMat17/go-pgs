@@ -4,6 +4,8 @@
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import {
   Clock,
@@ -20,6 +22,8 @@ import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 export default function Footer() {
+  const footer = useQuery(api.contactUs.getContactInfo);
+
   const [email, setEmail] = useState("");
 
   const handleEmail = (e: FormEvent<HTMLFormElement>) => {
@@ -59,19 +63,28 @@ export default function Footer() {
             <div className='space-y-2 mt-2'>
               <div className='flex items-center gap-2'>
                 <MapPin className='w-4 h-4 shrink-0' />
-                <p className='text-sm'>City Campus, Enugu State, Nigeria</p>
+                <p className='text-sm'>{footer?.address}</p>
               </div>
               <div className='flex items-center gap-2'>
                 <Phone className='w-4 h-4 shrink-0' />
-                <p className='text-sm'>+234 800 555 1234</p>
+                {footer?.phone?.map((tel, i) => (
+                  <p key={i} className='text-sm'>
+                    {tel.tel1}
+                  </p>
+                ))}
               </div>
               <div className='flex items-center gap-2'>
                 <Mail className='w-4 h-4 shrink-0' />
-                <p className='text-sm'>pg@gouni.edu.ng</p>
+                {footer?.email?.map((mail, i) => (
+                  <p key={i} className='text-sm'>{mail.email1}</p>
+                ))}
               </div>
               <div className='flex items-center gap-2'>
                 <Clock className='w-4 h-4 shrink-0' />
-                <p className='text-sm'>Mon-Fri: 8am - 5pm</p>
+                {footer?.officeHours?.map((days, i) => (
+                  <p key={i} className='text-sm'>{days.days} : {days.time}</p>
+                ))}
+               
               </div>
             </div>
           </motion.div>
