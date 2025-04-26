@@ -7,11 +7,11 @@ export const courseType = v.union(
   v.literal("phd")
 );
 
-export const courseMode = v.union(
-  v.literal("On-line"),
-  v.literal("On-campus"),
-  v.literal("On-line & On-campus")
-);
+// export const courseMode = v.union(
+//   v.literal("On-line"),
+//   v.literal("On-campus"),
+//   v.literal("On-line & On-campus")
+// );
 
 export const facultyType = v.union(
   v.literal("Faculty of Arts"),
