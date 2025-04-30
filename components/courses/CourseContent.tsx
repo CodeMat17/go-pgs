@@ -168,11 +168,11 @@ const CourseContent = () => {
                 Course Materials
               </h2>
 
-              {course?.courseMaterials ? (
+              {course?.courseMaterials?.length ? (
                 <div className='space-y-4'>
-                  {course?.courseMaterials?.map((mat, i) => (
+                  {course?.courseMaterials?.map((mat) => (
                     <div
-                      key={i}
+                      key={mat.file}
                       className='flex items-center gap-3 justify-between'>
                       <p>{mat.title} </p>
                       {/* <Button size='icon' variant='outline' className="shrink-0"><Download /></Button> */}
