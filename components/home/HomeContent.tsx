@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { ApplyNow } from "../buttons/ApplyNow";
 import { QuickLinks } from "../QuickLinks";
 
@@ -30,13 +30,20 @@ const HomeContent = () => {
             sizes='100vw'
             aria-hidden='true'
           />
-          <div className='absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80 dark:from-black/90 dark:to-secondary/80' />
+          {/* <div className='absolute inset-0 bg-gradient-to-r from-primary/30 to-secondary/80 dark:from-black/50 dark:to-secondary/80' /> */}
         </div>
 
         {/* Hero Content */}
-        <div className='relative w-full z-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row-reverse items-center justify-between gap-2 md:gap-0 pb-7 sm:pt-7'>
+        <div
+          className='relative w-full z-10 px-4 sm:px-6 lg:px-8 
+         flex
+         flex-col
+         md:flex-row-reverse
+         items-center
+        justify-between
+        gap-2 md:gap-0 pb-7 sm:pt-7'>
           {/* Student Image Container */}
-          <motion.div
+          {/* <motion.div
             initial={
               shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: 20 }
             }
@@ -52,7 +59,7 @@ const HomeContent = () => {
               className='object-contain object-center'
               sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 500px'
             />
-          </motion.div>
+          </motion.div> */}
 
           {/* Text Container */}
           <motion.div
@@ -61,12 +68,15 @@ const HomeContent = () => {
             }
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className='md:w-[50%] text-center md:text-left lg:pl-6 xl:pl-12'>
+            className='
+            text-left
+            lg:px-12 xl:px-20
+            '>
             <motion.h1
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className='text-4xl md:text-[45px] xl:text-5xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0_2px_4px_rgba(0,0,0,0.25)]'>
+              className='text-4xl md:text-[45px] xl:text-5xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0_2px_4px_rgba(0,0,0,0.95)]'>
               Elevate Your Academic Journey at
               <span className='block text-[#FFDC55]'>
                 {" "}
@@ -74,7 +84,13 @@ const HomeContent = () => {
                 Godfrey Okoye University School of Postgraduate Studies
               </span>
             </motion.h1>
-           
+            {/*     className='
+            // md:w-[50%] 
+            text-center 
+            // md:text-left
+            // lg:pl-6 xl:pl-12
+            '> */}
+
             <DescriptionAnimation />
 
             <motion.div

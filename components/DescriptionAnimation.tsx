@@ -9,7 +9,7 @@ const DescriptionAnimation = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.4 }}
-      className='h-[75px] mb-8'>
+      className='h-[75px] mb-8 max-w-xl'>
       <TypeAnimation
         sequence={[
           "Join a community of scholars pushing boundaries in research and innovation.",
@@ -24,7 +24,7 @@ const DescriptionAnimation = () => {
         wrapper='span'
         speed={50}
         repeat={Infinity}
-        className='text-lg md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,25)]'
+        className='text-lg md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,95)]'
       />
     </motion.div>
   );
