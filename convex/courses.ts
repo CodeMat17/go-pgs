@@ -41,3 +41,10 @@ export const getProgramBySlug = query({
       .first();
   },
 });
+
+export const getFileUrl = query({
+  args: { fileId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    return await ctx.storage.getUrl(args.fileId);
+  },
+});

@@ -4,9 +4,10 @@ import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Calendar, FlaskConical, GraduationCap } from "lucide-react";
+import { Calendar, Download, FlaskConical, GraduationCap } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -21,6 +22,29 @@ const CourseContent = () => {
   );
 
   const howToApply = useQuery(api.howToApply.getAll);
+
+  const FileDownloadLink = ({
+    fileId,
+    title,
+  }: {
+    fileId: Id<"_storage">;
+    title: string;
+  }) => {
+    const fileUrl = useQuery(api.courses.getFileUrl, { fileId });
+
+    if (!fileUrl) return null;
+
+    return (
+      <Button asChild size='icon' variant='outline' className='shrink-0'>
+        <a
+          href={fileUrl}
+          download={`${title}.pdf`}
+          className='text-blue-600 hover:underline text-sm block'>
+          <Download />
+        </a>
+      </Button>
+    );
+  };
 
   // Add structured data for SEO
   useEffect(() => {
@@ -137,6 +161,31 @@ const CourseContent = () => {
                 />
               </div>
             </Card>
+
+            {/* Course Materials */}
+            <Card className='p-4 sm:p-6'>
+              <h2 className='text-xl sm:text-2xl font-semibold mb-3 sm:mb-4'>
+                Course Materials
+              </h2>
+
+              {course?.courseMaterials ? (
+                <div className='space-y-4'>
+                  {course?.courseMaterials?.map((mat, i) => (
+                    <div
+                      key={i}
+                      className='flex items-center gap-3 justify-between'>
+                      <p>{mat.title} </p>
+                      {/* <Button size='icon' variant='outline' className="shrink-0"><Download /></Button> */}
+                      <FileDownloadLink fileId={mat.file} title={mat.title} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className='py-6 text-muted-foreground'>
+                  No course material available at the moment
+                </p>
+              )}
+            </Card>
           </main>
 
           {/* Sidebar */}
@@ -149,7 +198,7 @@ const CourseContent = () => {
               {howToApply &&
                 howToApply.map((apply) => (
                   <div key={apply._id}>
-                    <div className="mb-6">
+                    <div className='mb-6'>
                       <SafeHTMLRenderer
                         htmlContent={apply.text}
                         className='text-gray-950 dark:text-muted-foreground prose dark:prose-invert max-w-none leading-5'
