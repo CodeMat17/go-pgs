@@ -209,7 +209,7 @@ export default function CourseMaterials() {
             </p>
           ) : (
             <div className='space-y-4'>
-              <h3 className='text-xl font-semibold'>Available Materials</h3>
+              <h3 className='text-xl font-semibold'>Available Course Materials</h3>
               <div className='grid gap-4 md:grid-cols-2'>
                 {materialsQuery?.map((material, index) => (
                   <motion.div
