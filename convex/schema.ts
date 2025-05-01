@@ -2,16 +2,11 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export const courseType = v.union(
+  v.literal("gpc"),
   v.literal("pgd"),
   v.literal("masters"),
   v.literal("phd")
 );
-
-// export const courseMode = v.union(
-//   v.literal("On-line"),
-//   v.literal("On-campus"),
-//   v.literal("On-line & On-campus")
-// );
 
 export const facultyType = v.union(
   v.literal("Faculty of Arts"),

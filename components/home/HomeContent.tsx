@@ -30,7 +30,7 @@ const HomeContent = () => {
             sizes='100vw'
             aria-hidden='true'
           />
-          {/* <div className='absolute inset-0 bg-gradient-to-r from-primary/30 to-secondary/80 dark:from-black/50 dark:to-secondary/80' /> */}
+          <div className='absolute inset-0 bg-gradient-to-r from-primary/40 to-secondary/40 dark:from-black/50 dark:to-secondary/50' />
         </div>
 
         {/* Hero Content */}

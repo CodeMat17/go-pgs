@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -25,147 +25,137 @@ const faculties = [
   "Faculty of Law",
 ] as const;
 
-const courseLevels = ["pgd", "masters", "phd"] as const;
+type CourseLevel = "gpc" | "pgd" | "masters" | "phd";
+const courseLevels: CourseLevel[] = ["gpc", "pgd", "masters", "phd"];
 
-const levelHeaders: Record<(typeof courseLevels)[number], string> = {
+const levelConfig = {
+  gpc: "GPC Courses",
   pgd: "PGD Courses",
   masters: "Masters Courses",
   phd: "PhD Courses",
-};
-
-const levelColors: Record<(typeof courseLevels)[number], string> = {
-  pgd: "text-amber-600",
-  masters: "text-blue-600",
-  phd: "text-purple-600",
-};
+} as const;
 
 export default function FacultyCourseBrowser() {
   const [selectedFaculty, setSelectedFaculty] = useState<
-    (typeof faculties)[number] | ""
+    (typeof faculties)[number]
   >(faculties[0]);
+  const [selectedProgram, setSelectedProgram] = useState<CourseLevel | "">("");
 
-  const courses = useQuery(
-    api.courses.getCoursesByFaculty,
-    selectedFaculty ? { faculty: selectedFaculty } : "skip"
-  );
+  const queryArgs =
+    selectedFaculty && selectedProgram
+      ? {
+          faculty: selectedFaculty,
+          type: selectedProgram,
+        }
+      : "skip";
 
-  const groupByType = (type: string) =>
-    courses?.filter((course) => course.type === type) ?? [];
+  const courses = useQuery(api.courses.getCoursesByFaculty, queryArgs);
 
-  const allEmpty =
-    courses?.length === 0 ||
-    (groupByType("pgd").length === 0 &&
-      groupByType("masters").length === 0 &&
-      groupByType("phd").length === 0);
+  const handleFacultyChange = (value: string) => {
+    setSelectedFaculty(value as (typeof faculties)[number]);
+    setSelectedProgram("");
+  };
 
   return (
-    <div className=''>
-      <div className='mb-10'>
-        <label
-          htmlFor='faculty'
-          className='block mb-2 text-sm font-semibold text-muted-foreground'>
-          Select Faculty
-        </label>
-        <Select
-          value={selectedFaculty}
-          onValueChange={(val) =>
-            setSelectedFaculty(val as (typeof faculties)[number])
-          }>
-          <SelectTrigger className='w-full sm:max-w-md rounded-lg py-6 bg-white dark:bg-gray-800'>
-            <SelectValue placeholder='Select faculty' />
-          </SelectTrigger>
-          <SelectContent>
-            {faculties.map((faculty) => (
-              <SelectItem key={faculty} value={faculty}>
-                {faculty}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+    <div className='space-y-8'>
+      <div className='flex flex-col md:flex-row items-center justify-between gap-3'>
+        <div className='w-full'>
+          <label className='block mb-2 text-sm font-semibold text-muted-foreground'>
+            Select Faculty
+          </label>
+          <Select value={selectedFaculty} onValueChange={handleFacultyChange}>
+            <SelectTrigger className='w-full rounded-lg py-6 bg-white dark:bg-gray-800'>
+              <SelectValue placeholder='Select faculty' />
+            </SelectTrigger>
+            <SelectContent>
+              {faculties.map((faculty) => (
+                <SelectItem key={faculty} value={faculty}>
+                  {faculty}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className='w-full'>
+          <label className='block mb-2 text-sm font-semibold text-muted-foreground'>
+            Program Type
+          </label>
+          <Select
+            value={selectedProgram}
+            onValueChange={(value: string) =>
+              setSelectedProgram(value as CourseLevel)
+            }
+            disabled={!selectedFaculty}>
+            <SelectTrigger className='w-full rounded-lg py-6 bg-white dark:bg-gray-800'>
+              <SelectValue placeholder='Select a program' />
+            </SelectTrigger>
+            <SelectContent>
+              {courseLevels.map((level) => (
+                <SelectItem key={level} value={level}>
+                  {levelConfig[level]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
-      {!courses ? (
-        <div className='grid md:grid-cols-3 gap-6'>
-          {[...Array(3)].map((_, i) => (
+      {!selectedProgram ? (
+        selectedFaculty && (
+          <p className='text-center text-muted-foreground my-20'>
+            Select a program type
+          </p>
+        )
+      ) : !courses ? (
+        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
+          {[...Array(4)].map((_, i) => (
             <Skeleton key={i} className='h-48 w-full rounded-xl' />
           ))}
         </div>
-      ) : allEmpty ? (
+      ) : courses.length === 0 ? (
         <p className='text-center text-muted-foreground mt-16'>
-          No courses available under the selected faculty.
+          No {levelConfig[selectedProgram].toLowerCase()} available.
         </p>
       ) : (
         <motion.div
-          className='grid lg:grid-cols-3 gap-4'
+          className='space-y-6'
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}>
-          {courseLevels.map((level) => {
-            const levelCourses = groupByType(level);
-            const levelColor = levelColors[level];
+          <h2 className='text-2xl font-bold'>{levelConfig[selectedProgram]}</h2>
 
-            return (
-              <Card
-                key={level}
-                className='rounded-2xl border shadow-sm transition hover:shadow-md duration-200 flex flex-col dark:bg-gray-900'>
-                <CardHeader>
-                  <CardTitle className={`text-2xl font-bold ${levelColor}`}>
-                    {levelHeaders[level]}{" "}
-                    <span className='text-muted-foreground font-medium text-sm'>
-                      ({levelCourses.length} course
-                      {levelCourses.length === 1 ? "" : "s"})
-                    </span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className='space-y-6 flex-1'>
-                  {levelCourses.length === 0 ? (
-                    <p className='text-sm text-muted-foreground'>
-                      No {level} courses available.
-                    </p>
-                  ) : (
-                    levelCourses.map((course) => (
-                      <motion.div
-                        key={course._id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className='space-y-2 border-b last:border-b-0 pb-4 last:pb-0'>
-                        <div className='space-y-2'>
-                          <h4 className='font-medium text-base'>
-                            {course.course}
-                          </h4>
-                          <p className='text-sm text-muted-foreground flex items-center flex-wrap gap-2'>
-                            <span className='flex items-center'>
-                              <Clock className='w-4 h-4 mr-1 text-amber-500' />
-                              {course.duration}
-                            </span>
-                            <span className='mx-1'>&middot;</span>
-                            <span className='flex items-center'>
-                              <BookOpen className='w-4 h-4 mr-1 text-amber-500' />
-                              {course.mode}
-                            </span>
-                          </p>
-                        </div>
-                        <Link href={`/courses/${course.slug}`} passHref>
-                          <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className='inline-block'>
-                            <Button
-                              size='sm'
-                              variant='outline'
-                              className='mt-3'>
-                              Learn More
-                            </Button>
-                          </motion.div>
-                        </Link>
-                      </motion.div>
-                    ))
-                  )}
-                </CardContent>
+          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>  {courses.map((course) => (
+            <motion.div
+              key={course._id}
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}>
+              <Card className='p-4 hover:shadow-lg transition-shadow'>
+                <div className='space-y-3'>
+                  <h3 className='font-medium text-lg'>{course.course}</h3>
+                  <div className='space-y-2 text-muted-foreground'>
+                    <div className='flex items-center gap-2'>
+                      <Clock className='w-4 h-4 text-amber-500' />
+                      <span>{course.duration}</span>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                      <BookOpen className='w-4 h-4 text-blue-500' />
+                      <span>{course.mode}</span>
+                    </div>
+                  </div>
+                  <Link href={`/courses/${course.slug}`} className='block'>
+                    <Button
+                      variant='outline'
+                      className='w-full mt-2 hover:bg-accent/90 transition-colors'>
+                      Learn More
+                    </Button>
+                  </Link>
+                </div>
               </Card>
-            );
-          })}
+            </motion.div>
+          ))}</div>
+        
+                
         </motion.div>
       )}
     </div>

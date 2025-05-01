@@ -18,17 +18,21 @@ export const getCoursesByType = query({
   },
 });
 
+// convex/courses.ts
 export const getCoursesByFaculty = query({
   args: {
     faculty: facultyType,
+    type: v.optional(courseType)
   },
   handler: async (ctx, args) => {
-    const all = await ctx.db
-      .query("courses")
-      .withIndex("by_faculty", (q) => q.eq("faculty", args.faculty))
-      .collect();
+    let query = ctx.db.query("courses")
+      .withIndex("by_faculty", q => q.eq("faculty", args.faculty));
 
-    return all;
+    if (args.type) {
+      query = query.filter(q => q.eq(q.field("type"), args.type));
+    }
+
+    return query.collect();
   },
 });
 
