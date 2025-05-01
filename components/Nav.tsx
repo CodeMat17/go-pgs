@@ -27,8 +27,9 @@ export function Nav() {
       name: "Academics",
       href: "/academics",
       subLinks: [
-        { name: "Requirements", href: "/requirements" },
+        { name: "Admission Requirements", href: "/requirements" },
         { name: "Research", href: "/research" },
+        { name: "Course Materials", href: "/course-materials" },
       ],
     },
     { name: "News", href: "/news" },
@@ -40,6 +41,7 @@ export function Nav() {
         { name: "Alumni", href: "/alumni" },
       ],
     },
+    { name: "Students", href: "/pg-students" },
     { name: "Contact", href: "/contact" },
   ];
 

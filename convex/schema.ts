@@ -198,4 +198,22 @@ export default defineSchema({
     text: v.string(),
     link: v.string(),
   }),
+
+  students: defineTable({
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+    regno: v.string(),
+    faculty: facultyType,
+    type: courseType,
+  }).index("by_regno", ["regno"]),
+
+  materials: defineTable({
+    faculty: facultyType,
+    type: courseType,
+    title: v.string(),
+    description: v.string(),
+    file: v.id("_storage"),
+  })
+    .index("by_faculty_type", ["faculty", "type"])
 });

@@ -103,7 +103,7 @@ export default function FacultyCourseBrowser() {
 
       {!selectedProgram ? (
         selectedFaculty && (
-          <p className='text-center text-muted-foreground my-20'>
+          <p className='text-center text-muted-foreground py-20'>
             Select a program type
           </p>
         )

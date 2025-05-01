@@ -22,10 +22,12 @@ import type * as courses from "../courses.js";
 import type * as getAllContent from "../getAllContent.js";
 import type * as hero from "../hero.js";
 import type * as howToApply from "../howToApply.js";
+import type * as materials from "../materials.js";
 import type * as mission from "../mission.js";
 import type * as news from "../news.js";
 import type * as programs from "../programs.js";
 import type * as staff from "../staff.js";
+import type * as students from "../students.js";
 import type * as vision from "../vision.js";
 
 /**
@@ -46,10 +48,12 @@ declare const fullApi: ApiFromModules<{
   getAllContent: typeof getAllContent;
   hero: typeof hero;
   howToApply: typeof howToApply;
+  materials: typeof materials;
   mission: typeof mission;
   news: typeof news;
   programs: typeof programs;
   staff: typeof staff;
+  students: typeof students;
   vision: typeof vision;
 }>;
 export declare const api: FilterApi<
