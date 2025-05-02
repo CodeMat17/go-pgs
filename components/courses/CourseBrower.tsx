@@ -66,9 +66,9 @@ export default function CourseBrowser() {
             <SelectTrigger className='w-full rounded-lg py-6 bg-white dark:bg-gray-800'>
               <SelectValue placeholder='Select faculty' />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='bg-gray-300 dark:bg-gray-700'>
               {faculties.map((faculty) => (
-                <SelectItem key={faculty} value={faculty}>
+                <SelectItem key={faculty} value={faculty} className='mx-4 my-3'>
                   {faculty}
                 </SelectItem>
               ))}
@@ -89,9 +89,9 @@ export default function CourseBrowser() {
             <SelectTrigger className='w-full rounded-lg py-6 bg-white dark:bg-gray-800'>
               <SelectValue placeholder='Select a program' />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='bg-gray-300 dark:bg-gray-700'>
               {courseLevels.map((level) => (
-                <SelectItem key={level} value={level}>
+                <SelectItem key={level} value={level} className='mx-4 my-3'>
                   {levelConfig[level]}
                 </SelectItem>
               ))}
@@ -124,37 +124,38 @@ export default function CourseBrowser() {
           transition={{ duration: 0.4 }}>
           <h2 className='text-2xl font-bold'>{levelConfig[selectedProgram]}</h2>
 
-          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>  {courses.map((course) => (
-            <motion.div
-              key={course._id}
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}>
-              <Card className='p-4 hover:shadow-lg transition-shadow'>
-                <div className='space-y-3'>
-                  <h3 className='font-medium text-lg'>{course.course}</h3>
-                  <div className='space-y-2 text-muted-foreground'>
-                    <div className='flex items-center gap-2'>
-                      <Clock className='w-4 h-4 text-amber-500' />
-                      <span>{course.duration}</span>
+          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
+            {" "}
+            {courses.map((course) => (
+              <motion.div
+                key={course._id}
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}>
+                <Card className='p-4 hover:shadow-lg transition-shadow'>
+                  <div className='space-y-3'>
+                    <h3 className='font-medium text-lg'>{course.course}</h3>
+                    <div className='space-y-2 text-muted-foreground'>
+                      <div className='flex items-center gap-2'>
+                        <Clock className='w-4 h-4 text-amber-500' />
+                        <span>{course.duration}</span>
+                      </div>
+                      <div className='flex items-center gap-2'>
+                        <BookOpen className='w-4 h-4 text-blue-500' />
+                        <span>{course.mode}</span>
+                      </div>
                     </div>
-                    <div className='flex items-center gap-2'>
-                      <BookOpen className='w-4 h-4 text-blue-500' />
-                      <span>{course.mode}</span>
-                    </div>
+                    <Link href={`/courses/${course.slug}`} className='block'>
+                      <Button
+                        variant='outline'
+                        className='w-full mt-2 hover:bg-accent/90 transition-colors'>
+                        Learn More
+                      </Button>
+                    </Link>
                   </div>
-                  <Link href={`/courses/${course.slug}`} className='block'>
-                    <Button
-                      variant='outline'
-                      className='w-full mt-2 hover:bg-accent/90 transition-colors'>
-                      Learn More
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            </motion.div>
-          ))}</div>
-        
-                
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       )}
     </div>
