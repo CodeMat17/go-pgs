@@ -68,7 +68,7 @@ export default function CourseBrowser() {
             </SelectTrigger>
             <SelectContent className='bg-gray-300 dark:bg-gray-700'>
               {faculties.map((faculty) => (
-                <SelectItem key={faculty} value={faculty} className='mx-4 my-3'>
+                <SelectItem key={faculty} value={faculty} className='py-3'>
                   {faculty}
                 </SelectItem>
               ))}
@@ -91,7 +91,7 @@ export default function CourseBrowser() {
             </SelectTrigger>
             <SelectContent className='bg-gray-300 dark:bg-gray-700'>
               {courseLevels.map((level) => (
-                <SelectItem key={level} value={level} className='mx-4 my-3'>
+                <SelectItem key={level} value={level} className='py-3'>
                   {levelConfig[level]}
                 </SelectItem>
               ))}
