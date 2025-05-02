@@ -2,7 +2,6 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export const courseType = v.union(
-  v.literal("gpc"),
   v.literal("pgd"),
   v.literal("masters"),
   v.literal("phd")

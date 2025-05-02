@@ -3,6 +3,12 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { facultyType, courseType } from "./schema";
 
+export const getAll = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("materials").collect();
+  },
+});
+
 export const getMaterialsByFacultyType = query({
   args: {
     faculty: facultyType,

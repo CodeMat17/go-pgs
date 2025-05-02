@@ -25,11 +25,10 @@ const faculties = [
   "Faculty of Law",
 ] as const;
 
-type CourseLevel = "gpc" | "pgd" | "masters" | "phd";
-const courseLevels: CourseLevel[] = ["gpc", "pgd", "masters", "phd"];
+type CourseLevel = "pgd" | "masters" | "phd";
+const courseLevels: CourseLevel[] = ["pgd", "masters", "phd"];
 
 const levelConfig = {
-  gpc: "GPC Courses",
   pgd: "PGD Courses",
   masters: "Masters Courses",
   phd: "PhD Courses",

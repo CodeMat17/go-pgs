@@ -23,7 +23,7 @@ const validFaculties = [
   "Faculty of Law",
 ] as const;
 
-const validCourseLevels = ["gpc", "pgd", "masters", "phd"] as const;
+const validCourseLevels = ["pgd", "masters", "phd"] as const;
 
 interface StudentData {
   name: string;
