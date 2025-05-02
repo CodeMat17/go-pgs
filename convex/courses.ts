@@ -22,17 +22,15 @@ export const getCoursesByType = query({
 export const getCoursesByFaculty = query({
   args: {
     faculty: facultyType,
-    type: v.optional(courseType)
+    type: courseType,
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("courses")
-      .withIndex("by_faculty", q => q.eq("faculty", args.faculty));
-
-    if (args.type) {
-      query = query.filter(q => q.eq(q.field("type"), args.type));
-    }
-
-    return query.collect();
+    return await ctx.db
+      .query("courses")
+      .withIndex("by_faculty_type", (q) =>
+        q.eq("faculty", args.faculty).eq("type", args.type)
+      )
+      .collect();
   },
 });
 

@@ -29,12 +29,12 @@ type CourseLevel = "pgd" | "masters" | "phd";
 const courseLevels: CourseLevel[] = ["pgd", "masters", "phd"];
 
 const levelConfig = {
-  pgd: "PGD Courses",
-  masters: "Masters Courses",
-  phd: "PhD Courses",
+  pgd: "PGD",
+  masters: "Masters",
+  phd: "PhD",
 } as const;
 
-export default function FacultyCourseBrowser() {
+export default function CourseBrowser() {
   const [selectedFaculty, setSelectedFaculty] = useState<
     (typeof faculties)[number]
   >(faculties[0]);

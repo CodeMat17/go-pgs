@@ -167,11 +167,11 @@ export default defineSchema({
       })
     ),
     faculty: facultyType,
-   
   })
     .index("by_slug", ["slug"])
     .index("by_type", ["type"])
-    .index("by_faculty", ["faculty"]),
+    .index("by_faculty", ["faculty"])
+    .index("by_faculty_type", ["faculty", "type"]),
 
   programs: defineTable({
     programFullName: v.optional(v.string()),
@@ -211,6 +211,5 @@ export default defineSchema({
     title: v.string(),
     description: v.string(),
     file: v.id("_storage"),
-  })
-    .index("by_faculty_type", ["faculty", "type"])
+  }).index("by_faculty_type", ["faculty", "type"]),
 });
