@@ -139,15 +139,6 @@ const CourseContent = () => {
                 />
               </div>
             </Card>
-
-            {/* Course Materials */}
-            <Card className='p-4 sm:p-6'>
-              <h2 className='text-xl sm:text-2xl font-semibold mb-3 sm:mb-4'>
-                Course Materials
-              </h2>
-
-            
-            </Card>
           </main>
 
           {/* Sidebar */}
