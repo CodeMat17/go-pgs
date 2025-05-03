@@ -145,134 +145,138 @@ export default function CourseMaterials() {
   };
 
   return (
-    <div className='max-w-4xl mx-auto px-4 py-12 space-y-8 min-h-[calc(100vh-8rem)]'>
-      <motion.header
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className='text-center space-y-2'>
-        <h1 className='text-3xl font-bold'>Get Your Course Materials</h1>
-        <p className='text-muted-foreground'>
-          Enter your registration number to access your course materials
-        </p>
-      </motion.header>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSearchTrigger(regNumber.trim());
-        }}
-        className='flex gap-2 max-w-xl mx-auto'>
-        <Input
-          value={regNumber}
-          onChange={(e) => setRegNumber(e.target.value)}
-          placeholder='Enter registration number'
-          className='py-6 text-lg focus-visible:ring-2 focus-visible:ring-primary/50'
-          aria-label='Registration number input'
-        />
-        <Button
-          type='submit'
-          className='py-6 px-8 text-lg flex gap-2 transition-all'
-          disabled={!regNumber.trim() || isLoading}
-          aria-busy={isLoading}>
-          <Search className='w-5 h-5' />
-          {isLoading ? (
-            <span className='animate-pulse'>Searching...</span>
-          ) : (
-            "Search"
-          )}
-        </Button>
-      </form>
-
-      {/* Error messages */}
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
+    <div className="w-full bg-gray-50 dark:bg-gray-950">
+      <div className='max-w-4xl mx-auto px-4 py-12 space-y-8 min-h-[calc(100vh-8rem)]'>
+        <motion.header
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className='text-center text-destructive p-4 bg-destructive/10 rounded-lg'>
-          {error}
-        </motion.div>
-      )}
+          className='text-center space-y-2'>
+          <h1 className='text-3xl font-bold'>Get Your Course Materials</h1>
+          <p className='text-muted-foreground'>
+            Enter your registration number to access your course materials
+          </p>
+        </motion.header>
 
-      {isLoading && (
-        <div className='grid md:grid-cols-2 xl:grid-cols-4 gap-4'>
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className='h-48 w-full rounded-xl' />
-          ))}
-        </div>
-      )}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setSearchTrigger(regNumber.trim());
+          }}
+          className='flex gap-2 max-w-xl mx-auto'>
+          <Input
+            value={regNumber}
+            onChange={(e) => setRegNumber(e.target.value)}
+            placeholder='Enter registration number'
+            className='py-6 text-lg focus-visible:ring-2 focus-visible:ring-primary/50'
+            aria-label='Registration number input'
+          />
+          <Button
+            type='submit'
+            className='py-6 px-8 text-lg flex gap-2 transition-all'
+            disabled={!regNumber.trim() || isLoading}
+            aria-busy={isLoading}>
+            <Search className='w-5 h-5' />
+            {isLoading ? (
+              <span className='animate-pulse'>Searching...</span>
+            ) : (
+              "Search"
+            )}
+          </Button>
+        </form>
 
-      {studentData && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className='space-y-6'>
-          <div className='bg-accent/50 p-4 rounded-lg'>
-            <h2 className='text-xl font-semibold'>Student Information</h2>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-2'>
-              <div>
-                <p className='text-muted-foreground'>Name</p>
-                <p className='font-medium'>{studentData.name}</p>
-              </div>
-              <div>
-                <p className='text-muted-foreground'>Faculty</p>
-                <p className='font-medium'>{studentData.faculty}</p>
-              </div>
-              <div>
-                <p className='text-muted-foreground'>Program</p>
-                <p className='font-medium'>{studentData.type.toUpperCase()}</p>
-              </div>
-            </div>
+        {/* Error messages */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className='text-center text-destructive p-4 bg-destructive/10 rounded-lg'>
+            {error}
+          </motion.div>
+        )}
+
+        {isLoading && (
+          <div className='grid md:grid-cols-2 xl:grid-cols-4 gap-4'>
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className='h-48 w-full rounded-xl' />
+            ))}
           </div>
+        )}
 
-          {materialsQuery?.length === 0 ? (
-            <p className='text-center text-muted-foreground mt-8'>
-              No materials available for your program at the moment.
-            </p>
-          ) : (
-            <div className='space-y-6'>
-              <h3 className='text-2xl font-semibold'>Course Materials</h3>
-
-              {/* First Semester */}
-              {semesterMaterials.first.length > 0 && (
-                <div className='space-y-2.5'>
-                  <h4 className='text-lg font-medium text-primary'>
-                    First Semester Materials
-                  </h4>
-                  <div className='grid gap-4 md:grid-cols-2'>
-                    {semesterMaterials.first.map((material, index) => (
-                      <MaterialCard
-                        key={material._id}
-                        material={material}
-                        index={index}
-                        onDownload={handleDownload}
-                      />
-                    ))}
-                  </div>
+        {studentData && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className='space-y-6'>
+            <div className='bg-blue-950/10 dark:bg-gray-700/50 p-4 rounded-lg'>
+              <h2 className='text-xl font-semibold'>Student Information</h2>
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-2'>
+                <div>
+                  <p className='text-muted-foreground'>Name</p>
+                  <p className='font-medium'>{studentData.name}</p>
                 </div>
-              )}
-
-              {/* Second Semester */}
-              {semesterMaterials.second.length > 0 && (
-                <div className='space-y-2.5'>
-                  <h4 className='text-lg font-medium text-primary'>
-                    Second Semester Materials
-                  </h4>
-                  <div className='grid gap-4 md:grid-cols-2'>
-                    {semesterMaterials.second.map((material, index) => (
-                      <MaterialCard
-                        key={material._id}
-                        material={material}
-                        index={index}
-                        onDownload={handleDownload}
-                      />
-                    ))}
-                  </div>
+                <div>
+                  <p className='text-muted-foreground'>Faculty</p>
+                  <p className='font-medium'>{studentData.faculty}</p>
                 </div>
-              )}
+                <div>
+                  <p className='text-muted-foreground'>Program</p>
+                  <p className='font-medium'>
+                    {studentData.type.toUpperCase()}
+                  </p>
+                </div>
+              </div>
             </div>
-          )}
-        </motion.div>
-      )}
+
+            {materialsQuery?.length === 0 ? (
+              <p className='text-center text-muted-foreground mt-8'>
+                No materials available for your program at the moment.
+              </p>
+            ) : (
+              <div className='space-y-6'>
+                <h3 className='text-2xl font-semibold'>Course Materials</h3>
+
+                {/* First Semester */}
+                {semesterMaterials.first.length > 0 && (
+                  <div className='space-y-2.5'>
+                    <h4 className='text-lg font-medium text-primary'>
+                      First Semester Materials
+                    </h4>
+                    <div className='grid gap-4 md:grid-cols-2'>
+                      {semesterMaterials.first.map((material, index) => (
+                        <MaterialCard
+                          key={material._id}
+                          material={material}
+                          index={index}
+                          onDownload={handleDownload}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Second Semester */}
+                {semesterMaterials.second.length > 0 && (
+                  <div className='space-y-2.5'>
+                    <h4 className='text-lg font-medium text-primary'>
+                      Second Semester Materials
+                    </h4>
+                    <div className='grid gap-4 md:grid-cols-2'>
+                      {semesterMaterials.second.map((material, index) => (
+                        <MaterialCard
+                          key={material._id}
+                          material={material}
+                          index={index}
+                          onDownload={handleDownload}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
@@ -290,7 +294,7 @@ const MaterialCard = ({
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1 }}>
-    <Card className='p-4 hover:shadow-lg transition-shadow'>
+    <Card className='p-4 hover:shadow-lg transition-shadow bg-white dark:bg-gray-800/20'>
       <div className='flex justify-between items-start'>
         <div>
           <h4 className='text-lg font-medium'>{material.title}</h4>
