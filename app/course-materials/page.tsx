@@ -294,7 +294,7 @@ const MaterialCard = ({
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1 }}>
-    <Card className='p-4 hover:shadow-lg transition-shadow bg-white dark:bg-gray-800/50'>
+    <Card className='p-4 hover:shadow-lg transition-shadow bg-white dark:bg-gray-700/50'>
       <div className='flex justify-between items-start'>
         <div>
           <h4 className='text-lg font-medium'>{material.title}</h4>
