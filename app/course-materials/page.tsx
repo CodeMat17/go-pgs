@@ -25,11 +25,27 @@ const validFaculties = [
 
 const validCourseLevels = ["pgd", "masters", "phd"] as const;
 
+type Material = {
+  _id: Id<"materials">;
+  _creationTime: number;
+  faculty: Faculty;
+  type: CourseLevel;
+  title: string;
+  semester: 1 | 2;
+  description: string;
+  file: Id<"_storage">;
+};
+
 interface StudentData {
   name: string;
   faculty: Faculty;
   type: CourseLevel;
 }
+
+type SemesterGroup = {
+  first: Material[];
+  second: Material[];
+};
 
 export default function CourseMaterials() {
   const [regNumber, setRegNumber] = useState("");
@@ -43,7 +59,7 @@ export default function CourseMaterials() {
     searchTrigger ? { regno: searchTrigger } : "skip"
   );
 
-     const downloadFile = useMutation(api.materials.downloadFile);
+  const downloadFile = useMutation(api.materials.downloadFile);
 
   // Materials query
   const materialsQuery = useQuery(
@@ -54,6 +70,14 @@ export default function CourseMaterials() {
           type: studentData.type,
         }
       : "skip"
+  ) as Material[] | undefined;
+
+  const semesterMaterials = useMemo<SemesterGroup>(
+    () => ({
+      first: materialsQuery?.filter((m) => m.semester === 1) || [],
+      second: materialsQuery?.filter((m) => m.semester === 2) || [],
+    }),
+    [materialsQuery]
   );
 
   const isStudentLoading = useMemo(
@@ -104,24 +128,21 @@ export default function CourseMaterials() {
       setError("Failed to load course materials");
     }
   }, [materialsQuery]);
-    
-     const handleDownload = async (
-       storageId: Id<"_storage">,
-       title: string
-     ) => {
-       try {
-         const url = await downloadFile({ storageId });
-         const response = await fetch(url);
-         const blob = await response.blob();
 
-         const link = document.createElement("a");
-         link.href = window.URL.createObjectURL(blob);
-         link.download = `${title}.pdf`;
-         link.click();
-       } catch (error) {
-         console.error("Download failed:", error);
-       }
-     };
+  const handleDownload = async (storageId: Id<"_storage">, title: string) => {
+    try {
+      const url = await downloadFile({ storageId });
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${title}.pdf`;
+      link.click();
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   return (
     <div className='max-w-4xl mx-auto px-4 py-12 space-y-8 min-h-[calc(100vh-8rem)]'>
@@ -205,44 +226,49 @@ export default function CourseMaterials() {
 
           {materialsQuery?.length === 0 ? (
             <p className='text-center text-muted-foreground mt-8'>
-              No materials available for your program
+              No materials available for your program at the moment.
             </p>
           ) : (
-            <div className='space-y-4'>
-              <h3 className='text-xl font-semibold'>Available Course Materials</h3>
-              <div className='grid gap-4 md:grid-cols-2'>
-                {materialsQuery?.map((material, index) => (
-                  <motion.div
-                    key={material._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}>
-                    <Card className='p-4 hover:shadow-lg transition-shadow'>
-                      <div className='flex justify-between items-start'>
-                        <div>
-                          <p className='text-muted-foreground text-sm mb-2'>
-                            {material.faculty} • {material.type.toUpperCase()}
-                          </p>
-                          <h4 className='text-lg font-medium'>
-                            {material.title}
-                          </h4>
-                          <p className='text-muted-foreground mt-2'>
-                            {material.description}
-                          </p>
-                        </div>
-                        <Button
-                          variant='outline'
-                          size='sm'
-                          onClick={() =>
-                            handleDownload(material.file, material.title)
-                          }>
-                          Download PDF
-                        </Button>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
+            <div className='space-y-6'>
+              <h3 className='text-2xl font-semibold'>Course Materials</h3>
+
+              {/* First Semester */}
+              {semesterMaterials.first.length > 0 && (
+                <div className='space-y-2.5'>
+                  <h4 className='text-lg font-medium text-primary'>
+                    First Semester Materials
+                  </h4>
+                  <div className='grid gap-4 md:grid-cols-2'>
+                    {semesterMaterials.first.map((material, index) => (
+                      <MaterialCard
+                        key={material._id}
+                        material={material}
+                        index={index}
+                        onDownload={handleDownload}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Second Semester */}
+              {semesterMaterials.second.length > 0 && (
+                <div className='space-y-2.5'>
+                  <h4 className='text-lg font-medium text-primary'>
+                    Second Semester Materials
+                  </h4>
+                  <div className='grid gap-4 md:grid-cols-2'>
+                    {semesterMaterials.second.map((material, index) => (
+                      <MaterialCard
+                        key={material._id}
+                        material={material}
+                        index={index}
+                        onDownload={handleDownload}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </motion.div>
@@ -250,3 +276,33 @@ export default function CourseMaterials() {
     </div>
   );
 }
+
+const MaterialCard = ({
+  material,
+  index,
+  onDownload,
+}: {
+  material: Material;
+  index: number;
+  onDownload: (storageId: Id<"_storage">, title: string) => void;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.1 }}>
+    <Card className='p-4 hover:shadow-lg transition-shadow'>
+      <div className='flex justify-between items-start'>
+        <div>
+          <h4 className='text-lg font-medium'>{material.title}</h4>
+          <p className='text-muted-foreground mt-2'>{material.description}</p>
+        </div>
+        <Button
+          variant='outline'
+          size='sm'
+          onClick={() => onDownload(material.file, material.title)}>
+          Download PDF
+        </Button>
+      </div>
+    </Card>
+  </motion.div>
+);

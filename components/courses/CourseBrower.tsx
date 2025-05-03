@@ -57,7 +57,7 @@ export default function CourseBrowser() {
 
   return (
     <div className='space-y-8'>
-      <div className='flex flex-col md:flex-row items-center justify-between gap-3'>
+      <div className='w-full max-w-2xl flex flex-col md:flex-row items-center justify-between gap-3'>
         <div className='w-full'>
           <label className='block mb-2 text-sm font-semibold text-muted-foreground'>
             Select Faculty

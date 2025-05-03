@@ -16,7 +16,6 @@ import type {
 import type * as admissionRequirements from "../admissionRequirements.js";
 import type * as alternativeAdmissions from "../alternativeAdmissions.js";
 import type * as alumni from "../alumni.js";
-import type * as askAI from "../askAI.js";
 import type * as contactUs from "../contactUs.js";
 import type * as courses from "../courses.js";
 import type * as getAllContent from "../getAllContent.js";
@@ -42,7 +41,6 @@ declare const fullApi: ApiFromModules<{
   admissionRequirements: typeof admissionRequirements;
   alternativeAdmissions: typeof alternativeAdmissions;
   alumni: typeof alumni;
-  askAI: typeof askAI;
   contactUs: typeof contactUs;
   courses: typeof courses;
   getAllContent: typeof getAllContent;
