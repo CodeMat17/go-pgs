@@ -65,7 +65,7 @@ export default function StaffDetail() {
                 index // Add index parameter
               ) => (
                 <motion.li
-                  key={staff.id}
+                  key={staff._id}
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                   whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
