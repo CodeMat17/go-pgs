@@ -22,14 +22,22 @@ export function Nav() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about-us" },
-    { name: "Courses", href: "/courses" },
+
+    {
+      name: "Programs",
+      href: "/programs",
+      subLinks: [
+        { name: "Courses", href: "/courses" },
+        { name: "Course Materials", href: "/course-materials" },
+      ],
+    },
     {
       name: "Academics",
       href: "/academics",
       subLinks: [
         { name: "Admission Requirements", href: "/requirements" },
         { name: "Research", href: "/research" },
-        { name: "Course Materials", href: "/course-materials" },
+        { name: "Students Data Collection", href: "/pg-students" },
       ],
     },
     { name: "News", href: "/news" },
@@ -41,7 +49,7 @@ export function Nav() {
         { name: "Alumni", href: "/alumni" },
       ],
     },
-    { name: "Students", href: "/pg-students" },
+
     { name: "Contact", href: "/contact" },
   ];
 

@@ -127,9 +127,10 @@ export default function Footer() {
             <h4 className='text-lg font-medium mb-4'>Programs</h4>
             <ul className='space-y-2'>
               {[
-                { name: "Master's Degrees", href: "/courses" },
-                { name: "PhD Programs", href: "/courses" },
-                { name: "Online Learning", href: "/courses" },
+                { name: "PGD", href: "/courses" },
+                { name: "Masters", href: "/courses" },
+                { name: "PhD", href: "/courses" },
+
                 { name: "SEE ALL PROGRAMS", href: "/courses" },
               ].map((link) => (
                 <li key={link.name}>
