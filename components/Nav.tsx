@@ -80,7 +80,7 @@ export function Nav() {
                   <DropdownMenuTrigger
                     className={`flex items-center gap-1 text-sm font-medium transition-colors ${
                       isSubLinkActive(link.subLinks)
-                        ? "text-[#FEDA37] bg-primary/10 rounded-md px-3 py-1.5"
+                        ? "text-[#FEDA37] bg-gray-500/5 rounded-md px-3 py-1.5"
                         : "hover:text-primary"
                     }`}>
                     {link.name}
@@ -98,7 +98,7 @@ export function Nav() {
                       <DropdownMenuItem key={subLink.name} asChild>
                         <Link
                           href={subLink.href}
-                          className={`px-4 py-2 hover:bg-accent rounded-md transition-colors ${isActive(subLink.href) ? "text-[#FEDA37] bg-primary/10" : ""}`}>
+                          className={`px-4 py-2 hover:bg-accent rounded-md transition-colors ${isActive(subLink.href) ? "text-[#FEDA37]" : ""}`}>
                           {subLink.name}
                         </Link>
                       </DropdownMenuItem>

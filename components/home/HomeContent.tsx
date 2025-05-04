@@ -35,13 +35,7 @@ const HomeContent = () => {
 
         {/* Hero Content */}
         <div
-          className='relative w-full z-10 px-4 sm:px-6 lg:px-8 
-         flex
-         flex-col
-         md:flex-row-reverse
-         items-center
-        justify-between
-        gap-2 md:gap-0 pb-7 sm:pt-7'>
+          className='relative w-full z-10 px-4 sm:px-6 lg:px-8 flex flex-col gap-2 md:gap-0 pb-7 sm:pt-7'>
           {/* Student Image Container */}
           {/* <motion.div
             initial={
@@ -76,7 +70,7 @@ const HomeContent = () => {
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className='text-4xl md:text-[45px] xl:text-5xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0_2px_4px_rgba(0,0,0,0.95)]'>
+              className='max-w-4xl text-4xl md:text-[45px] xl:text-6xl font-bold text-white mb-2 sm:mb-4 [text-shadow:_0_2px_4px_rgba(0,0,0,0.95)]'>
               Elevate Your Academic Journey at
               <span className='block text-[#FFDC55]'>
                 {" "}
@@ -96,10 +90,11 @@ const HomeContent = () => {
             <motion.div
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}>
+              transition={{ delay: 0.6 }} className="pt-8 lg:pt-4">
               <ApplyNow />
             </motion.div>
           </motion.div>
+        
         </div>
       </section>
 

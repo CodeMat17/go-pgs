@@ -24,7 +24,7 @@ const DescriptionAnimation = () => {
         wrapper='span'
         speed={50}
         repeat={Infinity}
-        className='text-lg md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,95)]'
+        className='text-xl font-medium md:text-xl text-white mb-6 sm:mb-8 max-w-2xl mx-auto md:mx-0 [text-shadow:_0px_2px_4px_rgba(0,0,0,95)]'
       />
     </motion.div>
   );
