@@ -415,7 +415,7 @@ function MaterialCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}>
       <Card
-        className={`p-4 hover:shadow-lg transition-shadow ${bgColor === "gpc" ? "bg-gray-50 dark:bg-sky-600/20" : "bg-muted/50"}`}>
+        className={`p-4 hover:shadow-lg transition-shadow ${bgColor === "gpc" ? "bg-gray-50 dark:bg-sky-600/20" : "bg-white dark:bg-muted/50"}`}>
         <div className='flex flex-col justify-between h-full gap-2'>
           <div>
             <h3 className='font-medium text-lg'>{material.title}</h3>

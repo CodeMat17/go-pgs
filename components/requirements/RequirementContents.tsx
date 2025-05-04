@@ -14,13 +14,20 @@ export default function RequirementsContent() {
   );
 
 
-  if (!requirements && requirements === undefined) {
+  if (requirements === undefined) {
     return (
        <div className="px-4 py-32 flex items-center justify-center"><Minus className="mr-3 animate-spin" /> loading...</div>
     )
   }
 
   
+  if (!requirements) {
+    return (
+      <div className='px-4 py-32 flex items-center justify-center'>
+        <Minus className='mr-3 animate-spin' /> loading...
+      </div>
+    );
+  }
 
 
   return (
