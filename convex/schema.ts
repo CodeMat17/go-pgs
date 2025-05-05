@@ -203,7 +203,11 @@ export default defineSchema({
     regno: v.string(),
     faculty: facultyType,
     type: courseType,
-  }).index("by_regno", ["regno"]),
+  })
+    .index("by_regno", ["regno"])
+    .index("by_faculty_type", ["faculty", "type"])
+    .index("by_faculty", ["faculty"])
+    .index("by_type", ["type"]),
 
   materials: defineTable({
     faculty: facultyType,
