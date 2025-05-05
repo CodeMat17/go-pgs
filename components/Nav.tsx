@@ -80,13 +80,13 @@ export function Nav() {
                   <DropdownMenuTrigger
                     className={`flex items-center gap-1 text-sm font-medium transition-colors ${
                       isSubLinkActive(link.subLinks)
-                        ? "text-[#FEDA37] bg-gray-500/5 rounded-md px-3 py-1.5"
+                        ? "text-blue-500 bg-gray-500/5 rounded-md px-3 py-1.5"
                         : "hover:text-primary"
                     }`}>
                     {link.name}
                     <span
                       className={`h-4 w-4 ml-1 transform group-hover:rotate-180 transition-transform ${
-                        isSubLinkActive(link.subLinks) ? "text-[#FEDA37]" : ""
+                        isSubLinkActive(link.subLinks) ? "text-blue-500" : ""
                       }`}>
                       ▼
                     </span>
@@ -98,7 +98,7 @@ export function Nav() {
                       <DropdownMenuItem key={subLink.name} asChild>
                         <Link
                           href={subLink.href}
-                          className={`px-4 py-2 hover:bg-accent rounded-md transition-colors ${isActive(subLink.href) ? "text-[#FEDA37]" : ""}`}>
+                          className={`px-4 py-2 hover:bg-accent rounded-md transition-colors ${isActive(subLink.href) ? "text-blue-500" : ""}`}>
                           {subLink.name}
                         </Link>
                       </DropdownMenuItem>
@@ -108,7 +108,7 @@ export function Nav() {
               ) : (
                 <Link
                   href={link.href}
-                  className={`text-sm font-medium transition-colors ${isActive(link.href) ? "dark:text-[#FEDA37] bg-amber-500/10 rounded-md px-3 py-1.5" : "hover:text-primary"}`}>
+                  className={`text-sm font-medium transition-colors ${isActive(link.href) ? "text-blue-500 bg-blue-500/10 rounded-md px-3 py-1.5" : "hover:text-primary"}`}>
                   {link.name}
                 </Link>
               )}
