@@ -73,7 +73,7 @@ export default function CourseBrowser() {
   };
 
   return (
-    <div className='space-y-8 p-4 max-w-7xl mx-auto'>
+    <div className='space-y-8 max-w-7xl mx-auto'>
       {/* Filter Controls */}
       <div className='grid grid-cols-1 md:grid-cols-4 gap-3'>
         <div className='space-y-2'>
