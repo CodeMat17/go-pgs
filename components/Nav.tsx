@@ -78,7 +78,7 @@ export function Nav() {
               {link.subLinks ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    className={`flex items-center gap-1 text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-1 text-sm font-medium transition-colors outline-none border-none ${
                       isSubLinkActive(link.subLinks)
                         ? "text-blue-500 bg-gray-500/5 rounded-md px-3 py-1.5"
                         : "hover:text-primary"
