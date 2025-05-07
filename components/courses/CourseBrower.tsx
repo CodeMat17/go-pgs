@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -15,7 +15,7 @@ import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, X } from "lucide-react";
 import Link from "next/link";
-import {  useState } from "react";
+import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 
@@ -44,7 +44,9 @@ const levelConfig = {
 } as const;
 
 export default function CourseBrowser() {
- const [selectedFaculty, setSelectedFaculty] = useState<Faculty | "all">("all");
+  const [selectedFaculty, setSelectedFaculty] = useState<Faculty | "all">(
+    "all"
+  );
   const [selectedProgram, setSelectedProgram] = useState<CourseLevel>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -203,30 +205,49 @@ export default function CourseBrowser() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.3 }}>
-              <Card className='p-6 hover:shadow-lg transition-shadow h-full flex flex-col'>
-                <div className='flex-1 space-y-4'>
-                  <h3 className='font-semibold text-lg'>{course.course}</h3>
-                  <div className='space-y-2 text-sm text-muted-foreground'>
-                    <div className='flex items-center gap-2'>
-                      <BookOpen className='h-4 w-4 text-blue-500' />
-                      <span>{course.faculty}</span>
+              <Card className=' hover:shadow-lg transition-shadow h-full flex flex-col bg-purple-200 dark:bg-gray-700'>
+                <CardHeader>
+                  <CardTitle className='font-semibold text-lg'>
+                    {course.course}
+                  </CardTitle>
+                </CardHeader>
+                <div className='flex-1 space-y-4 px-6 py-4 mx-1 mb-1 rounded-xl bg-purple-100 dark:bg-gray-800'>
+                  <div className='flex flex-col h-full'>
+                    {/* Added flex container */}
+                    <div className='flex-1 space-y-2 text-muted-foreground mb-4'>
+                      {" "}
+                      {/* Added flex-1 and mb-4 */}
+                      <div className='space-y-1'>
+                        <div className='flex items-center gap-2'>
+                          <BookOpen className='h-4 w-4 text-blue-500 shrink-0' />
+                          <span>{course.faculty}</span>
+                        </div>
+                        <div className='flex items-center gap-2'>
+                          <Clock className='h-4 w-4 text-amber-500' />
+                          <span>{course.duration}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className='flex items-center gap-2'>
-                      <Clock className='h-4 w-4 text-amber-500' />
-                      <span>{course.duration}</span>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <Badge className='font-medium px-4 py-1 rounded-full'>
-                        {course.type.toUpperCase()}
-                      </Badge>
+                    {/* Base container - now at bottom */}
+                    <div className='mt-auto'>
+                      {/* Added mt-auto */}
+                      <div className='flex items-center justify-between gap-2'>
+                        <Badge className='font-medium px-4 py-1 rounded-full'>
+                          {course.type.toUpperCase()}
+                        </Badge>
+                        <Link
+                          href={`/courses/${course.slug}`}
+                          className='block'>
+                          <Button
+                            className='w-full rounded-full'
+                            variant='outline'>
+                            View Details
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <Link href={`/courses/${course.slug}`} className='mt-4 block'>
-                  <Button className='w-full' variant='outline'>
-                    View Details
-                  </Button>
-                </Link>
               </Card>
             </motion.div>
           ))}
