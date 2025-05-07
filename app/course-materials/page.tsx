@@ -223,7 +223,7 @@ export default function CourseMaterials() {
           />
           <Button
             type='submit'
-            className='py-6 px-8 text-lg gap-2'
+            className='py-6 px-4 text-lg gap-2'
             disabled={!regNumber.trim() || isLoading ? true : undefined}>
             <Search className='w-5 h-5' />
             {isLoading ? "Searching..." : "Search"}

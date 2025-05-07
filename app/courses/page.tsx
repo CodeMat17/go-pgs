@@ -42,14 +42,15 @@ export default function ProgramsPage() {
   return (
     <div className='w-full px-4 py-12 bg-purple-50 dark:bg-gray-950'>
       <div className='max-w-5xl mx-auto'>
-        <h1 className='text-3xl sm:text-4xl font-bold mb-4 text-purple-700'>Our Courses</h1>
+        <h1 className='text-3xl sm:text-4xl font-bold mb-4 text-purple-700'>
+          Our Courses
+        </h1>
         <p className='text-lg text-muted-foreground mb-8'>
           Explore our diverse range of academic courses. Find the right course
           for you.
         </p>
         <div>
           <CourseBrowser />
-       
         </div>
       </div>
     </div>
