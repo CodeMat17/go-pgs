@@ -211,7 +211,7 @@ export default function CourseBrowser() {
                     {course.course}
                   </CardTitle>
                 </CardHeader>
-                <div className='flex-1 space-y-4 px-6 py-4 mx-1 mb-1 rounded-xl bg-purple-100 dark:bg-gray-800'>
+                <div className='flex-1 space-y-4 px-6 py-4 mx-1 mb-1 rounded-xl bg-purple-50 dark:bg-gray-800'>
                   <div className='flex flex-col h-full'>
                     {/* Added flex container */}
                     <div className='flex-1 space-y-2 text-muted-foreground mb-4'>
