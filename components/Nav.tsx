@@ -37,7 +37,7 @@ export function Nav() {
       subLinks: [
         { name: "Admission Requirements", href: "/requirements" },
         { name: "Research", href: "/research" },
-        { name: "Students Data Collection", href: "/pg-students" },
+        // { name: "Students Data Collection", href: "/pg-students" },
       ],
     },
     { name: "News", href: "/news" },
