@@ -29,6 +29,7 @@ export function Nav() {
       subLinks: [
         { name: "Courses", href: "/courses" },
         { name: "Course Materials", href: "/course-materials" },
+        {name: 'Fees', href: '/fees'},
       ],
     },
     {
