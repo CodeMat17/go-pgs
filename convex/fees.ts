@@ -1,0 +1,227 @@
+import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
+
+export const getPgdFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("pgdFees").order("asc").collect();
+  },
+});
+
+export const getMastersFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("mastersFees").order("asc").collect();
+  },
+});
+
+export const getPhdGeneralFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("phdGeneralFees").order("asc").collect();
+  },
+});
+
+export const getPhdNatSciFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("phdNatSciFees").order("asc").collect();
+  },
+});
+
+export const getPhdEduFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("phdEduFees").order("asc").collect();
+  },
+});
+
+export const updatePgdFee = mutation({
+  args: {
+    id: v.id("pgdFees"),
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...data } = args;
+
+    // First validate the input
+    if (!data.title || !data.amount) {
+      throw new Error("Title and amount are required");
+    }
+
+    if (
+      data.details.some(
+        (detail) => !detail.bank || !detail.accountNumber || !detail.accountName
+      )
+    ) {
+      throw new Error("All bank details must be complete");
+    }
+
+    // Update the document
+    await ctx.db.patch(id, data);
+
+    // Return the updated document
+    return await ctx.db.get(id);
+  },
+});
+
+export const updateMastersFee = mutation({
+  args: {
+    id: v.id("mastersFees"),
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...data } = args;
+
+    // First validate the input
+    if (!data.title || !data.amount) {
+      throw new Error("Title and amount are required");
+    }
+
+    if (
+      data.details.some(
+        (detail) => !detail.bank || !detail.accountNumber || !detail.accountName
+      )
+    ) {
+      throw new Error("All bank details must be complete");
+    }
+
+    // Update the document
+    await ctx.db.patch(id, data);
+
+    // Return the updated document
+    return await ctx.db.get(id);
+  },
+});
+
+export const updatePhdGeneralFee = mutation({
+  args: {
+    id: v.id("phdGeneralFees"),
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...data } = args;
+
+    // First validate the input
+    if (!data.title || !data.amount) {
+      throw new Error("Title and amount are required");
+    }
+
+    if (
+      data.details.some(
+        (detail) => !detail.bank || !detail.accountNumber || !detail.accountName
+      )
+    ) {
+      throw new Error("All bank details must be complete");
+    }
+
+    // Update the document
+    await ctx.db.patch(id, data);
+
+    // Return the updated document
+    return await ctx.db.get(id);
+  },
+});
+
+export const updatePhdNatSciFee = mutation({
+  args: {
+    id: v.id("phdNatSciFees"),
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...data } = args;
+
+    // First validate the input
+    if (!data.title || !data.amount) {
+      throw new Error("Title and amount are required");
+    }
+
+    if (
+      data.details.some(
+        (detail) => !detail.bank || !detail.accountNumber || !detail.accountName
+      )
+    ) {
+      throw new Error("All bank details must be complete");
+    }
+
+    // Update the document
+    await ctx.db.patch(id, data);
+
+    // Return the updated document
+    return await ctx.db.get(id);
+  },
+});
+
+export const updatePhdEduFee = mutation({
+  args: {
+    id: v.id("phdEduFees"),
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...data } = args;
+
+    // First validate the input
+    if (!data.title || !data.amount) {
+      throw new Error("Title and amount are required");
+    }
+
+    if (
+      data.details.some(
+        (detail) => !detail.bank || !detail.accountNumber || !detail.accountName
+      )
+    ) {
+      throw new Error("All bank details must be complete");
+    }
+
+    // Update the document
+    await ctx.db.patch(id, data);
+
+    // Return the updated document
+    return await ctx.db.get(id);
+  },
+});

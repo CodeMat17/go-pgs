@@ -228,4 +228,70 @@ export default defineSchema({
     file: v.id("_storage"),
     downloads: v.optional(v.number()),
   }).index("by_faculty_type", ["faculty", "type"]),
+
+  pgdFees: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    amount: v.string(),
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  }),
+
+  mastersFees: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    amount: v.string(),
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  }),
+
+  phdGeneralFees: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    amount: v.string(),
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  }),
+
+  phdNatSciFees: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    amount: v.string(),
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  }),
+
+  phdEduFees: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    amount: v.string(),
+    details: v.array(
+      v.object({
+        bank: v.string(),
+        accountNumber: v.string(),
+        accountName: v.string(),
+      })
+    ),
+  }),
 });
+
