@@ -31,6 +31,12 @@ export const getPhdEduFees = query({
   },
 });
 
+export const getAdditionalFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("additionalFees").collect();
+  },
+});
+
 export const updatePgdFee = mutation({
   args: {
     id: v.id("pgdFees"),
@@ -223,5 +229,19 @@ export const updatePhdEduFee = mutation({
 
     // Return the updated document
     return await ctx.db.get(id);
+  },
+});
+
+export const addAdditionalFee = mutation({
+  args: {
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+    bank: v.string(),
+    accountNumber: v.string(),
+    accountName: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("additionalFees", args);
   },
 });

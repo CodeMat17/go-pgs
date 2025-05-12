@@ -293,5 +293,15 @@ export default defineSchema({
       })
     ),
   }),
+
+  additionalFees: defineTable({
+    title: v.string(),
+    amount: v.string(),
+    description: v.optional(v.string()),
+    bank: v.string(),
+    accountNumber: v.string(),
+    accountName: v.string(),
+  }),
+
 });
 
