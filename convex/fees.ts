@@ -245,3 +245,31 @@ export const addAdditionalFee = mutation({
     await ctx.db.insert("additionalFees", args);
   },
 });
+
+export const updateAdditionalFee = mutation({
+  args: {
+    id: v.id("additionalFees"),
+    title: v.optional(v.string()),
+    amount: v.optional(v.string()),
+    description: v.optional(v.string()),
+    bank: v.optional(v.string()),
+    accountNumber: v.optional(v.string()),
+    accountName: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...rest } = args;
+    await ctx.db.patch(id, rest);
+  },
+});
+
+export const getExtraFeesAccount = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("extraFeesAccount").first();
+  },
+});
+
+export const getExtraFees = query({
+  handler: async (ctx) => {
+    return await ctx.db.query("extraFees").order("asc").collect();
+  },
+});

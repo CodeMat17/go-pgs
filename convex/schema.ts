@@ -303,5 +303,24 @@ export default defineSchema({
     accountName: v.string(),
   }),
 
+  extraFeesAccount: defineTable({
+    bankName: v.string(),
+    accountNumber: v.string(),
+    accountName: v.string(),
+  }),
+
+  extraFees: defineTable({
+    feeType: v.union(
+      v.literal("Course Deferment"),
+      v.literal("Development Levy"),
+      v.literal("Exams Levy"),
+      v.literal("Change of Supervisor"),
+      v.literal("Change of Department"),
+      v.literal("Utility Levy"),
+      v.literal("Carryover Fee"),
+    ),
+    amount: v.string(),
+    carryoverNote: v.optional(v.string()),
+  }).index("by_feeType", ["feeType"]),
 });
 

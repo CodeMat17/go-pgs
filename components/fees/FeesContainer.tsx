@@ -12,7 +12,7 @@ export default function FeeStructure() {
 
   return (
     <div className='relative w-full bg-purple-50 dark:bg-slate-950 py-8 flex flex-col xl:flex-row max-w-7xl mx-auto lg:gap-6'>
-      <div className="px-4 ">
+      <div className='px-4 '>
         <div className=' xl:max-w-[950px]'>
           <h1 className='text-2xl font-bold mb-8'>Fee Structure</h1>
 
@@ -140,7 +140,7 @@ export default function FeeStructure() {
             <PhdFeesContainer />
           </div>
         </div>
-        <div className='xl:hidden'>
+        <div className='xl:hidden w-full lg:max-w-[600px] mx-auto'>
           <AdditionalFees />
         </div>
         <div className='hidden xl:block fixed right-6 top-4 w-[300px]'>

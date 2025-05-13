@@ -2,49 +2,75 @@
 
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { Minus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-const AdditionalFees = () => {
-  const additionalFees = useQuery(api.fees.getAdditionalFees);
+export default function AdditionalFees() {
+  const paymentAccount = useQuery(api.fees.getExtraFeesAccount);
+  const extraFees = useQuery(api.fees.getExtraFees);
 
-  if (additionalFees === undefined) {
+  if (extraFees === undefined || paymentAccount === undefined) {
     return (
-      <div className='w-full px-4 h-[500px] xl:max-w-[280px] xl:mt-20 bg-gray-100 dark:bg-gray-800 flex items-center justify-center'>
-        <Minus className='animate-spin' />
+      <div className='flex items-center justify-center h-64'>
+        <Loader2 className='h-8 w-8 animate-spin' />
       </div>
     );
   }
 
   return (
-    <div className='p-4 xl:max-w-[300px] xl:mt-20 bg-blue-800 text-white rounded-xl'>
-      <h2 className='text-xl font-semibold mb-2 uppercase '>Additional Fees</h2>
-      {additionalFees.length === 0 ? (
-        <div className='flex items-center justify-center py-8'>
-          <Minus className='animate-spin mr-3' /> loading...
-        </div>
-      ) : (
-        <div className='lg:text-sm'>
-          {additionalFees.map((fee, index) => (
-            <div
-              key={fee._id}
-              className={`flex justify-between ${index % 2 === 0 ? "bg-gray-800" : "bg-blue-900"} px-4 py-1.5 rounded-full relative`}>
-              <p>{fee.title} </p>
-              <p>{fee.amount}</p>
+    <div className='xl:mt-20 bg-blue-600 p-4 rounded-xl text-white '>
+      <h2 className='text-xl font-semibold mb-2 uppercase'>Additional Fees</h2>
 
-              <p className='absolute -bottom-5 text-xs'> {fee.description}</p>
+      {/* Fees List */}
+      <div className=''>
+        {extraFees.length === 0 ? (
+          <div className='col-span-full text-center py-12'>
+            <p className='text-muted-foreground'>No extra fees configured</p>
+          </div>
+        ) : (
+          extraFees.map((fee) => (
+            <div key={fee._id} className=''>
+              <div></div>
+              <div className='flex justify-between  xl:text-sm font-medium'>
+                <p className=''>{fee.feeType}</p>
+
+                <p>₦{fee.amount}</p>
+              </div>
+
+              {fee.carryoverNote && (
+                <div className=''>
+                  <div className='flex items-center justify-center gap-2 text-sm italic text-gray-200'>
+                   
+                    <span>{fee.carryoverNote}</span>
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-          {additionalFees.length > 0 && (
-            <div className='bg-gray-800 p-4 rounded-xl font-medium mt-8'>
-              <p>Bank: {additionalFees[0].bank}</p>
-              <p>Account No: {additionalFees[0].accountNumber}</p>
-              <p>Account Name: {additionalFees[0].accountName}</p>
+          ))
+        )}
+      </div>
+
+      {/* Payment Account Section */}
+      {paymentAccount && (
+        <div className='bg-gray-800 rounded-lg p-3 mt-4'>
+          {/* <h2 className='text-xl font-semibold mb-4'>
+            Payment Account Details
+          </h2> */}
+          <div className='flex flex-col gap-2 font-medium'>
+            <div>
+              <p className='text-sm text-muted-foreground'>Bank Name</p>
+              <p>{paymentAccount.bankName}</p>
             </div>
-          )}
+            <div>
+              <p className='text-sm text-muted-foreground'>Account Number</p>
+              <p>{paymentAccount.accountNumber}</p>
+            </div>
+            <div>
+              <p className='text-sm text-muted-foreground'>Account Name</p>
+              <p>{paymentAccount.accountName}</p>
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
-};
-
-export default AdditionalFees;
+}
