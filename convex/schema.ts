@@ -317,10 +317,9 @@ export default defineSchema({
       v.literal("Change of Supervisor"),
       v.literal("Change of Department"),
       v.literal("Utility Levy"),
-      v.literal("Carryover Fee"),
+      v.literal("Carryover Fee")
     ),
     amount: v.string(),
     carryoverNote: v.optional(v.string()),
   }).index("by_feeType", ["feeType"]),
 });
-

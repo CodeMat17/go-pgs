@@ -33,7 +33,7 @@ export default function AdditionalFees() {
               <div className='flex justify-between  xl:text-sm font-medium'>
                 <p className=''>{fee.feeType}</p>
 
-                <p>₦{fee.amount}</p>
+                <p>{fee.amount}</p>
               </div>
 
               {fee.carryoverNote && (
