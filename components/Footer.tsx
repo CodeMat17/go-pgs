@@ -106,7 +106,7 @@ export default function Footer() {
                 { name: "Research", href: "/research" },
                 { name: "News", href: "/news" },
                 { name: "Alumni", href: "/alumni" },
-                { name: "Staff", href: "/staff" },
+                { name: "Administrative Team", href: "/administrative-team" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

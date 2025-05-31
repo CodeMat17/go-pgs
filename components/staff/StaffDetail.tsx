@@ -43,10 +43,10 @@ export default function StaffDetail() {
       <div className='max-w-6xl mx-auto'>
         <header className='text-center mb-12'>
           <h1 className='text-3xl sm:text-4xl font-bold mb-4'>
-            Our Staff
+            Administrative Team
           </h1>
           <p className='text-lg text-muted-foreground max-w-xl mx-auto'>
-            Meet the dedicated staff members shaping education at GO
+            Meet the dedicated administrative team shaping education at GO
             University School of Postgraduate Studies.
           </p>
         </header>

@@ -46,7 +46,7 @@ export function Nav() {
       name: "Profiles",
       href: "/profiles",
       subLinks: [
-        { name: "Staff", href: "/staff" },
+        { name: "Administrative Team", href: "/administrative-team" },
         { name: "Alumni", href: "/alumni" },
       ],
     },

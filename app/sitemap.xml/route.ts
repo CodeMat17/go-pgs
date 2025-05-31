@@ -17,7 +17,7 @@ export async function GET(): Promise<Response> {
       "/requirements",
       "/research",
       "/news",
-      "/staff",
+      "/administrative-team",
       "/alumni",
       "/contact",
     ];

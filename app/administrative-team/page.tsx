@@ -2,17 +2,17 @@ import StaffDetail from "@/components/staff/StaffDetail";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "GO Uni Staff Profile",
+  title: "GO Uni Administrative Team",
   description:
-    "Meet our distinguished staff members and postgraduate program coordinators.",
-  keywords: ["postgraduate lecturers", "academic staff profiles"],
+    "Meet our administrative team and postgraduate program coordinators.",
+  keywords: ["postgraduate lecturers", "academic staff profiles", 'administrative team'],
   openGraph: {
-    title: "Postgraduate staff Members",
+    title: "Postgraduate Administrative Team",
     description:
       "Meet our distinguished staff members and postgraduate program coordinators.",
     images: [
       {
-        url: "/staff/opengraph-image.jpg",
+        url: "/administrative-team/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "GO University News Bulletin",
@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     title: "Postgraduate staff Members",
     description:
       "Meet our distinguished staff members and postgraduate program coordinators.",
-    images: ["https://pg.gouni.edu.ng/staff/opengraph-image.jpg"],
+    images: ["https://pg.gouni.edu.ng/administrative-team/opengraph-image.jpg"],
   },
   alternates: {
-    canonical: "https://pg.gouni.edu.ng/staff",
+    canonical: "https://pg.gouni.edu.ng/administrative-team",
   },
 };
 
