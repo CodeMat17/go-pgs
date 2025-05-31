@@ -77,7 +77,7 @@ export default function HomeContent() {
               initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className='mt-4 lg:mt-4'>
+              className='mt-3'>
               <ApplyNow />
             </motion.div>
           </motion.div>

@@ -9,7 +9,7 @@ const DescriptionAnimation = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.4 }}
-      className='relative min-h-[120px] sm:min-h-[100px] md:min-h-[80px] w-full max-w-2xl'>
+      className='relative min-h-[120px] sm:min-h-[100px] md:min-h-[60px] w-full max-w-2xl'>
       <TypeAnimation
         sequence={[
           "Join a community of scholars pushing boundaries in research and innovation.",
