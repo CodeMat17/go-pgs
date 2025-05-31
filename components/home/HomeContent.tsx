@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ApplyNow } from "../buttons/ApplyNow";
@@ -16,25 +11,25 @@ const DescriptionAnimation = dynamic(() => import("../DescriptionAnimation"), {
   loading: () => <div className='h-8' aria-hidden='true' />,
 });
 
-const HomeContent = () => {
+export default function HomeContent() {
   const shouldReduceMotion = useReducedMotion();
-  const { scrollY } = useScroll();
-  const backgroundY = useTransform(scrollY, [0, 500], ["0%", "20%"]);
 
   return (
     <div className='min-h-screen'>
       {/* Hero Section */}
-      <section className='relative w-full min-h-[600px] lg:h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden'>
-        {/* Background Image with Parallax and Pattern Overlay */}
+      <section className='relative w-full min-h-[600px] lg:min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden'>
+        {/* Background Image with Gradient Overlay */}
         <motion.div
-          className='absolute inset-0 z-0'
-          style={{ y: shouldReduceMotion ? 0 : backgroundY }}>
+          initial={shouldReduceMotion ? {} : { scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className='absolute inset-0 z-0'>
           <Image
             src='/hero-bg.avif'
             alt='Aerial view of Godfrey Okoye University campus with modern buildings and green spaces'
             fill
             priority
-            className='object-cover object-center scale-105'
+            className='object-cover object-center'
             quality={100}
             sizes='100vw'
             aria-hidden='true'
@@ -47,40 +42,22 @@ const HomeContent = () => {
         </motion.div>
 
         {/* Hero Content */}
-        <div className='relative w-full z-10 max-w-5xl mx-auto px-4 flex flex-col items-center lg:items-start gap-2 md:gap-0 py-12'>
+        <div className='relative w-full z-10 max-w-6xl mx-auto px-4 flex flex-col items-center lg:items-start gap-2 md:gap-0 py-12 sm:py-16 lg:py-20'>
           {/* Text Container */}
           <motion.div
-            initial={
-              shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 30 }
-            }
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.7, delay: 0.2 }}
             className='max-w-4xl lg:px-12 xl:px-0'>
             <motion.div
-              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className='mb-6'>
-              <h1
-                className='
-                text-4xl sm:text-5xl lg:text-6xl 
-                font-extrabold text-white 
-                
-                tracking-tight 
-                [text-shadow:_2px_2px_8px_rgba(0,0,0,0.5)] 
-                leading-[1.15]
-                 max-w-3xl'>
+              className='mb-3'>
+              <h1 className='text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight [text-shadow:_2px_2px_8px_rgba(0,0,0,0.5)] leading-[1.15] max-w-3xl'>
                 Elevate Your Academic Journey at
               </h1>
-              <h1
-                className='
-                text-4xl sm:text-5xl lg:text-6xl 
-               
-                mb-6 sm:mb-8 
-                tracking-tight  font-extrabold
-                [text-shadow:_2px_2px_8px_rgba(0,0,0,0.5)] 
-                leading-[1.15]
-                 text-[#FFDC55]'>
+              <h1 className='text-4xl sm:text-5xl lg:text-6xl tracking-tight font-extrabold [text-shadow:_2px_2px_8px_rgba(0,0,0,0.5)] leading-[1.15] text-[#FFDC55] mt-4'>
                 Godfrey Okoye University
                 <span className='block text-2xl sm:text-3xl md:text-4xl xl:text-5xl mt-2 sm:mt-3 font-bold'>
                   School of Postgraduate Studies
@@ -89,22 +66,18 @@ const HomeContent = () => {
             </motion.div>
 
             <motion.div
-              initial={
-                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }
-              }
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className='backdrop-blur-sm bg-black/5 px-2 rounded-xl w-full max-w-2xl'>
+              className='backdrop-blur-sm bg-black/5 rounded-xl w-full max-w-2xl'>
               <DescriptionAnimation />
             </motion.div>
 
             <motion.div
-              initial={
-                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }
-              }
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className='mt-8 lg:mt-10'>
+              className='mt-4 lg:mt-4'>
               <ApplyNow />
             </motion.div>
           </motion.div>
@@ -126,11 +99,14 @@ const HomeContent = () => {
       </section>
 
       {/* Quick Links Section */}
-      <section className='py-20 bg-gradient-to-b from-muted/80 to-muted'>
+      <motion.section
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className='py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-muted/80 to-muted'>
         <QuickLinks />
-      </section>
+      </motion.section>
     </div>
   );
-};
-
-export default HomeContent;
+}
