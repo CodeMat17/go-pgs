@@ -10,6 +10,11 @@ import { BookOpen, Linkedin, Mail, MinusIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+const SPECIAL_STAFF_CRITERIA = {
+  firstName: "Christian",
+  lastName: "Anieke",
+} as const;
+
 export default function StaffDetail() {
   const staffList = useQuery(api.staff.getStaff);
   const shouldReduceMotion = useReducedMotion();
@@ -51,6 +56,86 @@ export default function StaffDetail() {
           </p>
         </header>
 
+        {/* Featured Staff Section */}
+        {staffList.some((staff) => {
+          const name = staff.name.trim();
+          return (
+            name.includes(SPECIAL_STAFF_CRITERIA.firstName) &&
+            name.includes(SPECIAL_STAFF_CRITERIA.lastName)
+          );
+        }) ? (
+          <div className='mb-12'>
+            {/* <h2 className='text-2xl font-semibold text-center mb-6'>
+              Featured Staff
+            </h2> */}
+            <div className='max-w-2xl mx-auto'>
+              {staffList
+                .filter((staff) => {
+                  const name = staff.name.trim();
+                  return (
+                    name.includes(SPECIAL_STAFF_CRITERIA.firstName) &&
+                    name.includes(SPECIAL_STAFF_CRITERIA.lastName)
+                  );
+                })
+                .map((staff) => (
+                  <motion.div
+                    key={staff._id}
+                    initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+                    animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}>
+                    <Card className='hover:shadow-lg transition-shadow rounded-xl overflow-hidden bg-white dark:bg-gray-900 sm:max-w-2xl'>
+                      <div className='flex flex-col sm:flex-row sm:justify-center sm:items-center'>
+                        <figure className='relative w-full sm:max-w-[50%] aspect-square'>
+                          <Image
+                            src={staff.imageUrl || "/default-avatar.png"}
+                            alt={`Portrait of ${staff.name}`}
+                            fill
+                            className='object-cover'
+                           
+                            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                            priority
+                          />
+                        </figure>
+                        <div className='p-4 md:p-6 flex flex-col sm:justify-center sm:items-center sm:text-center'>
+                          <h3 className='text-2xl font-bold mb-2'>
+                            {staff.name} Anthony Amtthew
+                          </h3>
+                          <p className='text-lg text-muted-foreground'>
+                            {staff.role}
+                          </p>
+                          <div className='flex gap-4 mb-4'>
+                           
+                            {staff.linkedin && (
+                              <a
+                                href={staff.linkedin}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='text-primary hover:scale-110 transition-transform'
+                                aria-label={`View ${staff.name}'s LinkedIn profile`}>
+                                <Linkedin className='w-6 h-6' />
+                              </a>
+                            )}
+                          </div>
+                          <Button
+                            variant='outline'
+                            className='w-fit'
+                            onClick={() => setSelectedStaff(staff)}
+                            aria-label={`View profile of ${staff.name}`}>
+                            <BookOpen
+                              className='mr-2 w-4 h-4'
+                              aria-hidden='true'
+                            />
+                            View Full Profile
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+            </div>
+          </div>
+        ) : null}
+
         {staffList.length === 0 ? (
           <div
             className='flex items-center justify-center px-4 py-20'
@@ -59,11 +144,15 @@ export default function StaffDetail() {
           </div>
         ) : (
           <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 list-none'>
-            {staffList.map(
-              (
-                staff,
-                index // Add index parameter
-              ) => (
+            {staffList
+              .filter((staff) => {
+                const name = staff.name.trim();
+                return !(
+                  name.includes(SPECIAL_STAFF_CRITERIA.firstName) &&
+                  name.includes(SPECIAL_STAFF_CRITERIA.lastName)
+                );
+              })
+              .map((staff, index) => (
                 <motion.li
                   key={staff._id}
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
@@ -83,13 +172,11 @@ export default function StaffDetail() {
                         />
                       </figure>
                       <div className='text-center px-4 pb-3 flex-1 flex flex-col'>
-                        <h2 className='text-xl font-semibold'>
-                          {staff.name}
-                        </h2>
+                        <h2 className='text-xl font-semibold'>{staff.name}</h2>
                         <p className='text-muted-foreground mb-4'>
                           {staff.role}
                         </p>
-                        <div className='flex justify-center gap-4 mb-4'>
+                        {/* <div className='flex justify-center gap-4 mb-4'>
                           <a
                             href={`mailto:${staff.email}`}
                             className='text-primary hover:scale-110'
@@ -111,7 +198,7 @@ export default function StaffDetail() {
                               aria-hidden='true'
                             />
                           )}
-                        </div>
+                        </div> */}
                         <Button
                           variant='outline'
                           className='w-full mt-auto'
@@ -127,8 +214,7 @@ export default function StaffDetail() {
                     </Card>
                   </article>
                 </motion.li>
-              )
-            )}
+              ))}
           </ul>
         )}
 
