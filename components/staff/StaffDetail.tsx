@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { motion, useReducedMotion } from "framer-motion";
-import { BookOpen, Linkedin, Mail, MinusIcon, X } from "lucide-react";
+import { BookOpen, Linkedin, MinusIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
