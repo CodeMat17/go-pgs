@@ -3,91 +3,119 @@ import { fetchQuery } from "convex/nextjs";
 
 const baseUrl = "https://pg.gouni.edu.ng";
 
+// Define static routes with their priorities and change frequencies
+const staticRoutes = [
+  { path: "", priority: "1.0", changefreq: "daily" },
+  { path: "/about-us", priority: "0.8", changefreq: "monthly" },
+  { path: "/courses", priority: "0.9", changefreq: "weekly" },
+  { path: "/requirements", priority: "0.8", changefreq: "monthly" },
+  { path: "/research", priority: "0.8", changefreq: "weekly" },
+  { path: "/news", priority: "0.9", changefreq: "daily" },
+  { path: "/administrative-team", priority: "0.8", changefreq: "weekly" },
+  { path: "/alumni", priority: "0.7", changefreq: "monthly" },
+  { path: "/contact", priority: "0.6", changefreq: "monthly" },
+] as const;
+
+// Helper function to format dates consistently
+const formatDate = (date: Date | number): string => {
+  return new Date(date).toISOString().split("T")[0];
+};
+
+// Helper function to create URL entries
+const createUrlEntry = (
+  path: string,
+  lastmod: string,
+  changefreq: string,
+  priority: string
+) => `
+  <url>
+    <loc>${baseUrl}${path}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+
 export async function GET(): Promise<Response> {
   try {
+    // Fetch dynamic content in parallel
     const [courses, news] = await Promise.all([
       fetchQuery(api.courses.getAllCourses, {}),
       fetchQuery(api.news.getNewsList, {}),
     ]);
 
-    const staticRoutes = [
-      "",
-      "/about-us",
-      "/courses",
-      "/requirements",
-      "/research",
-      "/news",
-      "/administrative-team",
-      "/alumni",
-      "/contact",
-    ];
+    const today = formatDate(new Date());
 
     // Generate static URLs
-    const staticUrls = staticRoutes.map(
-      (route) => `
-      <url>
-        <loc>${baseUrl}${route}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-      </url>
-    `
+    const staticUrls = staticRoutes.map((route) =>
+      createUrlEntry(route.path, today, route.changefreq, route.priority)
     );
 
-    // Generate dynamic course URLs with type safety
-    const dynamicCourseUrls = (courses ?? []).map(
-      (course) => `
-      <url>
-        <loc>${baseUrl}/courses/${course.slug}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-      </url>
-    `
+    // Generate dynamic course URLs
+    const courseUrls = (courses ?? []).map((course) =>
+      createUrlEntry(
+        `/courses/${course.slug}`,
+        formatDate(course._creationTime),
+        "weekly",
+        "0.7"
+      )
     );
 
-    // Generate dynamic news URLs with proper date formatting
-    const dynamicNewsUrls = (news ?? []).map(
-      (item) => `
-      <url>
-        <loc>${baseUrl}/news/${item.slug}</loc>
-        <lastmod>${new Date(item._creationTime).toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-      </url>
-    `
+    // Generate dynamic news URLs
+    const newsUrls = (news ?? []).map((item) =>
+      createUrlEntry(
+        `/news/${item.slug}`,
+        formatDate(item._creationTime),
+        "weekly",
+        "0.7"
+      )
     );
 
     // Combine all URLs
-    const allUrls = [
-      ...staticUrls,
-      ...dynamicCourseUrls,
-      ...dynamicNewsUrls,
-    ].join("");
+    const allUrls = [...staticUrls, ...courseUrls, ...newsUrls].join("");
 
-    // Build sitemap XML
+    // Build sitemap XML with proper formatting
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        ${allUrls}
-      </urlset>`;
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  ${allUrls}
+</urlset>`;
 
     return new Response(sitemap, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, max-age=3600", // Cache for 1 hour
+        "Cache-Control":
+          "public, max-age=3600, s-maxage=3600, stale-while-revalidate=7200",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (error) {
     console.error("Sitemap generation error:", error);
-    return new Response(
-      `<?xml version="1.0" encoding="UTF-8"?>
-      <error>Sitemap generation failed</error>`,
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/xml",
-        },
-      }
-    );
+
+    // Return a basic sitemap with static routes in case of error
+    const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${staticRoutes
+    .map(
+      (route) =>
+        `<url>
+          <loc>${baseUrl}${route.path}</loc>
+          <lastmod>${formatDate(new Date())}</lastmod>
+          <changefreq>${route.changefreq}</changefreq>
+          <priority>${route.priority}</priority>
+        </url>`
+    )
+    .join("")}
+</urlset>`;
+
+    return new Response(fallbackSitemap, {
+      status: 200, // Still return 200 with fallback content
+      headers: {
+        "Content-Type": "application/xml",
+        "Cache-Control": "public, max-age=600", // Shorter cache time for error state
+      },
+    });
   }
 }

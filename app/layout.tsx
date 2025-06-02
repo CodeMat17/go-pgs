@@ -1,11 +1,11 @@
+import { ConvexClientProvider } from "@/app/ConvexClientProvider";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { ConvexClientProvider } from '@/app/ConvexClientProvider'
-import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -20,8 +20,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default:
-      "Godfrey Okoye University Postgraduate School",
+    default: "Godfrey Okoye University Postgraduate School",
     template: "%s | GO Uni Postgrad",
   },
   description:
@@ -92,6 +91,9 @@ export const metadata: Metadata = {
     },
   },
   category: "education",
+  verification: {
+    google: "1JdJykuzZ8V4A8B0QyhPz7d6U1BZ5uwqpsldRCIadAU",
+  },
 };
 
 export default function RootLayout({
