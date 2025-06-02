@@ -50,19 +50,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Generate JSON-LD structured data
-export const generateStructuredData = async () => {
-  return {
-    "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    name: "Godfrey Okoye University School of Postgraduate Studies",
-    url: "https://pg.gouni.edu.ng/",
-    description:
-      "Meet the dedicated administrative team shaping education at GO University School of Postgraduate Studies.",
-    // Note: In a real implementation, you would fetch staff data here
-    // and dynamically generate the employee array
-  };
-};
 
 export default function AdministrativeTeamPage() {
   return <StaffDetail />;
