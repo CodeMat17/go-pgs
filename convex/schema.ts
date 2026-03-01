@@ -1,10 +1,10 @@
 import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import { Infer, v } from "convex/values";
 
 export const courseType = v.union(
   v.literal("pgd"),
   v.literal("masters"),
-  v.literal("phd")
+  v.literal("phd"),
 );
 
 export const facultyType = v.union(
@@ -12,8 +12,11 @@ export const facultyType = v.union(
   v.literal("Faculty of Education"),
   v.literal("Faculty of Mgt. & Social Sciences"),
   v.literal("Faculty of Nat. Science & Environmental Studies"),
-  v.literal("Faculty of Law")
+  v.literal("Faculty of Law"),
 );
+
+export type CourseType = Infer<typeof courseType>;
+export type FacultyType = Infer<typeof facultyType>;
 
 export default defineSchema({
   hero: defineTable({
@@ -61,7 +64,7 @@ export default defineSchema({
       v.object({
         linkedin: v.string(),
         twitter: v.string(),
-      })
+      }),
     ),
     image: v.optional(v.string()),
   }),
@@ -71,7 +74,7 @@ export default defineSchema({
       v.object({
         title: v.string(),
         description: v.string(),
-      })
+      }),
     ),
   }),
 
@@ -92,48 +95,48 @@ export default defineSchema({
         v.object({
           email1: v.string(),
           email2: v.string(),
-        })
-      )
+        }),
+      ),
     ),
     phone: v.optional(
       v.array(
         v.object({
           tel1: v.string(),
           tel2: v.string(),
-        })
-      )
+        }),
+      ),
     ),
     officeHours: v.optional(
       v.array(
         v.object({
           days: v.string(),
           time: v.string(),
-        })
-      )
+        }),
+      ),
     ),
     researchOffice: v.optional(
       v.array(
         v.object({
           email: v.string(),
           tel: v.string(),
-        })
-      )
+        }),
+      ),
     ),
     studentSupport: v.optional(
       v.array(
         v.object({
           email: v.string(),
           tel: v.string(),
-        })
-      )
+        }),
+      ),
     ),
     admissionOffice: v.optional(
       v.array(
         v.object({
           email: v.string(),
           tel: v.string(),
-        })
-      )
+        }),
+      ),
     ),
   }),
 
@@ -149,6 +152,14 @@ export default defineSchema({
     updatedOn: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     storageId: v.optional(v.id("_storage")),
+    images: v.optional(
+      v.array(
+        v.object({
+          url: v.string(),
+          storageId: v.id("_storage"),
+        }),
+      ),
+    ),
   })
     .index("by_slug", ["slug"])
     .index("by_date", ["publicationDate"]),
@@ -164,9 +175,9 @@ export default defineSchema({
       v.object({
         title: v.string(),
         description: v.string(),
-      })
+      }),
     ),
-    faculty: facultyType,
+    faculty: v.string(),
   })
     .index("by_slug", ["slug"])
     .index("by_type", ["type"])
@@ -181,7 +192,7 @@ export default defineSchema({
       v.object({
         title: v.string(),
         description: v.string(),
-      })
+      }),
     ),
     nextIntake: v.string(),
     studyDuration: v.string(),
@@ -201,7 +212,7 @@ export default defineSchema({
     email: v.string(),
     phone: v.string(),
     regno: v.string(),
-    faculty: facultyType,
+    faculty: v.string(),
     type: courseType,
   })
     .index("by_regno", ["regno"])
@@ -210,7 +221,7 @@ export default defineSchema({
     .index("by_type", ["type"]),
 
   materials: defineTable({
-    faculty: facultyType,
+    faculty: v.string(),
     type: courseType,
     title: v.string(),
     semester: v.optional(v.union(v.literal(1), v.literal(2))),
@@ -220,7 +231,7 @@ export default defineSchema({
   }).index("by_faculty_type", ["faculty", "type"]),
 
   gpc: defineTable({
-    faculty: facultyType,
+    faculty: v.string(),
     type: courseType,
     title: v.string(),
     semester: v.optional(v.union(v.literal(1), v.literal(2))),
@@ -229,97 +240,34 @@ export default defineSchema({
     downloads: v.optional(v.number()),
   }).index("by_faculty_type", ["faculty", "type"]),
 
-  pgdFees: defineTable({
+  fees: defineTable({
     title: v.string(),
     description: v.optional(v.string()),
-    amount: v.string(),
-    details: v.array(
-      v.object({
-        bank: v.string(),
-        accountNumber: v.string(),
-        accountName: v.string(),
-      })
-    ),
+    file: v.id("_storage"),
+    uploadedAt: v.optional(v.number()),
+    downloads: v.optional(v.number()),
   }),
 
-  mastersFees: defineTable({
+  examTimetable: defineTable({
     title: v.string(),
+    semester: v.optional(v.union(v.literal(1), v.literal(2))),
     description: v.optional(v.string()),
-    amount: v.string(),
-    details: v.array(
-      v.object({
-        bank: v.string(),
-        accountNumber: v.string(),
-        accountName: v.string(),
-      })
-    ),
+    file: v.id("_storage"),
+    uploadedAt: v.optional(v.number()),
+    downloads: v.optional(v.number()),
   }),
 
-  phdGeneralFees: defineTable({
+  lectureTimetable: defineTable({
     title: v.string(),
+    faculty: v.string(),
+    semester: v.optional(v.union(v.literal(1), v.literal(2))),
     description: v.optional(v.string()),
-    amount: v.string(),
-    details: v.array(
-      v.object({
-        bank: v.string(),
-        accountNumber: v.string(),
-        accountName: v.string(),
-      })
-    ),
-  }),
+    file: v.id("_storage"),
+    uploadedAt: v.optional(v.number()),
+    downloads: v.optional(v.number()),
+  }).index("by_faculty", ["faculty"]),
 
-  phdNatSciFees: defineTable({
-    title: v.string(),
-    description: v.optional(v.string()),
-    amount: v.string(),
-    details: v.array(
-      v.object({
-        bank: v.string(),
-        accountNumber: v.string(),
-        accountName: v.string(),
-      })
-    ),
-  }),
-
-  phdEduFees: defineTable({
-    title: v.string(),
-    description: v.optional(v.string()),
-    amount: v.string(),
-    details: v.array(
-      v.object({
-        bank: v.string(),
-        accountNumber: v.string(),
-        accountName: v.string(),
-      })
-    ),
-  }),
-
-  additionalFees: defineTable({
-    title: v.string(),
-    amount: v.string(),
-    description: v.optional(v.string()),
-    bank: v.string(),
-    accountNumber: v.string(),
-    accountName: v.string(),
-  }),
-
-  extraFeesAccount: defineTable({
-    bankName: v.string(),
-    accountNumber: v.string(),
-    accountName: v.string(),
-  }),
-
-  extraFees: defineTable({
-    feeType: v.union(
-      v.literal("Course Deferment"),
-      v.literal("Development Levy"),
-      v.literal("Exams Levy"),
-      v.literal("Change of Supervisor"),
-      v.literal("Change of Department"),
-      v.literal("Utility Levy"),
-      v.literal("Carryover Fee")
-    ),
-    amount: v.string(),
-    carryoverNote: v.optional(v.string()),
-  }).index("by_feeType", ["feeType"]),
+  faculties: defineTable({
+    name: v.string(),
+  }).index("by_name", ["name"]),
 });

@@ -1,9 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Pagination,
   PaginationContent,
@@ -18,11 +15,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import dayjs from "dayjs";
-import { motion, useReducedMotion } from "framer-motion";
-import { CameraOff, Minus, Share2, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  CameraOff,
+  Eye,
+  Images,
+  Newspaper,
+  Search,
+  Share2,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -34,23 +40,22 @@ export default function NewsPage() {
   const newsList = useQuery(api.news.getNewsList);
   const shouldReduceMotion = useReducedMotion();
   const [titleSearch, setTitleSearch] = useState("");
-  const [selectedAuthor, setSelectedAuthor] = useState<string>();
+  const [selectedAuthor, setSelectedAuthor] = useState<string | undefined>();
   const [sortOrder, setSortOrder] = useState<SortOption>("default");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Memoized filtered news
   const { uniqueAuthors, totalPages, paginatedNews } = useMemo(() => {
     if (!newsList)
       return { uniqueAuthors: [], totalPages: 0, paginatedNews: [] };
 
     const authors = Array.from(new Set(newsList.map((item) => item.author)));
-
     const filtered = newsList
       .filter((item) => {
         const matchesTitle = item.title
           .toLowerCase()
           .includes(titleSearch.toLowerCase());
-        const matchesAuthor = !selectedAuthor || item.author === selectedAuthor;
+        const matchesAuthor =
+          !selectedAuthor || item.author === selectedAuthor;
         return matchesTitle && matchesAuthor;
       })
       .sort((a, b) => {
@@ -65,9 +70,13 @@ export default function NewsPage() {
       startIndex,
       startIndex + ITEMS_PER_PAGE
     );
-
     return { uniqueAuthors: authors, totalPages, paginatedNews };
   }, [newsList, titleSearch, selectedAuthor, sortOrder, currentPage]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [titleSearch, selectedAuthor, sortOrder]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -78,20 +87,17 @@ export default function NewsPage() {
       if (e.key === "ArrowRight" && currentPage < totalPages)
         setCurrentPage((p) => p + 1);
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentPage, totalPages]);
 
-  // Share functionality
-  const handleShare = async (slug: string) => {
+  const handleShare = async (slug: string, title: string) => {
     const url = `${window.location.origin}/news/${slug}`;
     try {
       if (navigator.share) {
-        await navigator.share({ url });
+        await navigator.share({ title, url });
       } else {
         await navigator.clipboard.writeText(url);
-        // Replace with toast implementation
         alert("Link copied to clipboard!");
       }
     } catch (error) {
@@ -99,294 +105,315 @@ export default function NewsPage() {
     }
   };
 
-  if (newsList === undefined) {
-    return (
-      <div
-        className='w-full min-h-96 flex items-center justify-center'
-        aria-live='polite'>
-        <Minus className='animate-spin mr-3' aria-hidden='true' />
-        <span>Loading news articles...</span>
-      </div>
-    );
-  }
+  const clearFilters = () => {
+    setTitleSearch("");
+    setSelectedAuthor(undefined);
+    setSortOrder("default");
+  };
+
+  const hasActiveFilters = !!(
+    titleSearch ||
+    selectedAuthor ||
+    sortOrder !== "default"
+  );
 
   return (
-    <div className='w-full min-h-screen px-4 py-12 bg-gray-100 dark:bg-gray-950'>
-      <div className='max-w-5xl mx-auto'>
-        <motion.h1
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className='text-3xl sm:text-4xl font-bold mb-12 text-center'>
-          Latest Updates
-        </motion.h1>
+    <div className='min-h-screen bg-background'>
+      {/* ── Hero ───────────────────────────────────────────────────────── */}
+      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+        <div
+          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
+          aria-hidden='true'
+        />
+        <div
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          aria-hidden='true'
+        />
+        <div
+          className='absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-white/5 blur-3xl pointer-events-none'
+          aria-hidden='true'
+        />
+        <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+            News &amp; Updates
+          </span>
+          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+            Latest from GO University
+          </h1>
+          <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
+            Stay informed with the latest research breakthroughs, campus
+            announcements, and academic milestones from our postgraduate school.
+          </p>
+        </div>
+      </section>
 
-        {/* Filter Controls */}
-        <section aria-label='News filters' className='space-y-8 mb-12'>
-          <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-4'>
-            {/* Title Search */}
-            <div className='space-y-1'>
-              <label
-                htmlFor='search'
-                className='text-sm font-medium text-foreground/80'>
-                Search by Title
-              </label>
-              <div className='relative'>
-                <Input
-                  id='search'
-                  placeholder='Type to search...'
-                  value={titleSearch}
-                  onChange={(e) => setTitleSearch(e.target.value)}
-                  className='bg-background pr-10 py-5'
-                  aria-label='Search news articles'
-                />
-                {titleSearch && (
-                  <button
-                    onClick={() => setTitleSearch("")}
-                    className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
-                    aria-label='Clear search'>
-                    <X className='h-4 w-4' />
-                  </button>
-                )}
-              </div>
+      <section className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12'>
+        {/* ── Filter Panel ─────────────────────────────────────────────── */}
+        <div
+          className='rounded-2xl border border-border bg-card p-5 mb-8 space-y-4'
+          aria-label='News filters'>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+            {/* Search */}
+            <div className='relative'>
+              <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none' />
+              <Input
+                placeholder='Search articles…'
+                value={titleSearch}
+                onChange={(e) => setTitleSearch(e.target.value)}
+                className='pl-9 pr-9'
+                aria-label='Search news articles'
+              />
+              {titleSearch && (
+                <button
+                  onClick={() => setTitleSearch("")}
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
+                  aria-label='Clear search'>
+                  <X className='h-4 w-4' />
+                </button>
+              )}
             </div>
 
-            {/* Author Filter */}
-            <div className='space-y-1'>
-              <label
-                htmlFor='author'
-                className='text-sm font-medium text-foreground/80'>
-                Filter by Author
-              </label>
-              <Select
-                value={selectedAuthor}
-                onValueChange={(value: string) =>
-                  setSelectedAuthor(value === "all" ? undefined : value)
-                }>
-                <SelectTrigger id='author' className='bg-background py-5'>
-                  <SelectValue placeholder='All authors' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='all'>All Authors</SelectItem>
-                  {uniqueAuthors.map((author) => (
-                    <SelectItem key={author} value={author}>
-                      {author}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Author filter */}
+            <Select
+              value={selectedAuthor ?? "all"}
+              onValueChange={(v) =>
+                setSelectedAuthor(v === "all" ? undefined : v)
+              }>
+              <SelectTrigger aria-label='Filter by author'>
+                <SelectValue placeholder='All Authors' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='all'>All Authors</SelectItem>
+                {uniqueAuthors.map((author) => (
+                  <SelectItem key={author} value={author}>
+                    {author}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-            {/* View Sorting */}
-            <div className='space-y-1'>
-              <label
-                htmlFor='sort'
-                className='text-sm font-medium text-foreground/80'>
-                Sort by Views
-              </label>
-              <Select
-                value={sortOrder}
-                onValueChange={(value: SortOption) => setSortOrder(value)}>
-                <SelectTrigger id='sort' className='bg-background py-5'>
-                  <SelectValue placeholder='Sort order' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='default'>Default Order</SelectItem>
-                  <SelectItem value='views_desc'>Most Views</SelectItem>
-                  <SelectItem value='views_asc'>Fewest Views</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Sort */}
+            <Select
+              value={sortOrder}
+              onValueChange={(v: SortOption) => setSortOrder(v)}>
+              <SelectTrigger aria-label='Sort articles'>
+                <SelectValue placeholder='Sort order' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='default'>Default Order</SelectItem>
+                <SelectItem value='views_desc'>Most Views</SelectItem>
+                <SelectItem value='views_asc'>Fewest Views</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          {/* Active Filters Display */}
-          {(titleSearch || selectedAuthor || sortOrder !== "default") && (
+          {/* Active filter chips */}
+          {hasActiveFilters && (
             <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              className='flex flex-wrap gap-2 items-center'>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() => {
-                  setTitleSearch("");
-                  setSelectedAuthor(undefined);
-                  setSortOrder("default");
-                }}
-                className='text-destructive hover:text-destructive/80'>
-                <X className='mr-2 h-4 w-4' />
-                Clear All Filters
-              </Button>
-
+              className='flex flex-wrap gap-2 items-center pt-1'>
+              <button
+                onClick={clearFilters}
+                className='text-xs text-destructive hover:text-destructive/80 flex items-center gap-1 font-medium'>
+                <X className='w-3 h-3' /> Clear all
+              </button>
               {titleSearch && (
-                <Badge variant='outline' className='px-3 py-1'>
-                  Title: {titleSearch}
+                <span className='inline-flex items-center gap-1.5 text-xs bg-muted border border-border rounded-full px-3 py-1'>
+                  Search: {titleSearch}
                   <button
                     onClick={() => setTitleSearch("")}
-                    className='ml-2'
                     aria-label='Remove title filter'>
                     <X className='h-3 w-3' />
                   </button>
-                </Badge>
+                </span>
               )}
-
               {selectedAuthor && (
-                <Badge variant='outline' className='px-3 py-1'>
+                <span className='inline-flex items-center gap-1.5 text-xs bg-muted border border-border rounded-full px-3 py-1'>
                   Author: {selectedAuthor}
                   <button
                     onClick={() => setSelectedAuthor(undefined)}
-                    className='ml-2'
                     aria-label='Remove author filter'>
                     <X className='h-3 w-3' />
                   </button>
-                </Badge>
+                </span>
               )}
-
               {sortOrder !== "default" && (
-                <Badge variant='outline' className='px-3 py-1'>
+                <span className='inline-flex items-center gap-1.5 text-xs bg-muted border border-border rounded-full px-3 py-1'>
                   Sort:{" "}
                   {sortOrder === "views_desc" ? "Most Views" : "Fewest Views"}
                   <button
                     onClick={() => setSortOrder("default")}
-                    className='ml-2'
                     aria-label='Remove sort filter'>
                     <X className='h-3 w-3' />
                   </button>
-                </Badge>
+                </span>
               )}
             </motion.div>
           )}
-        </section>
+        </div>
 
-        {/* News Grid */}
-        <section aria-label='News articles list'>
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6'>
-            {paginatedNews.length > 0 ? (
-              paginatedNews.map((news, index) => (
-                <motion.article
-                  key={news._id}
-                  initial={
-                    shouldReduceMotion
-                      ? false
-                      : { opacity: 0, y: 50, scale: 0.98 }
-                  }
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    delay: index * 0.1,
-                    type: "spring",
-                    stiffness: 120,
-                  }}
-                  className='relative'>
-                  <Card className='group h-full flex flex-col overflow-hidden shadow-md hover:shadow-lg dark:bg-gray-900'>
-                    {/* Image Section */}
-                    <div className='relative aspect-[1.91/1] overflow-hidden'>
+        {/* ── News Grid ────────────────────────────────────────────────── */}
+        {newsList === undefined ? (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className='rounded-2xl border border-border overflow-hidden'>
+                <Skeleton className='aspect-[1.91/1] w-full' />
+                <div className='p-4 space-y-2'>
+                  <Skeleton className='h-4 w-full rounded-lg' />
+                  <Skeleton className='h-4 w-4/5 rounded-lg' />
+                  <div className='flex justify-between pt-2'>
+                    <Skeleton className='h-3 w-20 rounded-full' />
+                    <Skeleton className='h-3 w-16 rounded-full' />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : paginatedNews.length === 0 ? (
+          <div className='flex flex-col items-center justify-center py-24 text-center gap-3'>
+            <div className='w-16 h-16 rounded-2xl bg-muted flex items-center justify-center'>
+              <Newspaper className='w-8 h-8 text-muted-foreground/40' />
+            </div>
+            <p className='text-lg font-semibold text-foreground'>
+              No articles found
+            </p>
+            <p className='text-sm text-muted-foreground'>
+              {hasActiveFilters
+                ? "Try adjusting your filters."
+                : "Check back later for updates."}
+            </p>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className='mt-1 text-sm text-primary hover:underline font-semibold'>
+                Clear all filters
+              </button>
+            )}
+          </div>
+        ) : (
+          <section aria-label='News articles'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
+              <AnimatePresence mode='wait'>
+                {paginatedNews.map((news, index) => (
+                  <motion.article
+                    key={news._id}
+                    initial={
+                      shouldReduceMotion
+                        ? false
+                        : { opacity: 0, y: 24, scale: 0.98 }
+                    }
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      delay: index * 0.06,
+                      type: "spring",
+                      stiffness: 140,
+                      damping: 20,
+                    }}
+                    className='group flex flex-col rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300'>
+                    {/* Cover image */}
+                    <div className='relative aspect-[1.91/1] overflow-hidden bg-muted flex-shrink-0'>
                       {news.coverImage ? (
                         <Image
                           src={news.coverImage}
                           alt={news.title}
                           fill
-                          className='object-cover transition-transform duration-500 group-hover:scale-105'
-                          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                          className='object-cover object-top transition-transform duration-500 group-hover:scale-105'
+                          sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                           priority={index < 3}
                         />
                       ) : (
                         <div
                           className='absolute inset-0 bg-gradient-to-br from-primary/10 to-muted/30 flex items-center justify-center'
                           aria-hidden='true'>
-                          <CameraOff className='w-8 h-8 text-muted-foreground/50' />
+                          <CameraOff className='w-8 h-8 text-muted-foreground/40' />
                         </div>
                       )}
-                      <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent' />
+                      <div className='absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent' />
 
-                      {/* Article Meta */}
-                      <div className='absolute bottom-4 left-4 right-4 text-white'>
-                        <p className='text-sm font-medium'>{news.author}</p>
-                        <div className='flex justify-between items-center'>
+                      {/* Multi-image badge */}
+                      {news.images && news.images.length > 1 && (
+                        <div className='absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-full'>
+                          <Images className='w-3 h-3' />
+                          {news.images.length}
+                        </div>
+                      )}
+
+                      {/* Overlay meta */}
+                      <div className='absolute bottom-0 left-0 right-0 p-4'>
+                        <p className='text-white/90 text-xs font-medium truncate'>
+                          {news.author}
+                        </p>
+                        <div className='flex items-center justify-between mt-0.5'>
                           <time
-                            className='text-xs text-primary-100/90'
+                            className='text-white/70 text-xs'
                             dateTime={dayjs(news._creationTime).format(
                               "YYYY-MM-DD"
                             )}>
                             {dayjs(news._creationTime).format("MMM DD, YYYY")}
                           </time>
-                          <Badge
-                            variant='secondary'
-                            className='py-1 px-2 text-xs bg-black/30 backdrop-blur-sm'>
-                            {news.views.toLocaleString()} views
-                          </Badge>
+                          <span className='flex items-center gap-1 text-white/70 text-xs'>
+                            <Eye className='w-3 h-3' />
+                            {news.views.toLocaleString()}
+                          </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className='flex-1 flex flex-col p-4 space-y-3'>
-                      <h2 className='font-semibold line-clamp-2 leading-snug'>
+                    {/* Body */}
+                    <div className='flex flex-col flex-1 p-4'>
+                      <h2 className='font-semibold text-foreground text-sm leading-snug line-clamp-2 mb-3'>
                         {news.title}
                       </h2>
-
                       {news.updatedOn && (
-                        <div className='text-sm text-muted-foreground'>
-                          <time
-                            dateTime={dayjs(news.updatedOn).format(
-                              "YYYY-MM-DD"
-                            )}>
-                            Updated{" "}
-                            {dayjs(news.updatedOn).format("MMM DD, YYYY")}
-                          </time>
-                        </div>
+                        <p className='text-xs text-muted-foreground mb-3'>
+                          Updated{" "}
+                          {dayjs(news.updatedOn).format("MMM DD, YYYY")}
+                        </p>
                       )}
-
-                      {/* Action Bar */}
-                      <div className='mt-auto pt-3 flex items-center justify-between border-t border-muted/20'>
-                        <Button
-                          asChild
-                          variant='ghost'
-                          size='sm'
-                          className='rounded-full px-4 hover:bg-primary/10'>
-                          <Link
-                            href={`/news/${news.slug}`}
-                            className='flex items-center gap-2 text-primary'
-                            aria-label={`Read more about ${news.title}`}>
-                            Read More
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              width='16'
-                              height='16'
-                              viewBox='0 0 24 24'
-                              fill='none'
-                              stroke='currentColor'
-                              strokeWidth='2'
-                              className='opacity-80 group-hover:translate-x-1 transition-transform'>
-                              <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3'
-                              />
-                            </svg>
-                          </Link>
-                        </Button>
-
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='rounded-full hover:bg-muted/30'
-                          onClick={() => handleShare(news.slug)}
+                      <div className='mt-auto pt-3 flex items-center justify-between border-t border-border/50'>
+                        <Link
+                          href={`/news/${news.slug}`}
+                          className='text-xs font-semibold text-primary hover:underline flex items-center gap-1.5'
+                          aria-label={`Read more about ${news.title}`}>
+                          Read More
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='12'
+                            height='12'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            strokeWidth='2.5'
+                            className='group-hover:translate-x-0.5 transition-transform'
+                            aria-hidden='true'>
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3'
+                            />
+                          </svg>
+                        </Link>
+                        <button
+                          onClick={() => handleShare(news.slug, news.title)}
+                          className='flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors'
                           aria-label='Share article'>
-                          <Share2 className='w-4 h-4' /> Share
-                        </Button>
+                          <Share2 className='w-3.5 h-3.5' />
+                          Share
+                        </button>
                       </div>
                     </div>
-                  </Card>
-                </motion.article>
-              ))
-            ) : (
-              <div className='col-span-full text-center py-12'>
-                <p className='text-muted-foreground'>No articles found</p>
-              </div>
-            )}
-          </div>
-        </section>
+                  </motion.article>
+                ))}
+              </AnimatePresence>
+            </div>
+          </section>
+        )}
 
-        {/* Pagination */}
+        {/* ── Pagination ───────────────────────────────────────────────── */}
         {totalPages > 1 && (
           <motion.nav
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
@@ -407,13 +434,11 @@ export default function NewsPage() {
                     }
                   />
                 </PaginationItem>
-
                 <PaginationItem>
-                  <span className='px-4 h-10 text-sm font-medium'>
+                  <span className='px-4 h-10 flex items-center text-sm font-medium text-muted-foreground'>
                     Page {currentPage} of {totalPages}
                   </span>
                 </PaginationItem>
-
                 <PaginationItem>
                   <PaginationNext
                     onClick={(e) => {
@@ -433,7 +458,7 @@ export default function NewsPage() {
             </Pagination>
           </motion.nav>
         )}
-      </div>
+      </section>
     </div>
   );
 }

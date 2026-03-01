@@ -26,7 +26,7 @@ export function Logo({
         />
         <div className={`leading-4 tracking-tight  ${classnames}`}>
           <p>{text_one}</p>
-          <p>{text_two}</p>
+          <p className='text-muted-foreground mt-1'>{text_two}</p>
         </div>
       </>
     </Link>

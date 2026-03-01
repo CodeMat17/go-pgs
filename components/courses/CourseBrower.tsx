@@ -1,257 +1,264 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { motion } from "framer-motion";
-import { BookOpen, Clock, X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { BookOpen, Clock, GraduationCap, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { Badge } from "../ui/badge";
-import { Input } from "../ui/input";
 
-type Faculty = (typeof faculties)[number];
+// ── Types ──────────────────────────────────────────────────────────────────
 type CourseLevel = "all" | "pgd" | "masters" | "phd";
-const courseLevels: CourseLevel[] = ["all", "pgd", "masters", "phd"];
 
-const faculties = [
-  "Faculty of Arts",
-  "Faculty of Education",
-  "Faculty of Mgt. & Social Sciences",
-  "Faculty of Nat. Science & Environmental Studies",
-  "Faculty of Law",
-] as const;
+const courseLevels: { value: CourseLevel; label: string }[] = [
+  { value: "all", label: "All Programs" },
+  { value: "pgd", label: "PGD" },
+  { value: "masters", label: "Masters" },
+  { value: "phd", label: "PhD" },
+];
 
-// Add type guard validation
-const isValidCourseLevel = (value: string): value is CourseLevel => {
-  return courseLevels.includes(value as CourseLevel);
+const levelAccent: Record<string, string> = {
+  pgd: "bg-blue-500",
+  masters: "bg-violet-500",
+  phd: "bg-emerald-500",
 };
 
-const levelConfig = {
-  all: "All Programs",
-  pgd: "PGD",
-  masters: "Masters",
-  phd: "PhD",
-} as const;
+const levelBadge: Record<string, string> = {
+  pgd: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  masters:
+    "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+  phd: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+};
 
-export default function CourseBrowser() {
-  const [selectedFaculty, setSelectedFaculty] = useState<Faculty | "all">(
-    "all"
+// ── Pill button helper ─────────────────────────────────────────────────────
+function Pill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-150 whitespace-nowrap ${
+        active
+          ? "bg-primary text-primary-foreground border-primary"
+          : "bg-background text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
+      }`}>
+      {children}
+    </button>
   );
-  const [selectedProgram, setSelectedProgram] = useState<CourseLevel>("all");
+}
+
+// ── Main component ─────────────────────────────────────────────────────────
+export default function CourseBrowser() {
+  const [selectedFaculty, setSelectedFaculty] = useState<string>("all");
+  const [selectedLevel, setSelectedLevel] = useState<CourseLevel>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const allCourses = useQuery(api.courses.getAllCourses);
-  const isLoading = allCourses === undefined;
+  const faculties = useQuery(api.faculties.getFaculties);
+  const isLoading = allCourses === undefined || faculties === undefined;
 
-  // Client-side filtering
   const filteredCourses =
     allCourses?.filter((course) => {
       const matchesFaculty =
         selectedFaculty === "all" || course.faculty === selectedFaculty;
-      const matchesProgram =
-        selectedProgram === "all" || course.type === selectedProgram;
+      const matchesLevel =
+        selectedLevel === "all" || course.type === selectedLevel;
       const matchesSearch = course.course
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-
-      return matchesFaculty && matchesProgram && matchesSearch;
+      return matchesFaculty && matchesLevel && matchesSearch;
     }) ?? [];
 
-  // Clear all filters
+  const hasActiveFilters =
+    selectedFaculty !== "all" || selectedLevel !== "all" || !!searchQuery;
+
   const clearFilters = () => {
     setSelectedFaculty("all");
-    setSelectedProgram("all");
+    setSelectedLevel("all");
     setSearchQuery("");
   };
 
   return (
-    <div className='space-y-8 max-w-7xl mx-auto'>
-      {/* Filter Controls */}
-      <div className='grid grid-cols-1 md:grid-cols-4 gap-3'>
-        <div className='space-y-2'>
-          <label className='block text-sm font-medium'>Faculty</label>
-          <Select
-            value={selectedFaculty}
-            onValueChange={(value: Faculty | "all") =>
-              setSelectedFaculty(value)
-            }>
-            <SelectTrigger className='w-full h-10 bg-white dark:bg-gray-700'>
-              <SelectValue placeholder='Select faculty' />
-            </SelectTrigger>
-            <SelectContent className='dark:bg-gray-700'>
-              <SelectItem value='all'>All Faculties</SelectItem>
-              {faculties.map((faculty) => (
-                <SelectItem key={faculty} value={faculty} className='py-2'>
-                  {faculty.replace("Faculty of ", "")}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <div className='space-y-8'>
+      {/* ── Filter panel ──────────────────────────────────────────────── */}
+      <div className='bg-card border border-border rounded-2xl p-4 sm:p-6 space-y-5'>
+        {/* Search */}
+        <div className='relative'>
+          <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none' />
+          <Input
+            type='text'
+            placeholder='Search courses…'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className='pl-9 pr-9 h-11 rounded-xl'
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              aria-label='Clear search'
+              className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'>
+              <X className='h-4 w-4' />
+            </button>
+          )}
         </div>
 
-        <div className='space-y-2'>
-          <label className='block text-sm font-medium'>Program Level</label>
-          <Select
-            value={selectedProgram}
-            onValueChange={(value: string) => {
-              if (isValidCourseLevel(value)) {
-                setSelectedProgram(value);
-              }
-            }}>
-            <SelectTrigger className='w-full h-10 bg-white dark:bg-gray-700'>
-              <SelectValue placeholder='Select program' />
-            </SelectTrigger>
-            <SelectContent className='dark:bg-gray-700'>
-              {courseLevels.map((level) => (
-                <SelectItem key={level} value={level} className='py-2'>
-                  {levelConfig[level]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className='space-y-2 md:col-span-2'>
-          <label className='block text-sm font-medium'>Search Courses</label>
-          <div className='relative'>
-            <Input
-              type='text'
-              placeholder='Search course titles...'
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className='w-full h-10 bg-white dark:bg-gray-700'
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'>
-                <X className='h-4 w-4' />
-              </button>
-            )}
+        {/* Program level pills */}
+        <div>
+          <p className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2.5'>
+            Program Level
+          </p>
+          <div className='flex flex-wrap gap-2'>
+            {courseLevels.map(({ value, label }) => (
+              <Pill
+                key={value}
+                active={selectedLevel === value}
+                onClick={() => setSelectedLevel(value)}>
+                {label}
+              </Pill>
+            ))}
           </div>
         </div>
+
+        {/* Faculty pills — fetched from DB */}
+        <div>
+          <p className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2.5'>
+            Faculty
+          </p>
+          {faculties === undefined ? (
+            <div className='flex flex-wrap gap-2'>
+              {[...Array(5)].map((_, i) => (
+                <Skeleton key={i} className='h-8 w-36 rounded-full' />
+              ))}
+            </div>
+          ) : (
+            <div className='flex flex-wrap gap-2'>
+              <Pill
+                active={selectedFaculty === "all"}
+                onClick={() => setSelectedFaculty("all")}>
+                All Faculties
+              </Pill>
+              {faculties.map((faculty) => (
+                <Pill
+                  key={faculty._id}
+                  active={selectedFaculty === faculty.name}
+                  onClick={() => setSelectedFaculty(faculty.name)}>
+                  {faculty.name.replace("Faculty of ", "")}
+                </Pill>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Active filters footer */}
+        {hasActiveFilters && (
+          <div className='flex items-center gap-2 pt-1 border-t border-border'>
+            <span className='text-xs text-muted-foreground'>
+              {filteredCourses.length} result
+              {filteredCourses.length !== 1 ? "s" : ""}
+            </span>
+            <button
+              onClick={clearFilters}
+              className='ml-auto text-xs text-primary hover:underline font-semibold'>
+              Clear all filters
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Active Filters */}
-      {(selectedFaculty !== "all" ||
-        selectedProgram !== "all" ||
-        searchQuery) && (
-        <div className='flex items-center gap-3 flex-wrap'>
-          <span className='text-sm text-muted-foreground'>Active filters:</span>
-          {selectedFaculty !== "all" && (
-            <Badge variant='outline' className='gap-2'>
-              {selectedFaculty.replace("Faculty of ", "")}
-              <button onClick={() => setSelectedFaculty("all")}>
-                <X className='h-3 w-3' />
-              </button>
-            </Badge>
-          )}
-          {selectedProgram !== "all" && (
-            <Badge variant='outline' className='gap-2'>
-              {levelConfig[selectedProgram]}
-              <button onClick={() => setSelectedProgram("all")}>
-                <X className='h-3 w-3' />
-              </button>
-            </Badge>
-          )}
-          {searchQuery && (
-            <Badge variant='outline' className='gap-2'>
-              {searchQuery}
-              <button onClick={() => setSearchQuery("")}>
-                <X className='h-3 w-3' />
-              </button>
-            </Badge>
-          )}
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={clearFilters}
-            className='text-primary hover:bg-accent'>
-            Clear all
-          </Button>
-        </div>
-      )}
-
-      {/* Course Grid */}
+      {/* ── Results ───────────────────────────────────────────────────── */}
       {isLoading ? (
-        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <div className='grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'>
           {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className='h-48 w-full rounded-xl' />
+            <Skeleton key={i} className='h-52 w-full rounded-2xl' />
           ))}
         </div>
       ) : filteredCourses.length === 0 ? (
-        <div className='text-center py-12 text-muted-foreground'>
-          No courses found matching your criteria
+        <div className='flex flex-col items-center justify-center py-24 text-center gap-3'>
+          <div className='w-16 h-16 rounded-2xl bg-muted flex items-center justify-center'>
+            <GraduationCap className='w-8 h-8 text-muted-foreground/50' />
+          </div>
+          <p className='text-lg font-semibold text-foreground'>
+            No courses found
+          </p>
+          <p className='text-sm text-muted-foreground max-w-xs'>
+            Try adjusting your filters or search term.
+          </p>
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className='mt-1 text-sm text-primary hover:underline font-semibold'>
+              Clear all filters
+            </button>
+          )}
         </div>
       ) : (
-        <motion.div
-          className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}>
-          {filteredCourses.map((course) => (
-            <motion.div
-              key={course._id}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3 }}>
-              <Card className=' hover:shadow-lg transition-shadow h-full flex flex-col bg-purple-200 dark:bg-gray-700'>
-                <CardHeader>
-                  <CardTitle className='font-semibold text-lg'>
-                    {course.course}
-                  </CardTitle>
-                </CardHeader>
-                <div className='flex-1 space-y-4 px-6 py-4 mx-1 mb-1 rounded-xl bg-purple-50 dark:bg-gray-800'>
-                  <div className='flex flex-col h-full'>
-                    {/* Added flex container */}
-                    <div className='flex-1 space-y-2 text-muted-foreground mb-4'>
-                      {" "}
-                      {/* Added flex-1 and mb-4 */}
-                      <div className='space-y-1'>
-                        <div className='flex items-center gap-2'>
-                          <BookOpen className='h-4 w-4 text-blue-500 shrink-0' />
-                          <span>{course.faculty}</span>
-                        </div>
-                        <div className='flex items-center gap-2'>
-                          <Clock className='h-4 w-4 text-amber-500' />
-                          <span>{course.duration}</span>
-                        </div>
+        <AnimatePresence mode='wait'>
+          <motion.div
+            key={`${selectedFaculty}-${selectedLevel}-${searchQuery}`}
+            className='grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}>
+            {filteredCourses.map((course, i) => (
+              <motion.div
+                key={course._id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.04 }}>
+                <Link
+                  href={`/courses/${course.slug}`}
+                  className='group flex flex-col h-full rounded-2xl border border-border bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden'>
+                  {/* Level accent bar */}
+                  <div
+                    className={`h-1 w-full ${levelAccent[course.type] ?? "bg-primary"}`}
+                  />
+
+                  <div className='flex flex-col flex-1 p-5'>
+                    {/* Level badge */}
+                    <span
+                      className={`self-start text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full mb-3 ${levelBadge[course.type] ?? ""}`}>
+                      {course.type.toUpperCase()}
+                    </span>
+
+                    {/* Course title */}
+                    <h3 className='font-semibold text-base text-foreground leading-snug mb-4 group-hover:text-primary transition-colors'>
+                      {course.course}
+                    </h3>
+
+                    {/* Meta info */}
+                    <div className='mt-auto space-y-1.5 text-sm text-muted-foreground'>
+                      <div className='flex items-center gap-2'>
+                        <BookOpen className='w-3.5 h-3.5 shrink-0' />
+                        <span className='truncate'>
+                          {course.faculty.replace("Faculty of ", "")}
+                        </span>
+                      </div>
+                      <div className='flex items-center gap-2'>
+                        <Clock className='w-3.5 h-3.5 shrink-0' />
+                        <span>{course.duration}</span>
                       </div>
                     </div>
-                    {/* Base container - now at bottom */}
-                    <div className='mt-auto'>
-                      {/* Added mt-auto */}
-                      <div className='flex items-center justify-between gap-2'>
-                        <Badge className='font-medium px-4 py-1 rounded-full'>
-                          {course.type.toUpperCase()}
-                        </Badge>
-                        <Link
-                          href={`/courses/${course.slug}`}
-                          className='block'>
-                          <Button
-                            className='w-full rounded-full'
-                            variant='outline'>
-                            View Details
-                          </Button>
-                        </Link>
-                      </div>
+
+                    {/* Footer link */}
+                    <div className='mt-4 pt-3 border-t border-border'>
+                      <span className='text-xs font-semibold text-primary group-hover:underline'>
+                        View course details →
+                      </span>
                     </div>
                   </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       )}
     </div>
   );

@@ -1,9 +1,7 @@
 // convex/news.ts
 import { v } from "convex/values";
+import { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
-
-
-
 
 export const getNewsList = query({
   handler: async (ctx) => {
@@ -15,6 +13,7 @@ export const getNewsList = query({
       title: doc.title,
       slug: doc.slug,
       coverImage: doc.coverImage,
+      images: doc.images,
       author: doc.author,
       views: doc.views,
       updatedOn: doc.updatedOn,
@@ -58,7 +57,7 @@ export const addNews = mutation({
     title: v.string(),
     author: v.string(),
     content: v.string(),
-    storageId: v.optional(v.id("_storage")),
+    storageIds: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
     const slug = args.title
@@ -67,9 +66,18 @@ export const addNews = mutation({
       .replace(/^-+|-+$/g, "")
       .slice(0, 60);
 
-    const coverImage = args.storageId
-      ? (await ctx.storage.getUrl(args.storageId)) || ""
-      : "";
+    // Resolve all storageIds to URLs
+    const images: { url: string; storageId: Id<"_storage"> }[] = [];
+    if (args.storageIds && args.storageIds.length > 0) {
+      for (const storageId of args.storageIds) {
+        const url = await ctx.storage.getUrl(storageId);
+        if (url) {
+          images.push({ url, storageId });
+        }
+      }
+    }
+
+    const coverImage = images.length > 0 ? images[0].url : "";
 
     await ctx.db.insert("news", {
       title: args.title,
@@ -77,6 +85,7 @@ export const addNews = mutation({
       author: args.author,
       content: args.content,
       coverImage,
+      images: images.length > 0 ? images : undefined,
       views: 0,
     });
   },
@@ -88,7 +97,7 @@ export const updateNews = mutation({
     title: v.string(),
     author: v.string(),
     content: v.string(),
-    storageId: v.optional(v.id("_storage")),
+    storageIds: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db.get(args.id);
@@ -96,12 +105,21 @@ export const updateNews = mutation({
       throw new Error("News item not found");
     }
 
-    let coverImage: string | undefined = existing.coverImage;
+    // Resolve new images if provided, otherwise keep existing
+    let images = existing.images;
+    let coverImage = existing.coverImage;
 
-    if (args.storageId && args.storageId !== existing.storageId) {
-      const url = await ctx.storage.getUrl(args.storageId);
-      if (url) {
-        coverImage = url;
+    if (args.storageIds && args.storageIds.length > 0) {
+      const resolved: { url: string; storageId: Id<"_storage"> }[] = [];
+      for (const storageId of args.storageIds) {
+        const url = await ctx.storage.getUrl(storageId);
+        if (url) {
+          resolved.push({ url, storageId });
+        }
+      }
+      if (resolved.length > 0) {
+        images = resolved;
+        coverImage = resolved[0].url;
       }
     }
 
@@ -110,7 +128,7 @@ export const updateNews = mutation({
       author: args.author,
       content: args.content,
       coverImage,
-      storageId: args.storageId ?? existing.storageId,
+      images,
       updatedOn: new Date().toISOString(),
     });
   },

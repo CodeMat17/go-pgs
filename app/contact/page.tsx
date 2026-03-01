@@ -1,38 +1,15 @@
-
 import ContactDetails from "@/components/contact/ContactDetails";
 import { Metadata } from "next";
 
-
 export const metadata: Metadata = {
-  title: "Contact Postgraduate Admissions Office",
-  description: "Get in touch with our postgraduate admissions team",
-  keywords: ["postgraduate school contact", "admissions office"],
-  openGraph: {
-    title: "Contact GO University Postgraduate School",
-    description: "Get in touch with our postgraduate admissions team",
-    images: [
-      {
-        url: "/contact/opengraph-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "GO University Postgraduate Contact",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contact GO University Postgraduate School",
-    description: "Get in touch with our postgraduate admissions team",
-    images: ["https://pg.gouni.edu.ng/contact/opengraph-image.jpg"],
-  },
+  title: "Contact Us | GO University Postgraduate School",
+  description:
+    "Reach out to the GO University Postgraduate School admissions, research, and student support teams. We are here to help you every step of the way.",
   alternates: {
     canonical: "https://pg.gouni.edu.ng/contact",
   },
 };
 
 export default function ContactPage() {
-
-  return (
-  <ContactDetails />
-  );
+  return <ContactDetails />;
 }

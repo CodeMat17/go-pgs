@@ -18,17 +18,20 @@ import type * as alternativeAdmissions from "../alternativeAdmissions.js";
 import type * as alumni from "../alumni.js";
 import type * as contactUs from "../contactUs.js";
 import type * as courses from "../courses.js";
+import type * as faculties from "../faculties.js";
 import type * as fees from "../fees.js";
 import type * as getAllContent from "../getAllContent.js";
 import type * as gpc from "../gpc.js";
 import type * as hero from "../hero.js";
 import type * as howToApply from "../howToApply.js";
+import type * as lectureTimetable from "../lectureTimetable.js";
 import type * as materials from "../materials.js";
 import type * as mission from "../mission.js";
 import type * as news from "../news.js";
 import type * as programs from "../programs.js";
 import type * as staff from "../staff.js";
 import type * as students from "../students.js";
+import type * as timetable from "../timetable.js";
 import type * as vision from "../vision.js";
 
 /**
@@ -45,17 +48,20 @@ declare const fullApi: ApiFromModules<{
   alumni: typeof alumni;
   contactUs: typeof contactUs;
   courses: typeof courses;
+  faculties: typeof faculties;
   fees: typeof fees;
   getAllContent: typeof getAllContent;
   gpc: typeof gpc;
   hero: typeof hero;
   howToApply: typeof howToApply;
+  lectureTimetable: typeof lectureTimetable;
   materials: typeof materials;
   mission: typeof mission;
   news: typeof news;
   programs: typeof programs;
   staff: typeof staff;
   students: typeof students;
+  timetable: typeof timetable;
   vision: typeof vision;
 }>;
 export declare const api: FilterApi<

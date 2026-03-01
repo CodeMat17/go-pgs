@@ -29,7 +29,8 @@ export function Nav() {
       subLinks: [
         { name: "Courses", href: "/courses" },
         { name: "Course Materials", href: "/course-materials" },
-        {name: 'Fees', href: '/fees'},
+        { name: "Fees", href: "/fees" },
+        { name: "Exam Timetable", href: "/timetable" },
       ],
     },
     {
@@ -67,7 +68,7 @@ export function Nav() {
       <div className='flex h-[68px] items-center justify-between px-3 sm:px-6 lg:px-8'>
         <Logo
           text_one='Godfrey Okoye University'
-          text_two='School of Postgraduate Studies'
+          text_two='SPgS'
           classnames='sm:font-semibold'
           width={50}
           height={50}
@@ -121,7 +122,7 @@ export function Nav() {
           <ThemeToggle />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className='lg:hidden'>
-              <AlignRightIcon className='h-8 w-8 text-3xl font-bold' />
+              <AlignRightIcon className='h-6 w-6 text-3xl font-bold' />
             </SheetTrigger>
             <SheetContent side='right' className='w-[300px] sm:w-[400px]'>
               <div className='flex flex-col h-full pt-8'>
