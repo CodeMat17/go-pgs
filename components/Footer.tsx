@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
+  ArrowUp,
   Clock,
   Facebook,
   Instagram,
@@ -21,97 +22,135 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
+const QUICK_LINKS = [
+  { name: "About Us", href: "/about-us" },
+  { name: "Courses", href: "/courses" },
+  { name: "Requirements", href: "/requirements" },
+  { name: "Research", href: "/research" },
+  { name: "News", href: "/news" },
+  { name: "Alumni", href: "/alumni" },
+  { name: "Administrative Team", href: "/administrative-team" },
+];
+
+const PROGRAMS = [
+  { name: "Postgraduate Diploma (PGD)", href: "/courses" },
+  { name: "Masters Degree", href: "/courses" },
+  { name: "Doctor of Philosophy (PhD)", href: "/courses" },
+];
+
+const SOCIALS = [
+  { icon: Twitter, label: "Twitter", href: "#" },
+  { icon: Facebook, label: "Facebook", href: "#" },
+  { icon: Linkedin, label: "LinkedIn", href: "#" },
+  { icon: Instagram, label: "Instagram", href: "#" },
+];
+
 export default function Footer() {
   const footer = useQuery(api.contactUs.getContactInfo);
-
+  const shouldReduceMotion = useReducedMotion();
   const [email, setEmail] = useState("");
 
-  const handleEmail = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubscribe = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Basic validation
     if (!email || !email.includes("@")) {
-      toast.error("Invalid Email", {
-        description: "Please enter a valid email address",
-      });
+      toast.error("Invalid Email", { description: "Please enter a valid email address" });
       return;
     }
-
     setEmail("");
-    // Show success message
-    toast.success("Subscribed!", {
-      description: "Thank you for joining our newsletter!",
-    });
+    toast.success("Subscribed!", { description: "Thank you for joining our newsletter!" });
   };
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
   return (
-    <footer className='bg-gray-900 text-white border-t'>
-      <div className='w-full px-4 sm:px-6 lg:px-8 pt-4 pb-12'>
-        <Logo text_one='' text_two='' classnames='' width={70} height={70} />
+    <footer className="relative bg-gray-950 text-gray-300 overflow-hidden">
+      {/* Subtle pattern overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{ backgroundImage: "url('/pattern.png')", backgroundSize: "400px" }}
+        aria-hidden="true"
+      />
+      {/* Top accent line */}
+      <div className="h-1 w-full bg-gradient-to-r from-transparent via-[#FFDC55] to-transparent" />
 
-        <div className='w-full grid grid-cols-2 lg:grid-cols-4 gap-8 mt-2'>
-          {/* University Info */}
+      {/* Main content */}
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          {/* ── Column 1: Brand + Contact ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className='col-span-2 md:col-span-1'>
-            <h3 className='text-xl font-medium mb-4'>
-              Godfrey Okoye University{" "}
-              <span className='block'>School of Postgraduate Studies</span>
-            </h3>
-            <div className='space-y-2 mt-2'>
-              <div className='flex items-center gap-2'>
-                <MapPin className='w-4 h-4 shrink-0' />
-                <p className='text-sm'>{footer?.address}</p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Phone className='w-4 h-4 shrink-0' />
-                {footer?.phone?.map((tel, i) => (
-                  <p key={i} className='text-sm'>
-                    {tel.tel1}
-                  </p>
-                ))}
-              </div>
-              <div className='flex items-center gap-2'>
-                <Mail className='w-4 h-4 shrink-0' />
-                {footer?.email?.map((mail, i) => (
-                  <p key={i} className='text-sm'>
-                    {mail.email1}
-                  </p>
-                ))}
-              </div>
-              <div className='flex items-center gap-2'>
-                <Clock className='w-4 h-4 shrink-0' />
-                {footer?.officeHours?.map((days, i) => (
-                  <p key={i} className='text-sm'>
-                    {days.days} : {days.time}
-                  </p>
-                ))}
-              </div>
-            </div>
+            className="sm:col-span-2 lg:col-span-1"
+          >
+            <Logo text_one="" text_two="" classnames="" width={64} height={64} />
+            <p className="mt-3 text-sm font-semibold text-white leading-snug">
+              Godfrey Okoye University
+              <span className="block font-normal text-gray-400">
+                School of Postgraduate Studies
+              </span>
+            </p>
+
+            <ul className="mt-5 space-y-3">
+              {footer?.address && (
+                <li className="flex items-start gap-2.5 text-sm">
+                  <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-[#FFDC55]" />
+                  <span>{footer.address}</span>
+                </li>
+              )}
+              {footer?.phone?.[0] && (
+                <li className="flex items-center gap-2.5 text-sm">
+                  <Phone className="w-4 h-4 shrink-0 text-[#FFDC55]" />
+                  <a
+                    href={`tel:${footer.phone[0].tel1}`}
+                    className="hover:text-[#FFDC55] transition-colors"
+                  >
+                    {footer.phone[0].tel1}
+                  </a>
+                </li>
+              )}
+              {footer?.email?.[0] && (
+                <li className="flex items-center gap-2.5 text-sm">
+                  <Mail className="w-4 h-4 shrink-0 text-[#FFDC55]" />
+                  <a
+                    href={`mailto:${footer.email[0].email1}`}
+                    className="hover:text-[#FFDC55] transition-colors truncate"
+                  >
+                    {footer.email[0].email1}
+                  </a>
+                </li>
+              )}
+              {footer?.officeHours?.[0] && (
+                <li className="flex items-start gap-2.5 text-sm">
+                  <Clock className="w-4 h-4 mt-0.5 shrink-0 text-[#FFDC55]" />
+                  <span>
+                    {footer.officeHours[0].days}
+                    <span className="block text-gray-500">{footer.officeHours[0].time}</span>
+                  </span>
+                </li>
+              )}
+            </ul>
           </motion.div>
 
-          {/* Quick Links */}
+          {/* ── Column 2: Quick Links ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}>
-            <h4 className='text-lg font-medium mb-4'>Quick Links</h4>
-            <ul className='space-y-2'>
-              {[
-                { name: "About Us", href: "/about-us" },
-                { name: "Courses", href: "/courses" },
-                { name: "Requirements", href: "/requirements" },
-                { name: "Research", href: "/research" },
-                { name: "News", href: "/news" },
-                { name: "Alumni", href: "/alumni" },
-                { name: "Administrative Team", href: "/administrative-team" },
-              ].map((link) => (
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">
+              Quick Links
+            </h4>
+            <ul className="space-y-2.5">
+              {QUICK_LINKS.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className='text-sm hover:text-[#FEDA37]'>
+                    className="text-sm hover:text-[#FFDC55] hover:translate-x-1 inline-flex transition-all duration-200"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -119,82 +158,109 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          {/* Courses */}
+          {/* ── Column 3: Programs ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}>
-            <h4 className='text-lg font-medium mb-4'>Programs</h4>
-            <ul className='space-y-2'>
-              {[
-                { name: "PGD", href: "/courses" },
-                { name: "Masters", href: "/courses" },
-                { name: "PhD", href: "/courses" },
-
-                { name: "SEE ALL PROGRAMS", href: "/courses" },
-              ].map((link) => (
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">
+              Programs
+            </h4>
+            <ul className="space-y-2.5">
+              {PROGRAMS.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className={`text-sm hover:text-[#FEDA37] ${link.name === "SEE ALL PROGRAMS" ? "text-[#FEDA37] font-medium" : ""}`}>
+                    className="text-sm hover:text-[#FFDC55] hover:translate-x-1 inline-flex transition-all duration-200"
+                  >
                     {link.name}
                   </Link>
                 </li>
               ))}
-            </ul>
-          </motion.div>
-
-          {/* Social & Newsletter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className='col-span-2 md:col-span-1'>
-            <h4 className='text-lg font-medium mb-4'>Stay Connected</h4>
-            <div className='flex gap-4 mb-6'>
-              {[
-                { icon: Twitter, href: "#" },
-                { icon: Facebook, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Instagram, href: "#" },
-              ].map((social, index) => (
+              <li className="pt-1">
                 <Link
-                  key={index}
-                  href={social.href}
-                  className=' rounded-full overflow-hidden p-2 hover:bg-[#FEDA37]/10 hover:text-[#FEDA37] transition-all duration-300 ease-in'
-                  aria-label={`Follow us on ${social.icon.name}`}>
-                  <social.icon className='w-5 h-5' />
+                  href="/courses"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#FFDC55] hover:underline uppercase tracking-wider"
+                >
+                  See all programmes →
+                </Link>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* ── Column 4: Social + Newsletter ── */}
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-white mb-4">
+              Stay Connected
+            </h4>
+
+            {/* Social icons */}
+            <div className="flex gap-2 mb-7">
+              {SOCIALS.map(({ icon: Icon, label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  aria-label={`Follow us on ${label}`}
+                  className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-700 text-gray-400 hover:border-[#FFDC55] hover:text-[#FFDC55] hover:bg-[#FFDC55]/10 transition-all duration-200"
+                >
+                  <Icon className="w-4 h-4" />
                 </Link>
               ))}
             </div>
 
-            <div className='space-y-4'>
-              <p className='text-sm'>Subscribe to our newsletter</p>
-              <form onSubmit={handleEmail} className='flex gap-2'>
-                <Input
-                  type='email'
-                  value={email}
-                  required
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder='Enter your email'
-                  className='rounded-full'
-                />
-                <Button type='submit' size='sm' className='rounded-full px-6'>
-                  Subscribe
-                </Button>
-              </form>
-            </div>
+            {/* Newsletter */}
+            <p className="text-sm text-gray-400 mb-3">
+              Get updates on admissions and events.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex gap-2">
+              <Input
+                type="email"
+                value={email}
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your email address"
+                className="rounded-full bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-[#FFDC55] text-sm h-9"
+              />
+              <Button
+                type="submit"
+                size="sm"
+                className="rounded-full px-4 bg-[#FFDC55] text-gray-900 font-semibold hover:bg-[#FFDC55]/90 shrink-0 h-9"
+              >
+                Join
+              </Button>
+            </form>
           </motion.div>
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className='border-t border-gray-700 py-6'>
-        <div className='container px-4 sm:px-6 lg:px-8 text-center md:text-left'>
-          <p className='text-sm text-gray-400'>
-            © {new Date().getFullYear()} Godfrey Okoye University Postgraduate
-            School. All rights reserved.
+      {/* ── Bottom bar ── */}
+      <div className="relative border-t border-gray-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-gray-500 text-center sm:text-left">
+            © {new Date().getFullYear()} Godfrey Okoye University Postgraduate School.
+            All rights reserved.
           </p>
+          <div className="flex items-center gap-4">
+            <Link href="/contact" className="text-xs text-gray-500 hover:text-[#FFDC55] transition-colors">
+              Contact Us
+            </Link>
+            <span className="text-gray-700 text-xs">|</span>
+            <button
+              onClick={scrollToTop}
+              aria-label="Back to top"
+              className="flex items-center gap-1 text-xs text-gray-500 hover:text-[#FFDC55] transition-colors"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+              Back to top
+            </button>
+          </div>
         </div>
       </div>
     </footer>
