@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Doc, Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
@@ -13,23 +13,14 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 // Define valid types
-type Faculty = (typeof validFaculties)[number];
 type CourseLevel = (typeof validCourseLevels)[number];
-
-const validFaculties = [
-  "Faculty of Arts",
-  "Faculty of Education",
-  "Faculty of Mgt. & Social Sciences",
-  "Faculty of Nat. Science & Environmental Studies",
-  "Faculty of Law",
-] as const;
 
 const validCourseLevels = ["pgd", "masters", "phd"] as const;
 
 type Material = {
   _id: Id<"materials">;
   _creationTime: number;
-  faculty: Faculty;
+  faculty: string;
   type: CourseLevel;
   title: string;
   semester: 1 | 2;
@@ -40,7 +31,7 @@ type Material = {
 type GPCMaterial = {
   _id: Id<"gpc">;
   _creationTime: number;
-  faculty: Faculty;
+  faculty: string;
   type: CourseLevel;
   title: string;
   semester: 1 | 2;
@@ -51,7 +42,7 @@ type GPCMaterial = {
 
 interface StudentData {
   name: string;
-  faculty: Faculty;
+  faculty: string;
   type: CourseLevel;
 }
 
@@ -93,45 +84,31 @@ export default function CourseMaterials() {
       : "skip"
   );
 
-  // Group materials by semester with proper type validation
-  const isValidSemester = (sem: unknown): sem is 1 | 2 =>
-    sem === 1 || sem === 2;
-
   // Group materials by semester
- const materials = useMemo<MaterialGroup<Material>>(
-   () => ({
-     first: (materialsQuery ?? []).filter(
-       (m): m is Material => isValidSemester(m.semester) && m.semester === 1
-     ),
-     second: (materialsQuery ?? []).filter(
-       (m): m is Material => isValidSemester(m.semester) && m.semester === 2
-     ),
-   }),
-   [materialsQuery]
- );
-
- const gpcMaterials = useMemo<MaterialGroup<GPCMaterial>>(
-   () => ({
-     first: (gpcQuery ?? []).filter(
-       (m): m is GPCMaterial => isValidSemester(m.semester) && m.semester === 1
-     ),
-     second: (gpcQuery ?? []).filter(
-       (m): m is GPCMaterial => isValidSemester(m.semester) && m.semester === 2
-     ),
-   }),
-   [gpcQuery]
- );
-
-  // Loading states
-  const isStudentLoading = useMemo(
-    () => studentQuery === undefined && searchTrigger !== null,
-    [studentQuery, searchTrigger]
+  const materials = useMemo<MaterialGroup<Material>>(
+    () => ({
+      first: (materialsQuery ?? []).filter((m: Doc<"materials">) => m.semester === 1) as Material[],
+      second: (materialsQuery ?? []).filter((m: Doc<"materials">) => m.semester === 2) as Material[],
+    }),
+    [materialsQuery]
   );
 
-  const isLoading =
+  const gpcMaterials = useMemo<MaterialGroup<GPCMaterial>>(
+    () => ({
+      first: (gpcQuery ?? []).filter((m: Doc<"gpc">) => m.semester === 1) as GPCMaterial[],
+      second: (gpcQuery ?? []).filter((m: Doc<"gpc">) => m.semester === 2) as GPCMaterial[],
+    }),
+    [gpcQuery]
+  );
+
+  // Loading states
+  const isStudentLoading = studentQuery === undefined && searchTrigger !== null;
+
+  const isLoading: boolean = !!(
     isStudentLoading ||
     (studentData && materialsQuery === undefined) ||
-    (studentData && gpcQuery === undefined);
+    (studentData && gpcQuery === undefined)
+  );
 
   // Handle student data validation
  useEffect(() => {
@@ -144,18 +121,15 @@ export default function CourseMaterials() {
      return;
    }
 
-   const isValidFaculty = validFaculties.includes(
-     studentQuery.faculty as Faculty
-   );
    const isValidCourseLevel = validCourseLevels.includes(
      studentQuery.type as CourseLevel
    );
 
-   if (isValidFaculty && isValidCourseLevel) {
+   if (isValidCourseLevel) {
      setStudentData({
        name: studentQuery.name,
        faculty: studentQuery.faculty,
-       type: studentQuery.type,
+       type: studentQuery.type as CourseLevel,
      });
    } else {
      setError("Invalid student data format from server");
