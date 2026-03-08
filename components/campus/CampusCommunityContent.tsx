@@ -755,7 +755,7 @@ export default function CampusCommunityContent() {
                 description="Student spotlights will appear here once added."
               />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 gap-5">
                 {spotlights.map((s, i) => (
                   <SpotlightCard
                     key={s._id}
