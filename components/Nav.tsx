@@ -42,7 +42,13 @@ export function Nav() {
         // { name: "Students Data Collection", href: "/pg-students" },
       ],
     },
-    { name: "News", href: "/news" },
+    {
+      name: "News", href: "/news",
+      subLinks: [
+        { name: "News", href: "/news" },
+        { name: "Campus Community", href: "/campus-community" },
+      ],
+     },
     {
       name: "Profiles",
       href: "/profiles",

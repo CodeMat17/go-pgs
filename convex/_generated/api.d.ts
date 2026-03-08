@@ -28,6 +28,7 @@ import type * as lectureTimetable from "../lectureTimetable.js";
 import type * as materials from "../materials.js";
 import type * as mission from "../mission.js";
 import type * as news from "../news.js";
+import type * as postgradPen from "../postgradPen.js";
 import type * as programs from "../programs.js";
 import type * as staff from "../staff.js";
 import type * as students from "../students.js";
@@ -58,6 +59,7 @@ declare const fullApi: ApiFromModules<{
   materials: typeof materials;
   mission: typeof mission;
   news: typeof news;
+  postgradPen: typeof postgradPen;
   programs: typeof programs;
   staff: typeof staff;
   students: typeof students;
