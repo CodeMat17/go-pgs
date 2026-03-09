@@ -9,12 +9,17 @@ import {
   ArrowRight,
   Award,
   BookOpen,
+  Calendar,
   GraduationCap,
   Globe2,
+  Newspaper,
+  User,
   Users2,
 } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import dayjs from "dayjs";
 import { ApplyNow } from "../buttons/ApplyNow";
-import { QuickLinks } from "../QuickLinks";
 
 const DescriptionAnimation = dynamic(() => import("../DescriptionAnimation"), {
   ssr: false,
@@ -51,7 +56,7 @@ function StatCounter({
 
   return (
     <div ref={ref} className="flex flex-col items-center gap-1 py-2">
-      <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white">
+      <span className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white">
         {count.toLocaleString()}{suffix}
       </span>
       <span className="text-xs sm:text-sm text-white/60 font-medium tracking-wide text-center">
@@ -63,10 +68,10 @@ function StatCounter({
 
 // ── Data ───────────────────────────────────────────────────────────────────
 const stats = [
-  { label: "Postgraduate Programs", value: 30, suffix: "+" },
-  { label: "Years of Excellence", value: 15, suffix: "+" },
-  { label: "Graduate Students", value: 2000, suffix: "+" },
-  { label: "Research Publications", value: 500, suffix: "+" },
+  // { label: "Postgraduate Programs", value: 30, suffix: "+" },
+  { label: "Years of Excellence", value: 10, suffix: "+" },
+  { label: "Graduate Students", value: 400, suffix: "+" },
+  { label: "Research Publications", value: 25, suffix: "+" },
 ];
 
 const features = [
@@ -126,6 +131,8 @@ const programs = [
 // ── Main component ─────────────────────────────────────────────────────────
 export default function HomeContent() {
   const shouldReduceMotion = useReducedMotion();
+  const newsList = useQuery(api.news.getNewsList);
+  const recentNews = newsList?.slice(0, 4) ?? [];
 
   return (
     <div className="min-h-screen">
@@ -245,7 +252,7 @@ export default function HomeContent() {
       {/* ── Stats strip — fixed dark, works in both themes ────────────────── */}
       <section className="py-10 sm:py-14 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:divide-x lg:divide-white/10">
+          <div className="grid grid-cols-3 gap-6 sm:gap-8 lg:divide-x lg:divide-white/10">
             {stats.map((stat) => (
               <StatCounter key={stat.label} {...stat} />
             ))}
@@ -362,16 +369,112 @@ export default function HomeContent() {
         </div>
       </section>
 
-      {/* ── Quick Links ───────────────────────────────────────────────────── */}
-      <motion.section
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="py-16 sm:py-20 lg:py-24 bg-background"
-      >
-        <QuickLinks />
-      </motion.section>
+    
+
+      {/* ── Latest News & Engagements ─────────────────────────────────────── */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-muted/40 dark:bg-slate-900/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex items-end justify-between mb-10 sm:mb-12"
+          >
+            <div>
+              <span className="inline-block mb-3 text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground">
+                Latest Updates
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
+                News &amp; Engagements
+              </h2>
+            </div>
+            <Link
+              href="/news"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline shrink-0"
+            >
+              View all <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+
+          {newsList === undefined ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden border border-border bg-card">
+                  <div className="aspect-video bg-muted animate-pulse" />
+                  <div className="p-4 space-y-2">
+                    <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+                    <div className="h-3 bg-muted rounded animate-pulse w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : recentNews.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+              {recentNews.map(({ _id, title, slug, coverImage, author, _creationTime }, i) => (
+                <motion.div
+                  key={_id}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                >
+                  <Link
+                    href={`/news/${slug}`}
+                    className="group flex flex-col h-full rounded-2xl overflow-hidden border border-border bg-card hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className="relative aspect-video bg-muted overflow-hidden">
+                      {coverImage ? (
+                        <Image
+                          src={coverImage}
+                          alt={title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-primary/10">
+                          <Newspaper className="w-8 h-8 text-primary/40" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col flex-1 p-4 gap-2">
+                      <h3 className="font-semibold text-sm leading-snug text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+                        {title}
+                      </h3>
+                      <div className="mt-auto flex items-center gap-3 text-xs text-muted-foreground pt-2 border-t border-border">
+                        <span className="flex items-center gap-1 truncate">
+                          <User className="w-3 h-3 flex-shrink-0" />
+                          <span className="truncate">{author}</span>
+                        </span>
+                        <span className="flex items-center gap-1 shrink-0 ml-auto">
+                          <Calendar className="w-3 h-3 flex-shrink-0" />
+                          {dayjs(_creationTime).format("MMM D, YYYY")}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          ) : null}
+
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className="mt-8 flex justify-center sm:hidden"
+          >
+            <Link
+              href="/news"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+            >
+              View all news <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* ── CTA Banner — fixed dark, works in both themes ─────────────────── */}
       <section className="relative py-16 sm:py-20 lg:py-24 overflow-hidden bg-slate-900">
@@ -394,7 +497,7 @@ export default function HomeContent() {
               <span className="text-[#FFDC55]">Postgraduate Journey?</span>
             </h2>
             <p className="mt-4 text-white/60 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Join thousands of scholars who have chosen GO-PGS for world-class
+              Join hundreds of scholars who have chosen GO-PGS for world-class
               postgraduate education. Your future starts here.
             </p>
 
