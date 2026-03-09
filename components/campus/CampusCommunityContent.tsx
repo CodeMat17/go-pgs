@@ -189,15 +189,23 @@ function SpotlightSheetBody({
         {spotlight.achievement && (
           <div className="flex items-start gap-3 p-4 rounded-xl bg-[#FFDC55]/10 border border-[#FFDC55]/30">
             <Trophy className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
-            <p className="text-sm font-medium text-foreground">
-              {spotlight.achievement}
-            </p>
+            <div className="space-y-2 flex-1">
+              {spotlight.achievement.split(/\n\n+/).map((para, i) => (
+                <p key={i} className="text-sm font-medium text-foreground whitespace-pre-line">
+                  {para.trim()}
+                </p>
+              ))}
+            </div>
           </div>
         )}
 
-        <p className="text-muted-foreground text-sm leading-relaxed">
-          {spotlight.bio}
-        </p>
+        <div className="space-y-3">
+          {spotlight.bio.split(/\n\n+/).map((para, i) => (
+            <p key={i} className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
+              {para.trim()}
+            </p>
+          ))}
+        </div>
 
         {photos.length > 1 && (
           <div className="flex gap-2 overflow-x-auto pb-1 pt-1">
