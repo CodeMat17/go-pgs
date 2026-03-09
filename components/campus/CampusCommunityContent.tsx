@@ -602,7 +602,7 @@ export default function CampusCommunityContent() {
             className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#FFDC55]" aria-hidden="true" />
-            Student Life at GO-PGS
+            Student Life at GOUNI SPGS
           </motion.div>
 
           <motion.h1
