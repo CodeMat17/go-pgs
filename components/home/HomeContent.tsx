@@ -71,7 +71,7 @@ const stats = [
   // { label: "Postgraduate Programs", value: 30, suffix: "+" },
   { label: "Years of Excellence", value: 10, suffix: "+" },
   { label: "Graduate Students", value: 400, suffix: "+" },
-  { label: "Research Publications", value: 25, suffix: "+" },
+  { label: "Research Publications", value: 200, suffix: "+" },
 ];
 
 const features = [
