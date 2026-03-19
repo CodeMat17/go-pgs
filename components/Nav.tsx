@@ -30,7 +30,8 @@ export function Nav() {
         { name: "Courses", href: "/courses" },
         { name: "Course Materials", href: "/course-materials" },
         { name: "Fees", href: "/fees" },
-        { name: "Exam Timetable", href: "/timetable" },
+        { name: "Exam Timetable", href: "/exam-timetable" },
+        { name: "Lecture Timetable", href: "/lecture-timetable" },
       ],
     },
     {
@@ -43,12 +44,13 @@ export function Nav() {
       ],
     },
     {
-      name: "News", href: "/news",
+      name: "News",
+      href: "/news",
       subLinks: [
         { name: "News", href: "/news" },
         { name: "Campus Community", href: "/campus-community" },
       ],
-     },
+    },
     {
       name: "Profiles",
       href: "/profiles",
