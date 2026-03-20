@@ -24,7 +24,6 @@ import type * as getAllContent from "../getAllContent.js";
 import type * as gpc from "../gpc.js";
 import type * as hero from "../hero.js";
 import type * as howToApply from "../howToApply.js";
-import type * as importData from "../importData.js";
 import type * as lectureTimetable from "../lectureTimetable.js";
 import type * as materials from "../materials.js";
 import type * as mission from "../mission.js";
@@ -56,7 +55,6 @@ declare const fullApi: ApiFromModules<{
   gpc: typeof gpc;
   hero: typeof hero;
   howToApply: typeof howToApply;
-  importData: typeof importData;
   lectureTimetable: typeof lectureTimetable;
   materials: typeof materials;
   mission: typeof mission;
