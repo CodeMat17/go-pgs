@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import { Calendar, Download, FileText, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 // ── Per-card component — each card resolves its own storage URL ────────────
 function FeeCard({
@@ -27,11 +28,28 @@ function FeeCard({
 }) {
   const url = useQuery(api.fees.getFeeUrl, { storageId });
   const trackDownload = useMutation(api.fees.trackDownload);
+  const [downloading, setDownloading] = useState(false);
 
   const handleDownload = async () => {
     if (!url) return;
-    await trackDownload({ id });
-    window.open(url, "_blank", "noopener,noreferrer");
+    setDownloading(true);
+    try {
+      await trackDownload({ id });
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = `${title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } finally {
+      setDownloading(false);
+    }
   };
 
   const formattedDate = uploadedAt
@@ -82,13 +100,13 @@ function FeeCard({
         </div>
         <button
           onClick={handleDownload}
-          disabled={!url}
+          disabled={!url || downloading}
           aria-label={`Download ${title} as PDF`}
           className='flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'>
-          {url === undefined ? (
+          {url === undefined || downloading ? (
             <>
               <Loader2 className='w-4 h-4 animate-spin' />
-              Loading…
+              {downloading ? "Downloading…" : "Loading…"}
             </>
           ) : (
             <>
