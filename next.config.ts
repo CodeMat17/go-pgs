@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "cool-crocodile-345.convex.cloud",
+        port: "",
+      },
+      {
+        protocol: "https",
         hostname: "polite-monitor-553.convex.cloud",
         port: "",
       },
