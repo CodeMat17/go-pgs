@@ -1,5 +1,8 @@
 import AboutUsContent from '@/components/aboutUs/AboutUsContent'
-import { Metadata } from 'next';
+import { getMission, getVision } from "@/lib/server-data";
+import { Metadata } from "next";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "About Our Postgraduate School",
@@ -31,10 +34,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AboutUsPage() {
-
-
+export default async function AboutUsPage() {
+  const [initialMission, initialVision] = await Promise.all([
+    getMission(),
+    getVision(),
+  ]);
   return (
-  <AboutUsContent />
+    <AboutUsContent initialMission={initialMission} initialVision={initialVision} />
   );
 }

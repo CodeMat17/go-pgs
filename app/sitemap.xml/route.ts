@@ -1,5 +1,6 @@
-import { api } from "@/convex/_generated/api";
-import { fetchQuery } from "convex/nextjs";
+import { getAllCourses, getNewsList } from "@/lib/server-data";
+
+export const revalidate = 3600;
 
 const baseUrl = "https://pg.gouni.edu.ng";
 
@@ -16,6 +17,8 @@ const staticRoutes = [
   { path: "/alumni", priority: "0.7", changefreq: "monthly" },
   { path: "/exam-timetable", priority: "0.7", changefreq: "monthly" },
   { path: "/lecture-timetable", priority: "0.7", changefreq: "monthly" },
+  { path: "/fees", priority: "0.8", changefreq: "monthly" },
+  { path: "/course-materials", priority: "0.6", changefreq: "monthly" },
   { path: "/contact", priority: "0.6", changefreq: "monthly" },
 ] as const;
 
@@ -42,8 +45,8 @@ export async function GET(): Promise<Response> {
   try {
     // Fetch dynamic content in parallel
     const [courses, news] = await Promise.all([
-      fetchQuery(api.courses.getAllCourses, {}),
-      fetchQuery(api.news.getNewsList, {}),
+      getAllCourses(),
+      getNewsList(),
     ]);
 
     const today = formatDate(new Date());
@@ -78,7 +81,6 @@ export async function GET(): Promise<Response> {
 
     // Build sitemap XML with proper formatting
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9

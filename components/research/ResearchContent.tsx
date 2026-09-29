@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   ArrowRight,
   Award,
@@ -23,9 +23,9 @@ const highlights = [
     description:
       "State-of-the-art laboratories and research centres equipped with advanced technology for groundbreaking discoveries.",
     accent: {
-      bar: "bg-blue-500",
-      iconBg: "bg-blue-50 dark:bg-blue-900/30",
-      icon: "text-blue-500",
+      bar: "bg-indigo-500",
+      iconBg: "bg-indigo-50 dark:bg-indigo-900/30",
+      icon: "text-indigo-500",
     },
   },
   {
@@ -45,9 +45,9 @@ const highlights = [
     description:
       "Work alongside leading researchers and industry partners from across Nigeria and around the globe.",
     accent: {
-      bar: "bg-violet-500",
-      iconBg: "bg-violet-50 dark:bg-violet-900/30",
-      icon: "text-violet-500",
+      bar: "bg-amber-500",
+      iconBg: "bg-amber-50 dark:bg-amber-900/30",
+      icon: "text-amber-500",
     },
   },
   {
@@ -129,13 +129,9 @@ export default function ResearchContent() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -144,10 +140,10 @@ export default function ResearchContent() {
         />
 
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             Research &amp; Innovation
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Research at GO University
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
@@ -163,7 +159,7 @@ export default function ResearchContent() {
         <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-border'>
             {stats.map((stat, i) => (
-              <motion.div
+              <m.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -176,7 +172,7 @@ export default function ResearchContent() {
                 <span className='mt-1 text-xs text-muted-foreground font-medium tracking-wide uppercase'>
                   {stat.label}
                 </span>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -185,7 +181,7 @@ export default function ResearchContent() {
       {/* ── Research Highlights ─────────────────────────────────────────── */}
       <section className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16'>
         <div className='mb-10'>
-          <h2 className='text-2xl sm:text-3xl font-bold text-foreground'>
+          <h2 className='text-2xl sm:text-3xl font-black tracking-tight text-foreground'>
             Research Highlights
           </h2>
           <p className='mt-2 text-muted-foreground text-sm'>
@@ -196,7 +192,7 @@ export default function ResearchContent() {
           {highlights.map((item, index) => {
             const Icon = item.icon;
             return (
-              <motion.div
+              <m.div
                 key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -219,7 +215,7 @@ export default function ResearchContent() {
                     {item.description}
                   </p>
                 </div>
-              </motion.div>
+              </m.div>
             );
           })}
         </div>
@@ -229,7 +225,7 @@ export default function ResearchContent() {
       <section className='bg-muted/40 border-y border-border'>
         <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16'>
           <div className='mb-10'>
-            <h2 className='text-2xl sm:text-3xl font-bold text-foreground'>
+            <h2 className='text-2xl sm:text-3xl font-black tracking-tight text-foreground'>
               Our Research Areas
             </h2>
             <p className='mt-2 text-muted-foreground text-sm'>
@@ -238,7 +234,7 @@ export default function ResearchContent() {
           </div>
           <div className='grid sm:grid-cols-2 gap-4'>
             {researchAreas.map((area, index) => (
-              <motion.div
+              <m.div
                 key={area}
                 initial={{ opacity: 0, x: -12 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -251,7 +247,7 @@ export default function ResearchContent() {
                 <span className='text-sm font-medium text-foreground'>
                   {area}
                 </span>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -260,7 +256,7 @@ export default function ResearchContent() {
       {/* ── Research Facilities ─────────────────────────────────────────── */}
       <section className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16'>
         <div className='mb-10'>
-          <h2 className='text-2xl sm:text-3xl font-bold text-foreground'>
+          <h2 className='text-2xl sm:text-3xl font-black tracking-tight text-foreground'>
             Research Facilities
           </h2>
           <p className='mt-2 text-muted-foreground text-sm'>
@@ -271,7 +267,7 @@ export default function ResearchContent() {
           {facilities.map((facility, index) => {
             const Icon = facility.icon;
             return (
-              <motion.div
+              <m.div
                 key={facility.name}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -293,7 +289,7 @@ export default function ResearchContent() {
                     {facility.description}
                   </p>
                 </div>
-              </motion.div>
+              </m.div>
             );
           })}
         </div>
@@ -301,16 +297,12 @@ export default function ResearchContent() {
 
       {/* ── CTA Banner ──────────────────────────────────────────────────── */}
       <section className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20'>
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className='rounded-3xl bg-gradient-to-br from-primary dark:from-slate-700 to-primary/80 p-8 sm:p-12 text-center relative overflow-hidden'>
-          <div
-            className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-            aria-hidden='true'
-          />
+          className='rounded-3xl hero-brand rounded-3xl p-8 sm:p-12 text-center'>
           <div className='relative'>
             <h2 className='text-2xl sm:text-3xl font-extrabold text-white mb-3'>
               Join Our Research Community
@@ -320,19 +312,19 @@ export default function ResearchContent() {
               global impact through world-class postgraduate research.
             </p>
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-              <span className='inline-flex items-center gap-2 bg-[#FFDC55] text-gray-900 font-bold px-8 py-3.5 rounded-xl text-sm cursor-default select-none opacity-90'>
+              <span className='inline-flex items-center gap-2 bg-gold text-brand-950 font-extrabold px-8 py-3.5 rounded-full text-sm cursor-default select-none opacity-90'>
                 Research Portal — Coming Soon
               </span>
               <Link
                 href='/contact'
-                className='inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/20 active:scale-[0.98] transition-all duration-200 text-sm'>
+                className='inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-semibold px-8 py-3.5 rounded-full hover:bg-white/20 active:scale-[0.98] transition-all duration-200 text-sm'>
                 <Mail className='w-4 h-4' />
                 Contact Us
                 <ArrowRight className='w-4 h-4' />
               </Link>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </section>
     </div>
   );

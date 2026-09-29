@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Render metadata in <head> for every client, not just known crawlers.
+  // Streamed metadata lands in <body>, which Lighthouse and some crawlers ignore.
+  htmlLimitedBots: /.*/,
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

@@ -1,5 +1,8 @@
 import NewsPage from "@/components/news/NewsPage";
+import { getNewsList } from "@/lib/server-data";
 import { Metadata } from "next";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "News & Updates | GO University Postgraduate School",
@@ -10,6 +13,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NewsPageWrapper() {
-  return <NewsPage />;
+export default async function NewsPageWrapper() {
+  const initialNews = await getNewsList();
+  return <NewsPage initialNews={initialNews} />;
 }

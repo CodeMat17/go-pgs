@@ -1,5 +1,8 @@
 import HomeContent from "@/components/home/HomeContent";
+import { getNewsList } from "@/lib/server-data";
 import { Metadata } from "next";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Home | Premier Postgraduate Education in Nigeria",
@@ -35,6 +38,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  return <HomeContent />;
+export default async function HomePage() {
+  const initialNews = await getNewsList();
+  return <HomeContent initialNews={initialNews} />;
 }

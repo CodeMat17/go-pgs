@@ -1,18 +1,28 @@
 import NewsContent from "@/components/news/NewsContent";
-import { api } from "@/convex/_generated/api";
-// import { notFound } from "next/navigation";
-import { fetchQuery } from "convex/nextjs";
+import {
+  excerpt,
+  getNewsBySlug,
+  getNewsList,
+  sanitizeArticleHtml,
+} from "@/lib/server-data";
 import { Metadata } from "next";
+
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const news = await getNewsList();
+  return news.map(({ slug }) => ({ slug }));
+}
+
+const baseUrl = "https://pg.gouni.edu.ng";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  // Await params first
   const { slug } = await params;
-
-  const news = await fetchQuery(api.news.getNewsBySlug, { slug });
+  const news = await getNewsBySlug(slug);
 
   if (!news) {
     return {
@@ -22,18 +32,18 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = 'https://pg.gouni.edu.ng';
+  const description = excerpt(news.content, 155);
 
   return {
     title: `${news.title}`,
-    description: truncate(news.content, 160),
+    description,
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: `${baseUrl}/news/${slug}`,
     },
     openGraph: {
       title: news.title,
-      description: truncate(news.content, 160),
+      description,
       type: "article",
       publishedTime: new Date(news._creationTime).toISOString(),
       url: `/news/${slug}`,
@@ -51,20 +61,52 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: news.title,
-      description: truncate(news.content, 160),
+      description,
       images: news.coverImage ? [news.coverImage] : [],
     },
   };
 }
 
-const truncate = (text: string, maxLength: number): string => {
-  // Remove first 3 characters before truncating
-  const trimmedText = text.slice(3);
-  return trimmedText.length > maxLength
-    ? `${trimmedText.slice(0, maxLength - 1)}…`
-    : trimmedText;
-};
+export default async function NewsDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const news = await getNewsBySlug(slug);
 
-export default async function NewsDetailPage() {
-  return <NewsContent />;
+  const jsonLd = news && {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: news.title,
+    description: excerpt(news.content, 200),
+    image: news.coverImage ? [news.coverImage] : [],
+    datePublished: new Date(
+      news.publicationDate || news._creationTime
+    ).toISOString(),
+    author: { "@type": "Person", name: news.author },
+    publisher: {
+      "@type": "CollegeOrUniversity",
+      name: "Godfrey Okoye University Postgraduate School",
+      url: baseUrl,
+    },
+    mainEntityOfPage: `${baseUrl}/news/${slug}`,
+  };
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
+      <NewsContent
+        initialNews={news}
+        initialHtml={news ? sanitizeArticleHtml(news.content) : undefined}
+      />
+    </>
+  );
 }

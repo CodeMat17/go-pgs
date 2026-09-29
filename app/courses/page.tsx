@@ -1,5 +1,8 @@
 import CourseBrowser from "@/components/courses/CourseBrower";
+import { getAllCourses, getFaculties } from "@/lib/server-data";
 import { Metadata } from "next";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Our Courses | GO University Postgraduate School",
@@ -38,17 +41,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProgramsPage() {
+export default async function ProgramsPage() {
+  const [initialCourses, initialFaculties] = await Promise.all([
+    getAllCourses(),
+    getFaculties(),
+  ]);
+
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-900 via-primary/90 to-primary/80 dark:to-gray-700 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -57,10 +61,10 @@ export default function ProgramsPage() {
         />
 
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             Academic Programs
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Our Courses
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
@@ -71,8 +75,8 @@ export default function ProgramsPage() {
           {/* Level legend */}
           <div className='mt-8 flex flex-wrap gap-4'>
             {[
-              { label: "PGD", color: "bg-blue-400" },
-              { label: "Masters", color: "bg-violet-400" },
+              { label: "PGD", color: "bg-indigo-400" },
+              { label: "Masters", color: "bg-amber-400" },
               { label: "PhD", color: "bg-emerald-400" },
             ].map(({ label, color }) => (
               <div
@@ -88,7 +92,10 @@ export default function ProgramsPage() {
 
       {/* ── Browser ───────────────────────────────────────────────────── */}
       <section className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16'>
-        <CourseBrowser />
+        <CourseBrowser
+          initialCourses={initialCourses}
+          initialFaculties={initialFaculties}
+        />
       </section>
     </div>
   );

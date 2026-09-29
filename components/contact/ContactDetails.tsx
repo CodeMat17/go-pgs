@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useInView, useReducedMotion } from "framer-motion";
 import {
   BookOpen,
   Building2,
@@ -64,7 +64,7 @@ function InfoCard({ icon, title, accent, children, delay = 0, shouldReduceMotion
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -75,12 +75,12 @@ function InfoCard({ icon, title, accent, children, delay = 0, shouldReduceMotion
         {icon}
       </div>
       <div className="space-y-1">
-        <h3 className="font-semibold text-foreground">{title}</h3>
+        <h2 className="font-semibold text-foreground">{title}</h2>
         <div className="text-sm text-muted-foreground leading-relaxed space-y-0.5">
           {children}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -100,7 +100,7 @@ function DeptCard({ icon, title, accent, email, tel, delay = 0, shouldReduceMoti
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -111,7 +111,7 @@ function DeptCard({ icon, title, accent, email, tel, delay = 0, shouldReduceMoti
         {icon}
       </div>
       <div className="space-y-2">
-        <h3 className="font-semibold text-foreground">{title}</h3>
+        <h2 className="font-semibold text-foreground">{title}</h2>
         {email && (
           <a
             href={`mailto:${email}`}
@@ -131,7 +131,7 @@ function DeptCard({ icon, title, accent, email, tel, delay = 0, shouldReduceMoti
           </a>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -166,46 +166,31 @@ export default function ContactDetails() {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-primary dark:bg-slate-900 text-primary-foreground">
-        {/* Pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: "url('/pattern.png')", backgroundSize: "400px" }}
-          aria-hidden="true"
-        />
+      <section className="hero-brand">
         {/* Decorative blobs */}
-        <div className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-gold/10 blur-3xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-5xl px-4 py-20 sm:py-28 text-center">
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm dark:text-white/70"
+          <div
+            className="motion-safe:animate-fade-up mb-4 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-gold"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FFDC55]" aria-hidden="true"  />
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden="true"  />
             We&apos;re Here to Help
-          </motion.div>
+          </div>
 
-          <motion.h1
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-bold tracking-tight dark:text-slate-300"
+          <h1
+            className="motion-safe:animate-fade-up text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight"
           >
             Get in Touch
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 max-w-2xl mx-auto text-primary-foreground/80 dark:text-slate-400 text-lg "
+          <p
+            className="motion-safe:animate-fade-up mt-4 max-w-2xl mx-auto text-white/70 text-lg"
           >
             Reach out to our admissions and support teams. We are always ready
             to assist you on your postgraduate journey.
-          </motion.p>
+          </p>
         </div>
       </section>
 
@@ -213,11 +198,11 @@ export default function ContactDetails() {
       <div className="mx-auto max-w-5xl px-4 py-16 space-y-12">
         <AnimatePresence mode="wait">
           {isLoading ? (
-            <motion.div key="skeleton" exit={{ opacity: 0 }}>
+            <m.div key="skeleton" exit={{ opacity: 0 }}>
               <ContactSkeleton />
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <m.div key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
 
               {/* ── Primary info grid ── */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -234,9 +219,9 @@ export default function ContactDetails() {
 
                 {/* Phone */}
                 <InfoCard
-                  icon={<Phone className="w-5 h-5 text-blue-600" />}
+                  icon={<Phone className="w-5 h-5 text-indigo-600" />}
                   title="Phone"
-                  accent="bg-blue-50 dark:bg-blue-950"
+                  accent="bg-indigo-50 dark:bg-indigo-950"
                   delay={0.08}
                   shouldReduceMotion={shouldReduceMotion}
                 >
@@ -256,13 +241,13 @@ export default function ContactDetails() {
 
                 {/* Email */}
                 <InfoCard
-                  icon={<Mail className="w-5 h-5 text-violet-600" />}
+                  icon={<Mail className="w-5 h-5 text-amber-600" />}
                   title="Email"
-                  accent="bg-violet-50 dark:bg-violet-950"
+                  accent="bg-amber-50 dark:bg-amber-950"
                   delay={0.16}
                   shouldReduceMotion={shouldReduceMotion}
                 >
-                  {info?.email?.flatMap((m) => [m.email1, m.email2]).map((addr, i) => (
+                  {info?.email?.flatMap((e) => [e.email1, e.email2]).map((addr, i) => (
                     <p key={i}>
                       <a
                         href={`mailto:${addr}`}
@@ -322,9 +307,9 @@ export default function ContactDetails() {
                     )}
                     {info?.researchOffice?.[0] && (
                       <DeptCard
-                        icon={<BookOpen className="w-5 h-5 text-blue-600" />}
+                        icon={<BookOpen className="w-5 h-5 text-indigo-600" />}
                         title="Research Office"
-                        accent="bg-blue-50 dark:bg-blue-950"
+                        accent="bg-indigo-50 dark:bg-indigo-950"
                         email={info.researchOffice[0].email}
                         tel={info.researchOffice[0].tel}
                         delay={0.1}
@@ -347,7 +332,7 @@ export default function ContactDetails() {
               ) : null}
 
               {/* ── Find us ── */}
-              <motion.div
+              <m.div
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -376,18 +361,18 @@ export default function ContactDetails() {
                     Open in Google Maps
                   </a>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* ── CTA strip ── */}
-              <motion.div
+              <m.div
                 initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.97 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5 }}
-                className="rounded-2xl bg-primary dark:bg-slate-900 text-primary-foreground p-8 text-center space-y-4"
+                className="hero-brand rounded-3xl p-8 sm:p-12 text-center space-y-4"
               >
-                <h2 className="text-2xl font-bold dark:text-slate-500">Ready to Start?</h2>
-                <p className="text-primary-foreground/80 dark:text-slate-400 max-w-xl mx-auto">
+                <h2 className="text-2xl sm:text-3xl font-black">Ready to Start?</h2>
+                <p className="text-white/70 max-w-xl mx-auto">
                   Have questions about admission, programmes, or fees? Reach
                   out — our team responds within one business day.
                 </p>
@@ -395,7 +380,7 @@ export default function ContactDetails() {
                   {info?.email?.[0]?.email1 && (
                     <a
                       href={`mailto:${info.email[0].email1}`}
-                      className="inline-flex items-center gap-2 rounded-full bg-white dark:bg-slate-800 text-primary font-semibold px-6 py-2.5 text-sm hover:bg-white/90 transition-colors"
+                      className="inline-flex items-center gap-2 rounded-full bg-gold text-brand-950 font-extrabold px-6 py-3 text-sm hover:bg-gold-300 transition-colors"
                     >
                       <Mail className="w-4 h-4" />
                       Send an Email
@@ -404,15 +389,15 @@ export default function ContactDetails() {
                   {info?.phone?.[0]?.tel1 && (
                     <a
                       href={`tel:${info.phone[0].tel1}`}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 text-primary-foreground font-semibold px-6 py-2.5 text-sm hover:bg-white/20 transition-colors backdrop-blur-sm dark:text-slate-400"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 text-white font-bold px-6 py-3 text-sm hover:bg-white/10 transition-colors backdrop-blur-sm"
                     >
                       <Phone className="w-4 h-4" />
                       Call Us Now
                     </a>
                   )}
                 </div>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

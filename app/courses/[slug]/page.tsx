@@ -1,17 +1,29 @@
 import CourseContent from "@/components/courses/CourseContent";
-import { api } from "@/convex/_generated/api";
-import { fetchQuery } from "convex/nextjs";
+import {
+  excerpt,
+  getAllCourses,
+  getCourseBySlug,
+  getHowToApply,
+  sanitizeBasicHtml,
+} from "@/lib/server-data";
 import { Metadata } from "next";
+
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const courses = await getAllCourses();
+  return courses.map(({ slug }) => ({ slug }));
+}
+
+const baseUrl = "https://pg.gouni.edu.ng";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  // Await params first
   const { slug } = await params;
-
-  const course = await fetchQuery(api.courses.getProgramBySlug, { slug });
+  const course = await getCourseBySlug(slug);
 
   if (!course) {
     return {
@@ -21,21 +33,21 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = "https://pg.gouni.edu.ng";
+  const description = excerpt(course.overview, 155);
 
   return {
     title: `${course.course}`,
-    description: truncate(course.overview, 80),
+    description,
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: `${baseUrl}/courses/${slug}`,
     },
     openGraph: {
       title: course.course,
-      description: truncate(course.overview, 80),
+      description,
       type: "article",
       publishedTime: new Date(course._creationTime).toISOString(),
-      url: `/news/${slug}`,
+      url: `/courses/${slug}`,
       images: [
         {
           url: `${baseUrl}/courses/opengraph-image.jpg`,
@@ -48,18 +60,55 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: course.course,
-      description: truncate(course.overview, 80),
+      description,
       images: `${baseUrl}/courses/opengraph-image.jpg`,
     },
-    
   };
 }
 
-const truncate = (text: string, maxLength: number): string =>
-  text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
+export default async function ProgramDetail({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const [course, howToApply] = await Promise.all([
+    getCourseBySlug(slug),
+    getHowToApply(),
+  ]);
 
-const ProgramDetail = () => {
-  return <CourseContent />;
-};
+  const jsonLd = course && {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.course,
+    description: excerpt(course.overview, 500),
+    url: `${baseUrl}/courses/${slug}`,
+    timeRequired: course.duration,
+    provider: {
+      "@type": "CollegeOrUniversity",
+      name: "Godfrey Okoye University",
+      sameAs: "https://www.gouni.edu.ng",
+    },
+  };
 
-export default ProgramDetail;
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
+      <CourseContent
+        initialCourse={course}
+        initialOverviewHtml={course ? sanitizeBasicHtml(course.overview) : undefined}
+        initialHowToApply={howToApply.map((a) => ({
+          ...a,
+          html: sanitizeBasicHtml(a.text),
+        }))}
+      />
+    </>
+  );
+}

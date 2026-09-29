@@ -17,9 +17,10 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
+import { FunctionReturnType } from "convex/server";
 import { useQuery } from "convex/react";
 import dayjs from "dayjs";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import {
   CameraOff,
   Eye,
@@ -29,6 +30,7 @@ import {
   Share2,
   X,
 } from "lucide-react";
+import { liveAssetUrl } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -36,8 +38,11 @@ import { useEffect, useMemo, useState } from "react";
 type SortOption = "default" | "views_asc" | "views_desc";
 const ITEMS_PER_PAGE = 12;
 
-export default function NewsPage() {
-  const newsList = useQuery(api.news.getNewsList);
+type NewsList = FunctionReturnType<typeof api.news.getNewsList>;
+
+export default function NewsPage({ initialNews }: { initialNews?: NewsList }) {
+  // Server-rendered list seeds the first paint; the live query takes over once connected.
+  const newsList = useQuery(api.news.getNewsList) ?? initialNews;
   const shouldReduceMotion = useReducedMotion();
   const [titleSearch, setTitleSearch] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState<string | undefined>();
@@ -120,13 +125,9 @@ export default function NewsPage() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -134,10 +135,10 @@ export default function NewsPage() {
           aria-hidden='true'
         />
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             News &amp; Updates
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Latest from GO University
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
@@ -209,7 +210,7 @@ export default function NewsPage() {
 
           {/* Active filter chips */}
           {hasActiveFilters && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               className='flex flex-wrap gap-2 items-center pt-1'>
@@ -249,7 +250,7 @@ export default function NewsPage() {
                   </button>
                 </span>
               )}
-            </motion.div>
+            </m.div>
           )}
         </div>
 
@@ -296,9 +297,9 @@ export default function NewsPage() {
         ) : (
           <section aria-label='News articles'>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
-              <AnimatePresence mode='wait'>
+              <AnimatePresence initial={false} mode='wait'>
                 {paginatedNews.map((news, index) => (
-                  <motion.article
+                  <m.article
                     key={news._id}
                     initial={
                       shouldReduceMotion
@@ -316,9 +317,9 @@ export default function NewsPage() {
                     className='group flex flex-col rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300'>
                     {/* Cover image */}
                     <div className='relative aspect-[1.91/1] overflow-hidden bg-muted flex-shrink-0'>
-                      {news.coverImage ? (
+                      {liveAssetUrl(news.coverImage) ? (
                         <Image
-                          src={news.coverImage}
+                          src={liveAssetUrl(news.coverImage)!}
                           alt={news.title}
                           fill
                           className='object-cover object-top transition-transform duration-500 group-hover:scale-105'
@@ -377,9 +378,9 @@ export default function NewsPage() {
                       <div className='mt-auto pt-3 flex items-center justify-between border-t border-border/50'>
                         <Link
                           href={`/news/${news.slug}`}
-                          className='text-xs font-semibold text-primary hover:underline flex items-center gap-1.5'
-                          aria-label={`Read more about ${news.title}`}>
-                          Read More
+                          className='text-xs font-semibold text-primary hover:underline flex items-center gap-1.5'>
+                          Read more
+                          <span className='sr-only'>: {news.title}</span>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='12'
@@ -406,7 +407,7 @@ export default function NewsPage() {
                         </button>
                       </div>
                     </div>
-                  </motion.article>
+                  </m.article>
                 ))}
               </AnimatePresence>
             </div>
@@ -415,7 +416,7 @@ export default function NewsPage() {
 
         {/* ── Pagination ───────────────────────────────────────────────── */}
         {totalPages > 1 && (
-          <motion.nav
+          <m.nav
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className='mt-12'
@@ -456,7 +457,7 @@ export default function NewsPage() {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-          </motion.nav>
+          </m.nav>
         )}
       </section>
     </div>

@@ -1,27 +1,20 @@
 "use client";
 
-import { motion, type MotionProps } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-const MotionButton = motion.button as React.ComponentType<
-  MotionProps & React.ButtonHTMLAttributes<HTMLButtonElement>
->;
-
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <MotionButton
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className='p-2 rounded-full bg-gray-400 dark:bg-gray-800/40'>
-      {theme === "dark" ? (
-        <Sun className='h-6 w-6 text-[#FEDA37]' />
-      ) : (
-        <Moon className='h-6 w-6' />
-      )}
-    </MotionButton>
+    <button
+      type='button'
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className='relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/60 text-foreground transition-colors hover:bg-accent'>
+      <Sun className='h-[18px] w-[18px] rotate-90 scale-0 text-gold transition-all duration-300 dark:rotate-0 dark:scale-100' />
+      <Moon className='absolute h-[18px] w-[18px] rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0' />
+    </button>
   );
 }

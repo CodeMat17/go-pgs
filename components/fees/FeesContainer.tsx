@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Calendar, Download, FileText, Loader2 } from "lucide-react";
 import { useState } from "react";
 
@@ -61,7 +61,7 @@ function FeeCard({
     : null;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -74,9 +74,9 @@ function FeeCard({
             <FileText className='w-5 h-5 text-primary' aria-hidden='true' />
           </div>
           <div className='min-w-0'>
-            <h3 className='font-semibold text-foreground text-base leading-snug'>
+            <h2 className='font-semibold text-foreground text-base leading-snug'>
               {title}
-            </h3>
+            </h2>
             {description && (
               <p className='text-muted-foreground text-sm mt-1 leading-relaxed'>
                 {description}
@@ -101,7 +101,6 @@ function FeeCard({
         <button
           onClick={handleDownload}
           disabled={!url || downloading}
-          aria-label={`Download ${title} as PDF`}
           className='flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'>
           {url === undefined || downloading ? (
             <>
@@ -111,12 +110,12 @@ function FeeCard({
           ) : (
             <>
               <Download className='w-4 h-4' />
-              Download PDF
+              Download<span className='sr-only'> {title} as</span> PDF
             </>
           )}
         </button>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -128,13 +127,9 @@ export default function FeesContainer() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -142,10 +137,10 @@ export default function FeesContainer() {
           aria-hidden='true'
         />
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             Tuition &amp; Fees
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Fee Structure
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>

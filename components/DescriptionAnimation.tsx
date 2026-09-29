@@ -1,11 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 
 const DescriptionAnimation = () => {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.4 }}
@@ -28,7 +28,7 @@ const DescriptionAnimation = () => {
           [text-shadow:_0px_1px_2px_rgba(0,0,0,0.8)] break-words'
         style={{ margin: 0 }}
       />
-    </motion.div>
+    </m.div>
   );
 };
 

@@ -3,8 +3,9 @@
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
+import { FunctionReturnType } from "convex/server";
 import { useQuery } from "convex/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { BookOpen, Clock, GraduationCap, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -20,15 +21,15 @@ const courseLevels: { value: CourseLevel; label: string }[] = [
 ];
 
 const levelAccent: Record<string, string> = {
-  pgd: "bg-blue-500",
-  masters: "bg-violet-500",
+  pgd: "bg-indigo-500",
+  masters: "bg-amber-500",
   phd: "bg-emerald-500",
 };
 
 const levelBadge: Record<string, string> = {
-  pgd: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  pgd: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300",
   masters:
-    "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
   phd: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
 };
 
@@ -56,13 +57,20 @@ function Pill({
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
-export default function CourseBrowser() {
+export default function CourseBrowser({
+  initialCourses,
+  initialFaculties,
+}: {
+  initialCourses?: FunctionReturnType<typeof api.courses.getAllCourses>;
+  initialFaculties?: FunctionReturnType<typeof api.faculties.getFaculties>;
+}) {
   const [selectedFaculty, setSelectedFaculty] = useState<string>("all");
   const [selectedLevel, setSelectedLevel] = useState<CourseLevel>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const allCourses = useQuery(api.courses.getAllCourses);
-  const faculties = useQuery(api.faculties.getFaculties);
+  // Server-rendered data seeds the first paint (and puts every course link in the HTML).
+  const allCourses = useQuery(api.courses.getAllCourses) ?? initialCourses;
+  const faculties = useQuery(api.faculties.getFaculties) ?? initialFaculties;
   const isLoading = allCourses === undefined || faculties === undefined;
 
   const filteredCourses =
@@ -96,6 +104,7 @@ export default function CourseBrowser() {
           <Input
             type='text'
             placeholder='Search courses…'
+            aria-label='Search courses'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className='pl-9 pr-9 h-11 rounded-xl'
@@ -200,19 +209,15 @@ export default function CourseBrowser() {
           )}
         </div>
       ) : (
-        <AnimatePresence mode='wait'>
-          <motion.div
+        <AnimatePresence initial={false} mode='wait'>
+          <m.div
             key={`${selectedFaculty}-${selectedLevel}-${searchQuery}`}
             className='grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}>
-            {filteredCourses.map((course, i) => (
-              <motion.div
-                key={course._id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.04 }}>
+            {filteredCourses.map((course) => (
+              <div key={course._id}>
                 <Link
                   href={`/courses/${course.slug}`}
                   className='group flex flex-col h-full rounded-2xl border border-border bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden'>
@@ -229,9 +234,9 @@ export default function CourseBrowser() {
                     </span>
 
                     {/* Course title */}
-                    <h3 className='font-semibold text-base text-foreground leading-snug mb-4 group-hover:text-primary transition-colors'>
+                    <h2 className='font-semibold text-base text-foreground leading-snug mb-4 group-hover:text-primary transition-colors'>
                       {course.course}
-                    </h3>
+                    </h2>
 
                     {/* Meta info */}
                     <div className='mt-auto space-y-1.5 text-sm text-muted-foreground'>
@@ -255,9 +260,9 @@ export default function CourseBrowser() {
                     </div>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       )}
     </div>

@@ -1,13 +1,13 @@
 "use client";
 
+import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -168,50 +168,45 @@ export default function CourseMaterials() {
   };
 
   return (
-    <div className='w-full min-h-screen bg-gray-50 dark:bg-gray-950'>
-      <div className='max-w-4xl mx-auto px-4 py-12 space-y-8'>
-        {/* Search Header */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className='text-center space-y-2'>
-          <h1 className='text-3xl font-bold'>Course Materials Portal</h1>
-          <p className='text-muted-foreground'>
-            Enter your registration number to access your learning resources
-          </p>
-        </motion.header>
-
+    <div className='w-full min-h-screen bg-background'>
+      <PageHero
+        eyebrow='Student Portal'
+        title='Course Materials'
+        description='Enter your registration number to access the learning resources for your programme.'>
         {/* Search Form */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
             setSearchTrigger(regNumber.trim());
           }}
-          className='flex gap-2 max-w-xl mx-auto'>
-          <Input
+          className='flex max-w-xl items-center gap-2 rounded-full border border-white/15 bg-white/10 p-1.5 backdrop-blur'>
+          <Search className='ml-3 h-5 w-5 shrink-0 text-white/50' aria-hidden='true' />
+          <input
             value={regNumber}
             onChange={(e) => setRegNumber(e.target.value)}
-            placeholder='Enter registration number'
-            className='py-6 text-lg bg-white dark:bg-gray-900 shadow-md'
+            placeholder='e.g. GOU/PG/…'
+            className='h-11 min-w-0 flex-1 bg-transparent px-2 text-base text-white placeholder:text-white/40 focus:outline-none'
             aria-label='Registration number'
           />
-          <Button
+          <button
             type='submit'
-            className='py-6 px-4 text-lg gap-2'
+            className='h-11 shrink-0 rounded-full bg-gold px-6 text-sm font-extrabold text-brand-950 transition-colors hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-60'
             disabled={!regNumber.trim() || isLoading ? true : undefined}>
-            <Search className='w-5 h-5' />
-            {isLoading ? "Searching..." : "Search"}
-          </Button>
+            {isLoading ? "Searching…" : "Search"}
+          </button>
         </form>
+      </PageHero>
+
+      <div className='max-w-4xl mx-auto px-4 py-12 space-y-8'>
 
         {/* Error Display */}
         {error && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className='text-center text-destructive p-4 bg-destructive/10 rounded-lg'>
             {error}
-          </motion.div>
+          </m.div>
         )}
 
         {/* Loading State */}
@@ -225,12 +220,12 @@ export default function CourseMaterials() {
 
         {/* Student Dashboard */}
         {studentData && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className='space-y-8'>
             {/* Student Info Card */}
-            <Card className='p-6 bg-muted/50'>
+            <Card className='surface p-6 sm:p-8'>
               <h2 className='text-xl font-semibold mb-4'>Student Profile</h2>
               <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                 <div>
@@ -252,7 +247,7 @@ export default function CourseMaterials() {
 
             {/* GPC Materials Section */}
             {gpcMaterials.first.length > 0 || gpcMaterials.second.length > 0 ? (
-              <section className='space-y-6 bg-sky-100 dark:bg-sky-700/20 p-6 rounded-lg'>
+              <section className='space-y-6 rounded-3xl border border-gold/30 bg-gold/5 p-6 sm:p-8'>
                 <h2 className='text-2xl font-semibold text-primary'>
                   GPC Resources
                 </h2>
@@ -363,7 +358,7 @@ export default function CourseMaterials() {
                 </>
               )}
             </section>
-          </motion.div>
+          </m.div>
         )}
       </div>
     </div>
@@ -384,12 +379,12 @@ function MaterialCard({
   bgColor: string
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}>
       <Card
-        className={`p-4 hover:shadow-lg transition-shadow ${bgColor === "gpc" ? "bg-sky-50 dark:bg-sky-600/20" : "bg-gradient-to-tr from-transparent to-sky-300 dark:bg-muted/50"}`}>
+        className={`surface surface-hover h-full p-5 ${bgColor === "gpc" ? "border-l-4 border-l-gold" : "border-l-4 border-l-brand-500"}`}>
         <div className='flex flex-col justify-between h-full gap-2'>
           <div>
             <h3 className='font-medium text-lg'>{material.title}</h3>
@@ -416,6 +411,6 @@ function MaterialCard({
           </div>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   );
 }

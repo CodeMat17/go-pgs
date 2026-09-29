@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { Briefcase, Linkedin, Mail, Search, Users, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -28,9 +28,9 @@ import { FaWhatsapp } from "react-icons/fa";
 function getDegreeAccent(degree: string) {
   const d = degree.toLowerCase();
   if (d.includes("pgd") || d.includes("postgraduate diploma"))
-    return { bar: "bg-blue-500", badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" };
+    return { bar: "bg-indigo-500", badge: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300" };
   if (d.includes("master") || d.includes("msc") || d.includes("mba") || d.includes("ma"))
-    return { bar: "bg-violet-500", badge: "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300" };
+    return { bar: "bg-amber-500", badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300" };
   if (d.includes("phd") || d.includes("doctor"))
     return { bar: "bg-emerald-500", badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" };
   return { bar: "bg-primary", badge: "bg-primary/10 text-primary" };
@@ -112,13 +112,9 @@ export default function AlumniDetail() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -126,10 +122,10 @@ export default function AlumniDetail() {
           aria-hidden='true'
         />
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             Alumni Network
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Alumni Success Stories
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
@@ -140,8 +136,8 @@ export default function AlumniDetail() {
           {/* Degree legend */}
           <div className='mt-8 flex flex-wrap gap-4'>
             {[
-              { label: "PGD", color: "bg-blue-400" },
-              { label: "Masters", color: "bg-violet-400" },
+              { label: "PGD", color: "bg-indigo-400" },
+              { label: "Masters", color: "bg-amber-400" },
               { label: "PhD", color: "bg-emerald-400" },
             ].map(({ label, color }) => (
               <div
@@ -214,7 +210,7 @@ export default function AlumniDetail() {
 
           {/* Active filter chips */}
           {hasActiveFilters && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               className='flex flex-wrap gap-2 items-center pt-1'>
@@ -247,7 +243,7 @@ export default function AlumniDetail() {
                   </button>
                 </span>
               )}
-            </motion.div>
+            </m.div>
           )}
         </div>
 
@@ -315,7 +311,7 @@ export default function AlumniDetail() {
               {paginatedAlumni.map((alumnus, index) => {
                 const accent = getDegreeAccent(alumnus.degree);
                 return (
-                  <motion.article
+                  <m.article
                     key={alumnus._id}
                     initial={
                       shouldReduceMotion ? false : { opacity: 0, y: 20 }
@@ -395,7 +391,7 @@ export default function AlumniDetail() {
                             target='_blank'
                             rel='noopener noreferrer'
                             aria-label={`Connect with ${alumnus.name} on LinkedIn`}
-                            className='inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors'>
+                            className='inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-200 dark:border-indigo-900/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors'>
                             <Linkedin className='w-3.5 h-3.5' />
                             Connect
                           </a>
@@ -422,7 +418,7 @@ export default function AlumniDetail() {
                         )}
                       </div>
                     </div>
-                  </motion.article>
+                  </m.article>
                 );
               })}
             </div>

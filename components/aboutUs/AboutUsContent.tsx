@@ -1,8 +1,9 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   Award,
@@ -76,42 +77,42 @@ const globalPoints = [
 ];
 
 // ── Component ──────────────────────────────────────────────────────────────
-export default function AboutUsContent() {
+export default function AboutUsContent({
+  initialMission,
+  initialVision,
+}: {
+  initialMission?: Doc<"mission">[];
+  initialVision?: Doc<"vision">[];
+}) {
   const shouldReduceMotion = useReducedMotion();
-  const ourVision = useQuery(api.vision.getVision);
-  const ourMission = useQuery(api.mission.getMission);
+  // Server-rendered data seeds the first paint so the section doesn't pop in and shift the page.
+  const ourVision = useQuery(api.vision.getVision) ?? initialVision;
+  const ourMission = useQuery(api.mission.getMission) ?? initialMission;
 
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Page Hero ─────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-20 sm:py-24 lg:py-32'>
+      <section className='hero-brand py-20 sm:py-24 lg:py-32'>
         {/* Decorative blobs */}
         <div
-          className='absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-32 -right-32 w-96 h-96 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
           className='absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
-        <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
 
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}>
+          <div className='motion-safe:animate-fade-up'>
             {/* Eyebrow */}
-            <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+            <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
               Our Story
             </span>
 
             <h1 className='text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-tight tracking-tight'>
               About{" "}
-              <span className='text-[#FFDC55]'>Godfrey Okoye University</span>
+              <span className='text-gold'>Godfrey Okoye University</span>
               <br className='hidden sm:block' />
               <span className='text-2xl sm:text-3xl lg:text-4xl font-semibold text-white/80 mt-2 block'>
                 School of Postgraduate Studies
@@ -123,7 +124,7 @@ export default function AboutUsContent() {
               holistic education — shaping tomorrow&apos;s leaders and advancing
               knowledge across Africa and beyond.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -131,23 +132,23 @@ export default function AboutUsContent() {
       {(ourMission?.length || ourVision?.length) ? (
         <section className='py-16 sm:py-20 lg:py-24 bg-muted/40'>
           <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-            <motion.div
+            <m.div
               initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className='text-center mb-12'>
-              <span className='inline-block mb-3 text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground'>
+              <span className='inline-block mb-3 text-xs font-extrabold tracking-[0.18em] uppercase text-brand-600 dark:text-gold'>
                 What Drives Us
               </span>
-              <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground'>
+              <h2 className='text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-foreground'>
                 Our Mission &amp; Vision
               </h2>
-            </motion.div>
+            </m.div>
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               {ourMission?.map((mission) => (
-                <motion.div
+                <m.div
                   key={mission._id}
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -170,21 +171,21 @@ export default function AboutUsContent() {
                       {mission.desc}
                     </p>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
 
               {ourVision?.map((vision) => (
-                <motion.div
+                <m.div
                   key={vision._id}
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className='relative flex flex-col gap-4 p-6 sm:p-8 rounded-2xl bg-card border border-border hover:shadow-lg transition-all duration-300 overflow-hidden group'>
-                  <div className='absolute left-0 top-0 bottom-0 w-1 bg-[#c4a800] dark:bg-[#FEDA37] rounded-l-2xl' />
-                  <div className='w-11 h-11 rounded-xl bg-[#FEDA37]/15 flex items-center justify-center flex-shrink-0'>
+                  <div className='absolute left-0 top-0 bottom-0 w-1 bg-gold-700 dark:bg-gold rounded-l-2xl' />
+                  <div className='w-11 h-11 rounded-xl bg-gold/15 flex items-center justify-center flex-shrink-0'>
                     <Lightbulb
-                      className='w-5 h-5 text-[#c4a800] dark:text-[#FEDA37]'
+                      className='w-5 h-5 text-gold-700 dark:text-gold'
                       aria-hidden='true'
                     />
                   </div>
@@ -196,7 +197,7 @@ export default function AboutUsContent() {
                       {vision.desc}
                     </p>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
@@ -207,33 +208,33 @@ export default function AboutUsContent() {
       <section className='py-16 sm:py-20 lg:py-24 bg-background'>
         <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Section header */}
-          <motion.div
+          <m.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className='text-center mb-12 sm:mb-16'>
-            <span className='inline-block mb-3 text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground'>
+            <span className='inline-block mb-3 text-xs font-extrabold tracking-[0.18em] uppercase text-brand-600 dark:text-gold'>
               Our Strengths
             </span>
-            <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground'>
+            <h2 className='text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-foreground'>
               Why Choose GO University?
             </h2>
             <p className='mt-4 text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base leading-relaxed'>
               We provide a transformative environment where curiosity meets
               opportunity, and scholarship drives change.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Cards */}
-          <motion.div
+          <m.div
             variants={stagger}
             initial='hidden'
             whileInView='visible'
             viewport={{ once: true, margin: "-50px" }}
             className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6'>
             {whyItems.map(({ Icon, title, description }) => (
-              <motion.div
+              <m.div
                 key={title}
                 variants={fadeUp}
                 transition={{ duration: 0.45 }}
@@ -250,32 +251,32 @@ export default function AboutUsContent() {
                 <p className='text-muted-foreground text-sm leading-relaxed'>
                   {description}
                 </p>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
       {/* ── Global Standards, Local Impact ────────────────────────────── */}
       <section className='py-16 sm:py-20 lg:py-24 bg-muted/40'>
         <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <motion.div
+          <m.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className='text-center mb-12 sm:mb-16'>
-            <span className='inline-block mb-3 text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground'>
+            <span className='inline-block mb-3 text-xs font-extrabold tracking-[0.18em] uppercase text-brand-600 dark:text-gold'>
               Our Reach
             </span>
-            <h2 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground'>
+            <h2 className='text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-foreground'>
               Global Standards, Local Impact
             </h2>
-          </motion.div>
+          </m.div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-14 items-center'>
             {/* Text side */}
-            <motion.div
+            <m.div
               initial={shouldReduceMotion ? false : { opacity: 0, x: -24 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -300,10 +301,10 @@ export default function AboutUsContent() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </m.div>
 
             {/* Image side */}
-            <motion.div
+            <m.div
               initial={shouldReduceMotion ? false : { opacity: 0, x: 24 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -319,19 +320,15 @@ export default function AboutUsContent() {
               />
               {/* Image overlay gradient */}
               <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none' />
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </section>
 
       {/* ── CTA Banner ────────────────────────────────────────────────── */}
-      <section className='relative py-16 sm:py-20 lg:py-24 overflow-hidden bg-primary dark:bg-gray-400'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-80 h-80 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-80 h-80 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -340,16 +337,16 @@ export default function AboutUsContent() {
         />
 
         <div className='relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <motion.div
+          <m.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary-foreground leading-tight'>
+            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight'>
               Ready to{" "}
-              <span className='text-[#FFDC55]'>Join Us?</span>
+              <span className='text-gold'>Join Us?</span>
             </h2>
-            <p className='mt-4 text-primary-foreground/70 text-base sm:text-lg max-w-xl mx-auto leading-relaxed'>
+            <p className='mt-4 text-white/70 text-base sm:text-lg max-w-xl mx-auto leading-relaxed'>
               Take the first step toward a transformative educational experience.
               Your journey to excellence begins here.
             </p>
@@ -357,17 +354,17 @@ export default function AboutUsContent() {
             <div className='mt-8 flex flex-col sm:flex-row gap-3 justify-center'>
               <Link
                 href='/courses'
-                className='inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-[#FFDC55] text-black font-bold text-sm sm:text-base hover:bg-[#FFDC55]/90 active:scale-[0.98] transition-all duration-200'>
+                className='btn-gold'>
                 Explore Programs
                 <ArrowRight className='w-4 h-4' />
               </Link>
               <Link
                 href='/contact'
-                className='inline-flex items-center justify-center px-8 py-4 rounded-lg border border-primary-foreground/25 text-primary-foreground font-semibold text-sm sm:text-base hover:bg-primary-foreground/10 active:scale-[0.98] transition-all duration-200'>
+                className='btn-ghost-light'>
                 Contact Admissions
               </Link>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </section>
     </div>

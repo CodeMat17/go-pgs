@@ -13,7 +13,7 @@ import { Doc } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import {
   AnimatePresence,
-  motion,
+  m,
   useInView,
   useReducedMotion,
 } from "framer-motion";
@@ -31,6 +31,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { liveAssetUrl } from "@/lib/assets";
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
@@ -50,8 +51,8 @@ function getInitials(name: string) {
 }
 
 const CATEGORY_COLOURS: Record<string, string> = {
-  research: "bg-blue-500/15 text-blue-600 dark:text-blue-400",
-  opinion: "bg-violet-500/15 text-violet-600 dark:text-violet-400",
+  research: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400",
+  opinion: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
   experience: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
   academic: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
   story: "bg-rose-500/15 text-rose-600 dark:text-rose-400",
@@ -114,7 +115,7 @@ function SpotlightSheetBody({
   spotlight: Doc<"postgradSpotlight">;
 }) {
   const [photoIdx, setPhotoIdx] = useState(0);
-  const photos = spotlight.photos ?? [];
+  const photos = (spotlight.photos ?? []).filter((p) => liveAssetUrl(p.url));
   const current = photos[photoIdx];
 
   return (
@@ -187,7 +188,7 @@ function SpotlightSheetBody({
         </SheetHeader>
 
         {spotlight.achievement && (
-          <div className="flex items-start gap-3 p-4 rounded-xl bg-[#FFDC55]/10 border border-[#FFDC55]/30">
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-gold/10 border border-gold/30">
             <Trophy className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
             <div className="space-y-2 flex-1">
               {spotlight.achievement.split(/\n\n+/).map((para, i) => (
@@ -245,14 +246,14 @@ function PenModal({
   onClose: () => void;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm"
       onClick={onClose}
     >
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 60 }}
@@ -309,8 +310,8 @@ function PenModal({
             className="text-foreground prose-sm sm:prose dark:prose-invert max-w-none"
           />
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }
 
@@ -329,10 +330,10 @@ function SpotlightCard({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-  const photo = spotlight.photos?.[0];
+  const photo = spotlight.photos?.find((p) => liveAssetUrl(p.url));
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={shouldReduceMotion ? false : { opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -363,7 +364,7 @@ function SpotlightCard({
 
           {spotlight.achievement && (
             <div className="absolute top-3 left-3">
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FFDC55]/90 text-gray-900 backdrop-blur-sm">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-gold/90 text-gray-900 backdrop-blur-sm">
                 <Star className="w-3 h-3" />
                 Achievement
               </span>
@@ -399,7 +400,7 @@ function SpotlightCard({
           </p>
         </div>
       </button>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -421,7 +422,7 @@ function PenCard({
   const preview = stripHtml(article.content).slice(0, 160);
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={shouldReduceMotion ? false : { opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -469,7 +470,7 @@ function PenCard({
           </span>
         </div>
       </button>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -491,7 +492,7 @@ function SectionHeader({
   shouldReduceMotion: boolean | null;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -506,11 +507,11 @@ function SectionHeader({
           {eyebrow}
         </span>
       </div>
-      <h2 className="text-2xl sm:text-3xl font-bold text-foreground">{title}</h2>
+      <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">{title}</h2>
       <p className="mt-1 text-muted-foreground text-sm sm:text-base max-w-md">
         {description}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -585,50 +586,33 @@ export default function CampusCommunityContent() {
     <div className="min-h-screen bg-background">
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: "url('/pattern.png')", backgroundSize: "400px" }}
-          aria-hidden="true"
-        />
-        <div className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+      <section className="hero-brand">
+        <div className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-gold/10 blur-3xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-5xl px-4 py-20 sm:py-28 text-center">
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm"
+          <div
+            className="motion-safe:animate-fade-up mb-4 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-gold"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FFDC55]" aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden="true" />
             Student Life at GOUNI SPGS
-          </motion.div>
+          </div>
 
-          <motion.h1
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-bold tracking-tight"
+          <h1
+            className="motion-safe:animate-fade-up text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight"
           >
             Campus Community
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 max-w-2xl mx-auto text-primary-foreground/80 text-lg"
+          <p
+            className="motion-safe:animate-fade-up mt-4 max-w-2xl mx-auto text-white/70 text-lg"
           >
             Celebrating the brilliant minds, voices, and stories that define
             postgraduate life at Godfrey Okoye University.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className="mt-8 flex flex-wrap justify-center gap-4"
+          <div
+            className="motion-safe:animate-fade-up mt-8 flex flex-wrap justify-center gap-4"
           >
             {[
               { icon: Users, label: "Student Spotlights", value: spotlights?.length ?? "–" },
@@ -640,10 +624,10 @@ export default function CampusCommunityContent() {
               >
                 <Icon className="w-4 h-4" />
                 <span className="font-bold">{value}</span>
-                <span className="text-primary-foreground/70">{label}</span>
+                <span className="text-white/70">{label}</span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -747,7 +731,7 @@ export default function CampusCommunityContent() {
           <div className="lg:flex-[1] min-w-0 order-1 lg:order-2 lg:sticky lg:top-24">
             <SectionHeader
               icon={<Star className="w-4 h-4 text-amber-500" />}
-              iconBg="bg-[#FFDC55]/15"
+              iconBg="bg-gold/15"
               eyebrow="Featured"
               title="Student Spotlight"
               description="Meet the exceptional students making a mark in research, community, and innovation."

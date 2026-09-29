@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "View and download the official postgraduate examination timetable for GO University. Preview semester schedules directly on this page.",
   alternates: {
-    canonical: "https://pg.gouni.edu.ng/timetable",
+    canonical: "https://pg.gouni.edu.ng/exam-timetable",
   },
 };
 

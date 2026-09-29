@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GraduationCap, Microscope, Users } from "lucide-react";
 import Link from "next/link";
 
@@ -41,7 +41,7 @@ export function QuickLinks() {
       <h2 className='text-center mb-6 text-4xl'>Quick Links</h2>
       <div className='px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-3 lg:gap-6 xl:gap-8'>
         {items.map((item, index) => (
-          <motion.div
+          <m.div
             key={item.title}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -58,13 +58,13 @@ export function QuickLinks() {
               <CardContent className='p-6'>
                 <div className='flex flex-col h-full'>
                   {/* Icon Container */}
-                  <motion.div
+                  <m.div
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 150 }}
-                    className='mb-4 inline-block p-3 bg-[#FEDA37] dark:text-[#FEDA37] dark:bg-[#FEDA37]/20 rounded-lg w-fit'>
+                    className='mb-4 inline-block p-3 bg-gold dark:text-gold dark:bg-gold/20 rounded-lg w-fit'>
                     {item.icon}
-                  </motion.div>
+                  </m.div>
 
                   {/* Content */}
                   <CardTitle className='text-xl font-semibold mb-3'>
@@ -90,7 +90,7 @@ export function QuickLinks() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </section>

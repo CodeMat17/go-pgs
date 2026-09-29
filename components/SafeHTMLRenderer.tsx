@@ -5,14 +5,31 @@ import DOMPurify from "dompurify";
 
 interface SafeHTMLRendererProps {
   htmlContent: string;
+  /** Already-sanitized HTML from the server, so the content is present in SSR output. */
+  initialHtml?: string;
   className?: string;
 }
 
+const wrap = (cleanHTML: string) => `
+      <div class="force-color-inheritance">
+        ${cleanHTML || "<p>&nbsp;</p>"}
+      </div>
+      <style>
+        .force-color-inheritance * {
+          color: inherit !important;
+          font-family: inherit !important;
+        }
+      </style>
+    `;
+
 export const SafeHTMLRenderer = ({
   htmlContent,
+  initialHtml,
   className,
 }: SafeHTMLRendererProps) => {
-  const [sanitizedContent, setSanitizedContent] = useState("");
+  const [sanitizedContent, setSanitizedContent] = useState(
+    initialHtml !== undefined ? wrap(initialHtml) : ""
+  );
 
   useEffect(() => {
     const cleanHTML = DOMPurify.sanitize(htmlContent, {
@@ -37,22 +54,7 @@ export const SafeHTMLRenderer = ({
       ADD_ATTR: ["rel"],
     });
 
-    // Add color inheritance to all elements
-    const styledHTML = `
-      <div class="force-color-inheritance">
-        ${cleanHTML || "<p>&nbsp;</p>"}
-      </div>
-      <style>
-        .force-color-inheritance * {
-          color: inherit !important;
-          font-family: inherit !important;
-        }
-      </style>
-    `;
-
-    // Add basic paragraph spacing if empty content
-    setSanitizedContent(
-    styledHTML)
+    setSanitizedContent(wrap(cleanHTML));
   }, [htmlContent]);
 
   return (

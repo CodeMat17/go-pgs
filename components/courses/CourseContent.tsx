@@ -3,8 +3,8 @@
 import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   BookOpen,
@@ -16,18 +16,17 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
 
 // ── Level colours ──────────────────────────────────────────────────────────
 const levelAccent: Record<string, string> = {
-  pgd: "bg-blue-500",
-  masters: "bg-violet-500",
+  pgd: "bg-indigo-500",
+  masters: "bg-amber-500",
   phd: "bg-emerald-500",
 };
 const levelBadge: Record<string, string> = {
-  pgd: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  pgd: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300",
   masters:
-    "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
   phd: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
 };
 
@@ -52,40 +51,25 @@ function LoadingSkeleton() {
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
-const CourseContent = () => {
+const CourseContent = ({
+  initialCourse,
+  initialOverviewHtml,
+  initialHowToApply,
+}: {
+  initialCourse?: Doc<"courses"> | null;
+  initialOverviewHtml?: string;
+  initialHowToApply?: (Doc<"howToApply"> & { html: string })[];
+}) => {
   const params = useParams();
-  const shouldReduceMotion = useReducedMotion();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
-  const course = useQuery(
+  // Server-rendered data seeds the first paint; the live query takes over once connected.
+  const liveCourse = useQuery(
     api.courses.getProgramBySlug,
     slug ? { slug } : "skip"
   );
-  const howToApply = useQuery(api.howToApply.getAll);
-
-  // Structured data for SEO
-  useEffect(() => {
-    if (!course) return;
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Course",
-      name: course.course,
-      description: course.overview,
-      courseMode: course.mode,
-      timeRequired: course.duration,
-      provider: {
-        "@type": "Organization",
-        name: "Godfrey Okoye University",
-        sameAs: process.env.NEXT_PUBLIC_SITE_URL,
-      },
-    });
-    document.head.appendChild(script);
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, [course]);
+  const course = liveCourse === undefined ? initialCourse : liveCourse;
+  const howToApply = useQuery(api.howToApply.getAll) ?? initialHowToApply;
 
   if (course === undefined) return <LoadingSkeleton />;
 
@@ -108,13 +92,9 @@ const CourseContent = () => {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Course hero ───────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80 py-14 sm:py-18 lg:py-20'>
+      <section className='hero-brand py-14 sm:py-18 lg:py-20'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
 
@@ -159,13 +139,10 @@ const CourseContent = () => {
 
       {/* ── Body ──────────────────────────────────────────────────────── */}
       <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14'>
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+        <div
           className='grid gap-8 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_340px] items-start'>
           {/* ── Main column ─────────────────────────────────────────── */}
-          <main className='space-y-6 min-w-0'>
+          <div className='space-y-6 min-w-0'>
             {/* Why Choose This Course */}
             <div className='rounded-2xl border border-border bg-card p-6 sm:p-8'>
               <h2 className='text-xl sm:text-2xl font-bold text-foreground mb-5 flex items-center gap-2'>
@@ -205,10 +182,11 @@ const CourseContent = () => {
               </h2>
               <SafeHTMLRenderer
                 htmlContent={course.overview ?? ""}
+                initialHtml={initialOverviewHtml}
                 className='prose prose-sm sm:prose dark:prose-invert max-w-none text-muted-foreground'
               />
             </div>
-          </main>
+          </div>
 
           {/* ── Sidebar ─────────────────────────────────────────────── */}
           <aside className='space-y-5'>
@@ -216,12 +194,15 @@ const CourseContent = () => {
             {howToApply?.map((apply) => (
               <div
                 key={apply._id}
-                className='rounded-2xl border border-[#FFDC55]/40 bg-[#FFDC55]/8 dark:bg-[#FFDC55]/5 p-5 sm:p-6'>
+                className='rounded-2xl border border-gold/40 bg-gold/8 dark:bg-gold/5 p-5 sm:p-6'>
                 <h2 className='font-bold text-foreground text-base mb-3 uppercase tracking-wide'>
                   How to Apply
                 </h2>
                 <SafeHTMLRenderer
                   htmlContent={apply.text}
+                  initialHtml={
+                    initialHowToApply?.find((a) => a._id === apply._id)?.html
+                  }
                   className='prose prose-sm dark:prose-invert max-w-none text-muted-foreground mb-5 leading-relaxed'
                 />
                 <a
@@ -252,18 +233,18 @@ const CourseContent = () => {
                   },
                   { Icon: BookOpen, label: "Faculty", value: course.faculty },
                 ].map(({ Icon, label, value }) => (
-                  <div key={label} className='flex items-start gap-3'>
-                    <div className='w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0'>
-                      <Icon className='w-4 h-4 text-muted-foreground' />
-                    </div>
-                    <div>
-                      <dt className='text-xs text-muted-foreground font-medium uppercase tracking-wide'>
-                        {label}
-                      </dt>
-                      <dd className='text-sm text-foreground font-medium mt-0.5'>
-                        {value}
-                      </dd>
-                    </div>
+                  <div key={label} className='relative min-h-8 pl-11'>
+                    <dt className='text-xs text-muted-foreground font-medium uppercase tracking-wide'>
+                      <span
+                        className='absolute left-0 top-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center'
+                        aria-hidden='true'>
+                        <Icon className='w-4 h-4 text-muted-foreground' />
+                      </span>
+                      {label}
+                    </dt>
+                    <dd className='text-sm text-foreground font-medium mt-0.5'>
+                      {value}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -293,7 +274,7 @@ const CourseContent = () => {
               </Link>
             </div>
           </aside>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

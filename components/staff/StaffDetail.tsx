@@ -4,7 +4,7 @@ import { SafeHTMLRenderer } from "@/components/SafeHTMLRenderer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { BookOpen, Linkedin, Mail, Users, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -30,7 +30,7 @@ function StaffCard({
   onSelect: () => void;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -39,7 +39,8 @@ function StaffCard({
       {/* Photo */}
       <div className='relative aspect-square overflow-hidden bg-muted flex-shrink-0'>
         <Image
-          src={staff.imageUrl || "/default-avatar.png"}
+          src={staff.imageUrl || "/default-avatar.svg"}
+          unoptimized={!staff.imageUrl}
           alt={`Portrait of ${staff.name}`}
           fill
           className='object-cover object-top transition-transform duration-500 group-hover:scale-105'
@@ -78,15 +79,14 @@ function StaffCard({
           {staff.profile && (
             <button
               onClick={onSelect}
-              className='flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground text-xs font-semibold transition-colors'
-              aria-label={`View full profile of ${staff.name}`}>
+              className='flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground text-xs font-semibold transition-colors'>
               <BookOpen className='w-3.5 h-3.5' />
-              View Profile
+              View Profile<span className='sr-only'> of {staff.name}</span>
             </button>
           )}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -99,7 +99,7 @@ function StaffModal({
   onClose: () => void;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -108,7 +108,7 @@ function StaffModal({
       aria-labelledby='staff-modal-title'
       className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4'
       onClick={onClose}>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 40, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 40, scale: 0.97 }}
@@ -126,7 +126,8 @@ function StaffModal({
         <div className='flex items-center gap-4 px-6 py-5 border-b border-border'>
           <div className='relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border border-border bg-muted'>
             <Image
-              src={staff.imageUrl || "/default-avatar.png"}
+              src={staff.imageUrl || "/default-avatar.svg"}
+              unoptimized={!staff.imageUrl}
               alt={`Portrait of ${staff.name}`}
               fill
               className='object-cover object-top'
@@ -189,8 +190,8 @@ function StaffModal({
             Close
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }
 
@@ -230,13 +231,9 @@ export default function StaffDetail() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -244,10 +241,10 @@ export default function StaffDetail() {
           aria-hidden='true'
         />
         <div className='relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             Our Team
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Administrative Team
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
@@ -291,7 +288,7 @@ export default function StaffDetail() {
             {staffList.some(isFeatured) && (
               <section className='mb-12' aria-label='Featured staff member'>
                 {staffList.filter(isFeatured).map((staff) => (
-                  <motion.div
+                  <m.div
                     key={staff._id}
                     initial={
                       shouldReduceMotion ? false : { opacity: 0, y: 20 }
@@ -303,7 +300,8 @@ export default function StaffDetail() {
                     <div className='relative w-full aspect-square sm:w-56 sm:aspect-auto flex-shrink-0'>
                       <Image
                         alt={`Portrait of ${staff.name}`}
-                        src={staff.imageUrl || "/default-avatar.png"}
+                        src={staff.imageUrl || "/default-avatar.svg"}
+                        unoptimized={!staff.imageUrl}
                         fill
                         className='object-cover object-top'
                         sizes='(max-width: 640px) 100vw, 224px'
@@ -352,7 +350,7 @@ export default function StaffDetail() {
                         </button>
                       )}
                     </div>
-                  </motion.div>
+                  </m.div>
                 ))}
               </section>
             )}

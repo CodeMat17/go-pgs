@@ -3,7 +3,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   CheckCircle2,
   Globe,
@@ -15,15 +15,15 @@ function getAccent(title: string) {
   const t = title.toLowerCase();
   if (t.includes("pgd") || t.includes("postgraduate diploma"))
     return {
-      bar: "bg-blue-500",
-      icon: "text-blue-500",
-      iconBg: "bg-blue-50 dark:bg-blue-900/30",
+      bar: "bg-indigo-500",
+      icon: "text-indigo-500",
+      iconBg: "bg-indigo-50 dark:bg-indigo-900/30",
     };
   if (t.includes("master") || t.includes("msc") || t.includes("mba"))
     return {
-      bar: "bg-violet-500",
-      icon: "text-violet-500",
-      iconBg: "bg-violet-50 dark:bg-violet-900/30",
+      bar: "bg-amber-500",
+      icon: "text-amber-500",
+      iconBg: "bg-amber-50 dark:bg-amber-900/30",
     };
   if (t.includes("phd") || t.includes("doctorate") || t.includes("doctor"))
     return {
@@ -48,13 +48,9 @@ export default function RequirementsContent() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
-          className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-          aria-hidden='true'
-        />
-        <div
-          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none'
+          className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'
         />
         <div
@@ -63,10 +59,10 @@ export default function RequirementsContent() {
         />
 
         <div className='relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <span className='inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide'>
+          <span className='inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]'>
             Admissions
           </span>
-          <h1 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]'>
             Admission Requirements
           </h1>
           <p className='mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed'>
@@ -79,8 +75,8 @@ export default function RequirementsContent() {
           {/* Programme legend */}
           <div className='mt-8 flex flex-wrap gap-4'>
             {[
-              { label: "PGD", color: "bg-blue-400" },
-              { label: "Masters", color: "bg-violet-400" },
+              { label: "PGD", color: "bg-indigo-400" },
+              { label: "Masters", color: "bg-amber-400" },
               { label: "PhD", color: "bg-emerald-400" },
             ].map(({ label, color }) => (
               <div
@@ -134,7 +130,7 @@ export default function RequirementsContent() {
             {requirements?.map((req, index) => {
               const accent = getAccent(req.title);
               return (
-                <motion.div
+                <m.div
                   key={req._id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -166,7 +162,7 @@ export default function RequirementsContent() {
                       ))}
                     </ul>
                   </div>
-                </motion.div>
+                </m.div>
               );
             })}
           </div>
@@ -190,7 +186,7 @@ export default function RequirementsContent() {
           </div>
           <div className='grid sm:grid-cols-2 gap-5'>
             {otherRoutes.map((route, index) => (
-              <motion.div
+              <m.div
                 key={route._id}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -203,7 +199,7 @@ export default function RequirementsContent() {
                 <p className='text-sm text-muted-foreground leading-relaxed'>
                   {route.description}
                 </p>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </section>
@@ -211,16 +207,12 @@ export default function RequirementsContent() {
 
       {/* ── CTA Banner ──────────────────────────────────────────────────── */}
       <section className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20'>
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className='rounded-3xl bg-gradient-to-br from-primary dark:from-slate-700 to-primary/80 p-8 sm:p-12 text-center relative overflow-hidden'>
-          <div
-            className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-            aria-hidden='true'
-          />
+          className='rounded-3xl hero-brand rounded-3xl p-8 sm:p-12 text-center'>
           <div className='relative'>
             <h2 className='text-2xl sm:text-3xl font-extrabold text-white mb-3'>
               Ready to Begin Your Journey?
@@ -231,12 +223,12 @@ export default function RequirementsContent() {
             </p>
             {/* <Link
               href='/apply'
-              className='inline-flex items-center gap-2 bg-[#FFDC55] text-gray-900 font-bold px-8 py-3.5 rounded-xl hover:bg-[#FFD23F] active:scale-[0.98] transition-all duration-200 text-sm'>
+              className='inline-flex items-center gap-2 bg-gold text-gray-900 font-bold px-8 py-3.5 rounded-xl hover:bg-[#FFD23F] active:scale-[0.98] transition-all duration-200 text-sm'>
               Apply Now
               <ArrowRight className='w-4 h-4' />
             </Link> */}
           </div>
-        </motion.div>
+        </m.div>
       </section>
     </div>
   );

@@ -2,20 +2,16 @@ import { ConvexClientProvider } from "@/app/ConvexClientProvider";
 import Footer from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { LazyToaster } from "@/components/LazyToaster";
+import { MotionProvider } from "@/components/MotionProvider";
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -84,12 +80,6 @@ export const metadata: Metadata = {
   ],
   // manifest: "/site.webmanifest",
   metadataBase: new URL("https://pg.gouni.edu.ng"),
-  alternates: {
-    canonical: "/",
-    languages: {
-      "en-NG": "/en-NG",
-    },
-  },
   category: "education",
   verification: {
     google: "1JdJykuzZ8V4A8B0QyhPz7d6U1BZ5uwqpsldRCIadAU",
@@ -102,19 +92,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang='en' className={nunito.variable} suppressHydrationWarning>
+      <body className='font-sans antialiased'>
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
           enableSystem
           disableTransitionOnChange>
           <ConvexClientProvider>
-            <Nav />
-            {children}
-            <Footer />
-            <Toaster />
+            <MotionProvider>
+              <Nav />
+              <main>{children}</main>
+              <Footer />
+            </MotionProvider>
+            <LazyToaster />
             {/* <ChatWidget /> */}
           </ConvexClientProvider>
         </ThemeProvider>

@@ -2,16 +2,26 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { ArrowLeft, Calendar, Eye, Images, Share2, User } from "lucide-react";
+import { liveAssetUrl } from "@/lib/assets";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
-export default function NewsContent() {
+export default function NewsContent({
+  initialNews,
+  initialHtml,
+}: {
+  initialNews?: Doc<"news"> | null;
+  /** Server-sanitized body matching initialNews.content */
+  initialHtml?: string;
+}) {
   const params = useParams();
 
   const slug = useMemo(() => {
@@ -19,8 +29,14 @@ export default function NewsContent() {
     return Array.isArray(params.slug) ? params.slug[0] : params.slug;
   }, [params]);
 
-  const news = useQuery(api.news.getNewsBySlug, slug ? { slug } : "skip");
+  // Server-rendered data seeds the first paint; the live query takes over once connected.
+  const liveNews = useQuery(api.news.getNewsBySlug, slug ? { slug } : "skip");
+  const news = liveNews === undefined ? initialNews : liveNews;
   const incrementViews = useMutation(api.news.incrementViews);
+  const [previewImage, setPreviewImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
 
   useEffect(() => {
     if (news?.slug) {
@@ -28,32 +44,15 @@ export default function NewsContent() {
     }
   }, [news?.slug, incrementViews]);
 
-  // Structured data for SEO
-  useEffect(() => {
-    if (news) {
-      const structuredData = {
-        "@context": "https://schema.org",
-        "@type": "NewsArticle",
-        headline: news.title,
-        image: news.coverImage ? [news.coverImage] : [],
-        datePublished: news.publicationDate || news._creationTime,
-        author: { "@type": "Person", name: news.author },
-      };
-      const script = document.createElement("script");
-      script.type = "application/ld+json";
-      script.text = JSON.stringify(structuredData);
-      document.head.appendChild(script);
-      return () => {
-        document.head.removeChild(script);
-      };
-    }
-  }, [news]);
-
   const sanitizedContent = useMemo(
     () => ({
-      __html: news?.content ? DOMPurify.sanitize(news.content) : "",
+      __html: !news?.content
+        ? ""
+        : initialHtml !== undefined && news.content === initialNews?.content
+          ? initialHtml
+          : DOMPurify.sanitize(news.content),
     }),
-    [news?.content]
+    [news?.content, initialHtml, initialNews?.content]
   );
 
   const handleShare = async () => {
@@ -130,19 +129,21 @@ export default function NewsContent() {
 
   // Extra images beyond the cover (images[0].url === coverImage)
   const extraImages =
-    news.images && news.images.length > 1 ? news.images.slice(1) : [];
+    news.images && news.images.length > 1
+      ? news.images.slice(1).filter((img) => liveAssetUrl(img.url))
+      : [];
 
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Cover Image / Hero ────────────────────────────────────────── */}
-      {news.coverImage ? (
+      {liveAssetUrl(news.coverImage) ? (
         <div className='relative w-full max-w-3xl mx-auto aspect-video overflow-hidden'>
           <Image
-            src={news.coverImage}
+            src={liveAssetUrl(news.coverImage)!}
             alt={news.title}
             fill
             className='object-cover object-top'
-            sizes='100vw'
+            sizes='(max-width: 768px) 100vw, 768px'
             priority
             placeholder='blur'
             blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII='
@@ -162,11 +163,7 @@ export default function NewsContent() {
           </div>
         </div>
       ) : (
-        <div className='relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20'>
-          <div
-            className='absolute inset-0 bg-[url("/pattern.png")] opacity-5'
-            aria-hidden='true'
-          />
+        <div className='hero-brand py-16 sm:py-20'>
           <div className='relative max-w-3xl mx-auto px-4 sm:px-6'>
             <Link
               href='/news'
@@ -181,7 +178,7 @@ export default function NewsContent() {
       )}
 
       {/* ── Article Body ─────────────────────────────────────────────── */}
-      <main className='max-w-3xl mx-auto px-4 sm:px-6 py-10'>
+      <article className='max-w-3xl mx-auto px-4 sm:px-6 py-10'>
         {/* Meta bar */}
         <div className='flex flex-wrap items-center gap-x-5 gap-y-2 mb-3 pb-4 border-b border-border text-sm text-muted-foreground'>
           <span className='flex items-center gap-1.5'>
@@ -230,7 +227,7 @@ export default function NewsContent() {
               </span>
             </h2>
             <div
-              className={`grid gap-3 ${
+              className={`grid gap-3 mb-8 ${
                 extraImages.length === 1
                   ? "grid-cols-1"
                   : extraImages.length === 2
@@ -238,26 +235,61 @@ export default function NewsContent() {
                     : "grid-cols-2 sm:grid-cols-3"
               }`}>
               {extraImages.map((img, i) => (
-                <div
+                <button
+                  type='button'
                   key={img.storageId}
-                  className='relative aspect-video rounded-xl overflow-hidden border border-border bg-muted'>
+                  onClick={() =>
+                    setPreviewImage({
+                      src: img.url,
+                      alt: `${news.title} — photo ${i + 2}`,
+                    })
+                  }
+                  className='relative block w-full aspect-[4/3] rounded-xl overflow-hidden border border-border bg-muted cursor-zoom-in'
+                  aria-label={`View photo ${i + 2} larger`}>
                   <Image
                     src={img.url}
                     alt={`${news.title} — photo ${i + 2}`}
                     fill
-                    className='object-cover object-top hover:scale-105 transition-transform duration-500'
+                    className='object-cover hover:scale-105 transition-transform duration-500'
                     sizes='(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw'
                   />
-                </div>
+                </button>
               ))}
             </div>
           </section>
         )}
 
         {/* Article content */}
-        <article className='prose dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl'>
-          <div dangerouslySetInnerHTML={sanitizedContent} />
+        <article className='prose dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl prose-img:h-auto prose-img:max-w-full prose-img:cursor-zoom-in'>
+          <div
+            dangerouslySetInnerHTML={sanitizedContent}
+            onClick={(e) => {
+              const target = e.target as HTMLElement;
+              if (target instanceof HTMLImageElement) {
+                setPreviewImage({ src: target.src, alt: target.alt });
+              }
+            }}
+          />
         </article>
+
+        {/* Enlarged image preview */}
+        <Dialog
+          open={!!previewImage}
+          onOpenChange={(open) => !open && setPreviewImage(null)}>
+          <DialogContent className='w-[calc(100%-2rem)] max-w-4xl p-2 [&>button]:bg-background [&>button]:rounded-full [&>button]:p-1'>
+            <DialogTitle className='sr-only'>
+              {previewImage?.alt || "Image preview"}
+            </DialogTitle>
+            {previewImage && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={previewImage.src}
+                alt={previewImage.alt}
+                className='block mx-auto w-auto h-auto max-w-full max-h-[85vh] rounded-md'
+              />
+            )}
+          </DialogContent>
+        </Dialog>
 
         {/* Back link */}
         <div className='mt-12 pt-8 border-t border-border'>
@@ -268,7 +300,7 @@ export default function NewsContent() {
             Back to all news
           </Link>
         </div>
-      </main>
+      </article>
     </div>
   );
 }

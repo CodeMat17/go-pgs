@@ -2,34 +2,173 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
+/* ── Design tokens ─────────────────────────────────────────────────────────
+   Palette drawn from the GOUNI crest: deep indigo base, gold accent,
+   green as a quiet supporting tone. Values are HSL channels for shadcn/ui. */
+@layer base {
+  :root {
+    --background: 40 33% 98%;
+    --foreground: 246 42% 12%;
 
+    --card: 0 0% 100%;
+    --card-foreground: 246 42% 12%;
 
-/* globals.css or tailwind.config.js via plugin */
-.scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
-}
+    --popover: 0 0% 100%;
+    --popover-foreground: 246 42% 12%;
 
+    --primary: 248 55% 30%;
+    --primary-foreground: 0 0% 100%;
 
-  
-  .step-complete {
-    @apply bg-primary text-white;
+    --secondary: 246 35% 95%;
+    --secondary-foreground: 248 45% 22%;
+
+    --muted: 246 25% 95%;
+    --muted-foreground: 246 10% 42%;
+
+    --accent: 246 35% 95%;
+    --accent-foreground: 248 45% 22%;
+
+    --gold: 48 100% 67%;
+    --gold-foreground: 246 45% 12%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 246 20% 90%;
+    --input: 246 20% 88%;
+    --ring: 248 55% 40%;
+
+    --chart-1: 248 55% 40%;
+    --chart-2: 48 100% 55%;
+    --chart-3: 142 45% 38%;
+    --chart-4: 262 50% 60%;
+    --chart-5: 20 80% 58%;
+
+    --radius: 0.875rem;
   }
-  
-  .step-current {
-    @apply border-2 border-primary bg-background text-primary;
+
+  .dark {
+    --background: 246 42% 6%;
+    --foreground: 240 25% 96%;
+
+    --card: 246 36% 9%;
+    --card-foreground: 240 25% 96%;
+
+    --popover: 246 36% 10%;
+    --popover-foreground: 240 25% 96%;
+
+    --primary: 48 100% 67%;
+    --primary-foreground: 246 45% 10%;
+
+    --secondary: 246 30% 15%;
+    --secondary-foreground: 240 25% 96%;
+
+    --muted: 246 30% 13%;
+    --muted-foreground: 246 14% 68%;
+
+    --accent: 246 30% 16%;
+    --accent-foreground: 240 25% 96%;
+
+    --gold: 48 100% 67%;
+    --gold-foreground: 246 45% 10%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 246 26% 18%;
+    --input: 246 26% 20%;
+    --ring: 48 100% 67%;
+
+    --chart-1: 248 70% 70%;
+    --chart-2: 48 100% 67%;
+    --chart-3: 142 45% 50%;
+    --chart-4: 262 60% 70%;
+    --chart-5: 20 80% 62%;
   }
-  
-  .step-upcoming {
-    @apply bg-muted text-muted-foreground;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "kern", "liga";
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight;
+  }
+  ::selection {
+    @apply bg-gold text-gold-foreground;
   }
 }
 
 @layer components {
+  /* Page shell */
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Small uppercase label above section headings */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-brand-600 dark:text-gold;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-6 bg-current opacity-60;
+  }
+
+  /* Elevated surface used by cards across the site */
+  .surface {
+    @apply rounded-2xl border border-border/70 bg-card shadow-soft transition-all duration-300;
+  }
+  .surface-hover {
+    @apply hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift dark:hover:border-gold/30;
+  }
+
+  /* Buttons */
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-sm font-extrabold text-brand-950 shadow-[0_10px_30px_-10px_rgba(255,220,85,0.7)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold-300 active:translate-y-0 sm:text-base;
+  }
+  .btn-ghost-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition-all duration-200 hover:border-white/50 hover:bg-white/10 sm:text-base;
+  }
+  .btn-brand {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-800 px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_30px_-12px_rgba(46,38,105,0.8)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-700 dark:bg-gold dark:text-brand-950 dark:hover:bg-gold-300 sm:text-base;
+  }
+
+  /* Deep-indigo brand surface for page headers and feature bands.
+     Theme-independent so white text always has contrast. */
+  .hero-brand {
+    @apply relative isolate overflow-hidden bg-brand-950 text-white;
+    background-image: radial-gradient(ellipse 60% 70% at 100% 0%, rgba(255, 220, 85, 0.16), transparent 60%),
+      radial-gradient(ellipse 60% 80% at 0% 100%, rgba(97, 82, 186, 0.35), transparent 60%),
+      linear-gradient(135deg, #221c52 0%, #130e33 55%, #0b0822 100%);
+  }
+  .hero-brand::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 -z-10 opacity-50;
+    background-image: linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+  .hero-brand::after {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent;
+  }
+  .hero-brand h1 {
+    @apply font-black;
+  }
+
   .pagination-button {
     @apply h-10 w-10 hover:bg-muted/50 transition-colors;
   }
@@ -38,119 +177,46 @@
   }
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-
-    --input: 214.3 31.8% 91.4%;
-
-    --ring: 222.2 84% 4.9%;
-
-    --chart-1: 12 76% 61%;
-
-    --chart-2: 173 58% 39%;
-
-    --chart-3: 197 37% 24%;
-
-    --chart-4: 43 74% 66%;
-
-    --chart-5: 27 87% 67%;
-
-    --radius: 0.5rem;
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  .dark {
-    --background: 222.2 84% 4.9%;
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 
-    --foreground: 210 40% 98%;
+  /* Fine grid texture for dark brand surfaces (replaces missing pattern.png) */
+  .bg-grid {
+    background-image: linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .bg-grid-fade {
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+  .bg-dots {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
 
-    --card: 222.2 84% 4.9%;
+  .text-balance {
+    text-wrap: balance;
+  }
 
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-
-    --input: 217.2 32.6% 17.5%;
-
-    --ring: 212.7 26.8% 83.9%;
-
-    --chart-1: 220 70% 50%;
-
-    --chart-2: 160 60% 45%;
-
-    --chart-3: 30 80% 55%;
-
-    --chart-4: 280 65% 60%;
-
-    --chart-5: 340 75% 55%;
+  .step-complete {
+    @apply bg-primary text-primary-foreground;
+  }
+  .step-current {
+    @apply border-2 border-primary bg-background text-primary;
+  }
+  .step-upcoming {
+    @apply bg-muted text-muted-foreground;
   }
 }
 
-@-webkit-keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
+/* ── Legacy animation helpers ────────────────────────────────────────────── */
 @keyframes blink {
   0%,
   100% {
@@ -162,7 +228,6 @@
 }
 
 .animate-blink {
-  -webkit-animation: blink 1s step-end infinite;
   animation: blink 1s step-end infinite;
 }
 
@@ -171,18 +236,7 @@
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  -webkit-animation: typing 3.5s steps(40, end),
-    blink-caret 0.75s step-end infinite;
   animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-@-webkit-keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
 }
 
 @keyframes typing {
@@ -194,16 +248,6 @@
   }
 }
 
-@-webkit-keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: white;
-  }
-}
-
 @keyframes blink-caret {
   from,
   to {
@@ -211,14 +255,5 @@
   }
   50% {
     border-color: white;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   BookOpen,
   Calendar,
@@ -64,16 +64,16 @@ function LectureTimetableCard({
 
   const semesterColor =
     semester === 1
-      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+      ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300"
       : semester === 2
-        ? "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300"
+        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
         : "bg-muted text-muted-foreground";
 
   const accentColor =
-    semester === 1 ? "bg-blue-500" : semester === 2 ? "bg-violet-500" : "bg-primary";
+    semester === 1 ? "bg-indigo-500" : semester === 2 ? "bg-amber-500" : "bg-primary";
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -154,7 +154,6 @@ function LectureTimetableCard({
         <button
           onClick={handleDownload}
           disabled={!url}
-          aria-label={`Download ${title} as PDF`}
           className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {url === undefined ? (
@@ -165,13 +164,13 @@ function LectureTimetableCard({
           ) : (
             <>
               <Download className="w-4 h-4" />
-              Download PDF
+              Download<span className="sr-only"> {title} as</span> PDF
               <ExternalLink className="w-3.5 h-3.5 opacity-60" />
             </>
           )}
         </button>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -226,13 +225,9 @@ export default function LectureTimetableContent() {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary dark:from-gray-700 via-primary/90 to-primary/80 py-16 sm:py-20 lg:py-24">
+      <section className="hero-brand py-16 sm:py-20 lg:py-24">
         <div
-          className="absolute inset-0 bg-[url('/pattern.png')] opacity-5"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FFDC55]/10 blur-3xl pointer-events-none"
+          className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none"
           aria-hidden="true"
         />
         <div
@@ -241,10 +236,10 @@ export default function LectureTimetableContent() {
         />
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="inline-block mb-4 px-4 py-1.5 rounded-full bg-[#FFDC55]/15 border border-[#FFDC55]/35 text-[#FFDC55] text-sm font-semibold tracking-wide">
+          <span className="inline-flex mb-5 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-extrabold uppercase tracking-[0.16em]">
             Academic Calendar
           </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]">
             Lecture Timetable
           </h1>
           <p className="mt-4 text-white/70 text-base sm:text-lg max-w-2xl leading-relaxed">
@@ -255,8 +250,8 @@ export default function LectureTimetableContent() {
           {/* Legend */}
           <div className="mt-8 flex flex-wrap gap-4">
             {[
-              { label: "Semester 1", color: "bg-blue-400" },
-              { label: "Semester 2", color: "bg-violet-400" },
+              { label: "Semester 1", color: "bg-indigo-400" },
+              { label: "Semester 2", color: "bg-amber-400" },
             ].map(({ label, color }) => (
               <div key={label} className="flex items-center gap-2 text-white/75 text-sm">
                 <span className={`w-2.5 h-2.5 rounded-full ${color}`} />
