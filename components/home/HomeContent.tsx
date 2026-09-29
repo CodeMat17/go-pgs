@@ -260,31 +260,28 @@ export default function HomeContent({
 
           {/* Visual */}
           <div
-            className='motion-safe:animate-fade-up [animation-delay:150ms] relative mx-auto w-full max-w-[26rem] sm:max-w-[30rem] lg:col-span-6 lg:max-w-none'>
-            <div className='relative mx-auto aspect-[4/5] w-[82%] lg:w-[78%]'>
-              {/* Concentric rings */}
-              <div className='absolute -inset-x-6 -top-6 bottom-0 rounded-t-full border border-white/10' aria-hidden='true' />
-              <div className='absolute -inset-x-12 -top-12 bottom-0 rounded-t-full border border-white/5' aria-hidden='true' />
-              {/* Arch */}
-              <div className='absolute inset-0 overflow-hidden rounded-t-full bg-gradient-to-b from-gold-300 via-gold to-gold-500 shadow-[0_40px_80px_-30px_rgba(255,220,85,0.45)]'>
-                <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.45),transparent_55%)]' />
-                <div className='absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brand-900/30 to-transparent' />
+            className='motion-safe:animate-fade-up [animation-delay:150ms] relative mx-auto w-full max-w-[30rem] sm:max-w-[36rem] lg:col-span-6 lg:max-w-none'>
+            <div className='relative mx-auto w-full max-w-[600px] py-8 sm:py-10'>
+              {/* Offset gold panel + outline frame behind the photo */}
+              <div className='absolute inset-y-8 -right-3 left-6 translate-y-4 rounded-3xl bg-gradient-to-br from-gold-300 via-gold to-gold-500 shadow-[0_40px_80px_-30px_rgba(255,220,85,0.45)] sm:inset-y-10 sm:-right-5 sm:translate-y-5' aria-hidden='true' />
+              <div className='absolute inset-y-8 -left-3 right-6 -translate-y-4 rounded-3xl border border-white/15 sm:inset-y-10 sm:-left-5 sm:-translate-y-5' aria-hidden='true' />
+              {/* Photo: 600×400 source, framed at its native 3:2 ratio so nothing is cropped */}
+              <div className='relative aspect-[3/2] overflow-hidden rounded-3xl ring-1 ring-white/20 shadow-[0_30px_60px_-20px_rgba(10,6,40,0.6)]'>
+                <Image
+                  src='/pg-students.webp'
+                  alt='Postgraduate graduands in gowns outside the School of Postgraduate Studies, Godfrey Okoye University'
+                  fill
+                  priority
+                  sizes='(max-width: 640px) 90vw, (max-width: 1024px) 30rem, 600px'
+                  className='object-cover object-center'
+                />
+                <div className='absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-brand-950/40 to-transparent' aria-hidden='true' />
               </div>
-              {/* Student cutout */}
-              <Image
-                src='/student.avif'
-                alt='Postgraduate student at Godfrey Okoye University'
-                width={640}
-                height={640}
-                priority
-                sizes='(max-width: 1024px) 80vw, 40vw'
-                className='absolute bottom-0 left-1/2 w-[118%] max-w-none -translate-x-1/2 drop-shadow-[0_20px_30px_rgba(10,6,40,0.35)]'
-              />
             </div>
 
             {/* Floating cards */}
             <div
-              className='motion-safe:animate-fade-in [animation-delay:500ms] absolute left-0 top-[18%] hidden items-center sm:flex gap-3 rounded-2xl border border-white/15 bg-brand-900/85 p-3 pr-5 shadow-2xl backdrop-blur-xl sm:-left-2'>
+              className='motion-safe:animate-fade-in [animation-delay:500ms] absolute -left-2 top-0 hidden items-center sm:flex gap-3 rounded-2xl border border-white/15 bg-brand-900/85 p-3 pr-5 shadow-2xl backdrop-blur-xl sm:-left-6'>
               <span className='flex h-10 w-10 items-center justify-center rounded-xl bg-gold text-brand-950'>
                 <Users2 className='h-5 w-5' />
               </span>
@@ -295,7 +292,7 @@ export default function HomeContent({
             </div>
 
             <div
-              className='motion-safe:animate-fade-in [animation-delay:600ms] absolute bottom-[12%] right-0 flex items-center gap-3 rounded-2xl border border-black/5 bg-white p-3 pr-5 text-brand-950 shadow-2xl sm:-right-2'>
+              className='motion-safe:animate-fade-in [animation-delay:600ms] absolute -bottom-2 right-0 flex items-center gap-3 rounded-2xl border border-black/5 bg-white p-3 pr-5 text-brand-950 shadow-2xl sm:-right-2'>
               <span className='flex h-10 w-10 items-center justify-center rounded-xl bg-brand-800 text-gold'>
                 <Sparkles className='h-5 w-5' />
               </span>
