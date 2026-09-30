@@ -184,10 +184,10 @@ export default function HomeContent({
             fill
             priority
             sizes='100vw'
-            className='object-cover object-center opacity-[0.55] mix-blend-luminosity'
+            className='object-cover object-center opacity-[0.7] mix-blend-luminosity'
           />
           {/* Even veil with a soft vignette so the centred copy stays legible */}
-          <div className='absolute inset-0 bg-brand-950/70' />
+          <div className='absolute inset-0 bg-brand-950/55' />
           <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(11,8,34,0.55)_70%)]' />
           <div className='absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-brand-950/40' />
         </div>
