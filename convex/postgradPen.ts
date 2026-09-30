@@ -1,7 +1,9 @@
 import { v } from "convex/values";
 import sanitizeHtml from "sanitize-html";
 import { generateSlug } from "../lib/slugUtils";
+import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
+import { cloudinaryImage, publicIdsOf } from "./cloudinary";
 
 // ── Writings ──────────────────────────────────────────────────────────────────
 
@@ -108,6 +110,8 @@ export const getSpotlights = query({
   },
 });
 
+// Photos are uploaded straight to Cloudinary by the client (see
+// cloudinary.signUpload with folder "spotlight"); only url + publicId are stored.
 export const addSpotlight = mutation({
   args: {
     name: v.string(),
@@ -115,24 +119,16 @@ export const addSpotlight = mutation({
     faculty: v.string(),
     bio: v.string(),
     achievement: v.optional(v.string()),
-    storageIds: v.array(v.id("_storage")),
+    photos: v.array(cloudinaryImage),
   },
   handler: async (ctx, args) => {
-    const photos = await Promise.all(
-      args.storageIds.map(async (storageId) => {
-        const url = await ctx.storage.getUrl(storageId);
-        if (!url) throw new Error("Failed to resolve photo URL");
-        return { url, storageId };
-      })
-    );
-
     return await ctx.db.insert("postgradSpotlight", {
       name: args.name,
       program: args.program,
       faculty: args.faculty,
       bio: args.bio,
       achievement: args.achievement,
-      photos,
+      photos: args.photos,
     });
   },
 });
@@ -145,7 +141,7 @@ export const updateSpotlight = mutation({
     faculty: v.optional(v.string()),
     bio: v.optional(v.string()),
     achievement: v.optional(v.string()),
-    storageIds: v.optional(v.array(v.id("_storage"))),
+    photos: v.optional(v.array(cloudinaryImage)),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db.get(args.id);
@@ -158,15 +154,15 @@ export const updateSpotlight = mutation({
     if (args.bio !== undefined) patch.bio = args.bio;
     if (args.achievement !== undefined) patch.achievement = args.achievement;
 
-    if (args.storageIds && args.storageIds.length > 0) {
-      const photos = await Promise.all(
-        args.storageIds.map(async (storageId) => {
-          const url = await ctx.storage.getUrl(storageId);
-          if (!url) throw new Error("Failed to resolve photo URL");
-          return { url, storageId };
-        })
-      );
-      patch.photos = photos;
+    if (args.photos && args.photos.length > 0) {
+      const kept = new Set(publicIdsOf(args.photos));
+      const removed = publicIdsOf(existing.photos).filter((id) => !kept.has(id));
+      if (removed.length > 0) {
+        await ctx.scheduler.runAfter(0, internal.cloudinary.deleteImages, {
+          publicIds: removed,
+        });
+      }
+      patch.photos = args.photos;
     }
 
     await ctx.db.patch(args.id, patch);
@@ -176,12 +172,11 @@ export const updateSpotlight = mutation({
 export const deleteSpotlight = mutation({
   args: { id: v.id("postgradSpotlight") },
   handler: async (ctx, { id }) => {
+    const existing = await ctx.db.get(id);
     await ctx.db.delete(id);
-  },
-});
-
-export const generateUploadUrl = mutation({
-  handler: async (ctx) => {
-    return await ctx.storage.generateUploadUrl();
+    const publicIds = publicIdsOf(existing?.photos);
+    if (publicIds.length > 0) {
+      await ctx.scheduler.runAfter(0, internal.cloudinary.deleteImages, { publicIds });
+    }
   },
 });

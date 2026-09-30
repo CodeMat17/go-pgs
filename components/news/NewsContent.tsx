@@ -237,7 +237,7 @@ export default function NewsContent({
               {extraImages.map((img, i) => (
                 <button
                   type='button'
-                  key={img.storageId}
+                  key={img.publicId ?? img.url}
                   onClick={() =>
                     setPreviewImage({
                       src: img.url,

@@ -1,7 +1,8 @@
 // convex/news.ts
 import { v } from "convex/values";
-import { Id } from "./_generated/dataModel";
+import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
+import { cloudinaryImage, publicIdsOf } from "./cloudinary";
 
 export const getNewsList = query({
   handler: async (ctx) => {
@@ -48,16 +49,23 @@ export const incrementViews = mutation({
 export const deleteNews = mutation({
   args: { id: v.id("news") },
   handler: async (ctx, { id }) => {
+    const existing = await ctx.db.get(id);
     await ctx.db.delete(id);
+    const publicIds = publicIdsOf(existing?.images);
+    if (publicIds.length > 0) {
+      await ctx.scheduler.runAfter(0, internal.cloudinary.deleteImages, { publicIds });
+    }
   },
 });
 
+// Images are uploaded straight to Cloudinary by the client (see
+// cloudinary.signNewsUpload); only their url + publicId are stored here.
 export const addNews = mutation({
   args: {
     title: v.string(),
     author: v.string(),
     content: v.string(),
-    storageIds: v.optional(v.array(v.id("_storage"))),
+    images: v.optional(v.array(cloudinaryImage)),
   },
   handler: async (ctx, args) => {
     const slug = args.title
@@ -66,25 +74,14 @@ export const addNews = mutation({
       .replace(/^-+|-+$/g, "")
       .slice(0, 60);
 
-    // Resolve all storageIds to URLs
-    const images: { url: string; storageId: Id<"_storage"> }[] = [];
-    if (args.storageIds && args.storageIds.length > 0) {
-      for (const storageId of args.storageIds) {
-        const url = await ctx.storage.getUrl(storageId);
-        if (url) {
-          images.push({ url, storageId });
-        }
-      }
-    }
-
-    const coverImage = images.length > 0 ? images[0].url : "";
+    const images = args.images ?? [];
 
     await ctx.db.insert("news", {
       title: args.title,
       slug,
       author: args.author,
       content: args.content,
-      coverImage,
+      coverImage: images[0]?.url ?? "",
       images: images.length > 0 ? images : undefined,
       views: 0,
     });
@@ -97,7 +94,7 @@ export const updateNews = mutation({
     title: v.string(),
     author: v.string(),
     content: v.string(),
-    storageIds: v.optional(v.array(v.id("_storage"))),
+    images: v.optional(v.array(cloudinaryImage)),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db.get(args.id);
@@ -105,22 +102,20 @@ export const updateNews = mutation({
       throw new Error("News item not found");
     }
 
-    // Resolve new images if provided, otherwise keep existing
+    // Replace images if new ones are provided, otherwise keep existing
     let images = existing.images;
     let coverImage = existing.coverImage;
 
-    if (args.storageIds && args.storageIds.length > 0) {
-      const resolved: { url: string; storageId: Id<"_storage"> }[] = [];
-      for (const storageId of args.storageIds) {
-        const url = await ctx.storage.getUrl(storageId);
-        if (url) {
-          resolved.push({ url, storageId });
-        }
+    if (args.images && args.images.length > 0) {
+      const kept = new Set(publicIdsOf(args.images));
+      const removed = publicIdsOf(existing.images).filter((id) => !kept.has(id));
+      if (removed.length > 0) {
+        await ctx.scheduler.runAfter(0, internal.cloudinary.deleteImages, {
+          publicIds: removed,
+        });
       }
-      if (resolved.length > 0) {
-        images = resolved;
-        coverImage = resolved[0].url;
-      }
+      images = args.images;
+      coverImage = args.images[0].url;
     }
 
     await ctx.db.patch(args.id, {
@@ -131,11 +126,5 @@ export const updateNews = mutation({
       images,
       updatedOn: new Date().toISOString(),
     });
-  },
-});
-
-export const generateUploadUrl = mutation({
-  handler: async (ctx) => {
-    return await ctx.storage.generateUploadUrl();
   },
 });

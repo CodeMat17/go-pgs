@@ -1,7 +1,7 @@
 import { v } from "convex/values";
-import { Id } from "./_generated/dataModel";
+import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
-// import { Id } from "./_generated/dataModel";
+import { cloudinaryImage } from "./cloudinary";
 
 export const getAlumni = query({
   handler: async (ctx) => {
@@ -9,6 +9,8 @@ export const getAlumni = query({
   },
 });
 
+// Photos are uploaded straight to Cloudinary by the client (see
+// cloudinary.signUpload with folder "alumni"); only url + publicId are stored.
 export const addAlumni = mutation({
   args: {
     name: v.string(),
@@ -16,20 +18,13 @@ export const addAlumni = mutation({
     currentPosition: v.string(),
     testimonial: v.string(),
     linkedin: v.optional(v.string()),
-    storageId: v.optional(v.string()),
+    photo: v.optional(cloudinaryImage),
     graduatedOn: v.optional(v.string()),
     company: v.string(),
     email: v.optional(v.string()),
     tel: v.string(),
   },
   handler: async (ctx, args) => {
-    let photoUrl = "";
-
-    if (args.storageId) {
-      photoUrl =
-        (await ctx.storage.getUrl(args.storageId as Id<"_storage">)) ?? "";
-    }
-
     await ctx.db.insert("alumni", {
       name: args.name,
       degree: args.degree,
@@ -38,11 +33,10 @@ export const addAlumni = mutation({
       linkedin: args.linkedin ?? "",
       company: args.company,
       graduatedOn: args.graduatedOn ?? "",
-      photo: photoUrl,
-      // phone: args.phone,
+      photo: args.photo?.url ?? "",
+      photoPublicId: args.photo?.publicId,
       email: args.email,
       tel: args.tel,
-      storageId: args.storageId,
     });
   },
 });
@@ -57,88 +51,48 @@ export const updateAlumnus = mutation({
     linkedin: v.string(),
     company: v.optional(v.string()),
     graduatedOn: v.optional(v.string()),
-    photo: v.optional(v.string()),
+    photo: v.optional(cloudinaryImage),
     email: v.optional(v.string()),
     tel: v.string(),
-    storageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
-    const {
-      id,
-      name,
-      degree,
-      currentPosition,
-      testimonial,
-      linkedin,
-      company,
-      graduatedOn,
-      photo,
-      storageId,
-      tel,
-      email,
-    } = args;
+    const { id, photo, ...fields } = args;
 
-    // Fetch existing staff member
-    const existingStaff = await ctx.db.get(id);
-    if (!existingStaff) throw new Error("Staff member not found");
+    const existing = await ctx.db.get(id);
+    if (!existing) throw new Error("Alumnus not found");
 
-    let imageUrl: string | null = null;
-
-    // Determine the image URL: Use new storageId if provided, otherwise use the existing one
-    const finalStorageId = storageId ?? existingStaff.storageId;
-    if (finalStorageId) {
-      imageUrl = await ctx.storage.getUrl(finalStorageId as Id<"_storage">);
-    }
-
-    // Prepare the data to be updated
-    const updateData: {
-      name: string;
-      degree: string;
-      currentPosition: string;
-      testimonial: string;
-      linkedin?: string;
-      company?: string;
-      graduatedOn?: string;
-      photo?: string;
-      email?: string;
-      tel: string;
-      storageId?: Id<"_storage">;
-    } = {
-      name,
-      degree,
-      currentPosition,
-      testimonial,
-      linkedin,
-      company,
-      graduatedOn,
-      photo,
-      tel,
-      email,
-      storageId,
+    const updateData: typeof fields & { photo?: string; photoPublicId?: string } = {
+      ...fields,
     };
 
-    // Only update storageId if a new one is provided
-    if (storageId) {
-      updateData.storageId = storageId;
-      const newPhoto = await ctx.storage.getUrl(storageId);
-      updateData.photo = newPhoto ?? undefined;
+    // Only replace the photo if a new one is provided
+    if (photo) {
+      updateData.photo = photo.url;
+      updateData.photoPublicId = photo.publicId;
+      const old = existing.photoPublicId;
+      if (old && old !== photo.publicId) {
+        await ctx.scheduler.runAfter(0, internal.cloudinary.deleteImages, {
+          publicIds: [old],
+        });
+      }
     }
 
-    // Update the staff record in the database
     await ctx.db.patch(id, updateData);
 
-    // Return the updated staff record
-    return {
-      ...existingStaff,
-      ...updateData,
-      imageUrl,
-    };
+    const updated = { ...existing, ...updateData };
+    return { ...updated, imageUrl: updated.photo ?? null };
   },
 });
 
 export const deleteAlumnus = mutation({
   args: { id: v.id("alumni") },
   handler: async (ctx, { id }) => {
+    const existing = await ctx.db.get(id);
     await ctx.db.delete(id);
+    if (existing?.photoPublicId) {
+      await ctx.scheduler.runAfter(0, internal.cloudinary.deleteImages, {
+        publicIds: [existing.photoPublicId],
+      });
+    }
   },
 });

@@ -142,6 +142,11 @@ export default function ContactDetails() {
 
   const isLoading = info === undefined;
 
+  // The CMS allows secondary numbers/emails to be left blank.
+  const phones = (info?.phone ?? []).flatMap((t) => [t.tel1, t.tel2]).filter((n) => n?.trim());
+  const emails = (info?.email ?? []).flatMap((e) => [e.email1, e.email2]).filter((a) => a?.trim());
+  const hasDept = (d?: { email: string; tel: string }[]) => Boolean(d?.[0]?.email?.trim() || d?.[0]?.tel?.trim());
+
   // Structured data for SEO
   useEffect(() => {
     if (!info) return;
@@ -150,8 +155,8 @@ export default function ContactDetails() {
       "@type": "EducationalOrganization",
       name: "Godfrey Okoye University Postgraduate School",
       address: info.address,
-      email: info.email?.[0]?.email1,
-      telephone: info.phone?.[0]?.tel1,
+      email: info.email?.[0]?.email1 || undefined,
+      telephone: info.phone?.[0]?.tel1 || undefined,
       openingHours: info.officeHours?.map((oh) => `${oh.days} ${oh.time}`),
     };
     const script = document.createElement("script");
@@ -225,7 +230,7 @@ export default function ContactDetails() {
                   delay={0.08}
                   shouldReduceMotion={shouldReduceMotion}
                 >
-                  {info?.phone?.flatMap((tel) => [tel.tel1, tel.tel2]).map((num, i) => (
+                  {phones.map((num, i) => (
                     <p key={i}>
                       <a
                         href={`tel:${num}`}
@@ -236,7 +241,7 @@ export default function ContactDetails() {
                       </a>
                     </p>
                   ))}
-                  {!info?.phone?.length && <p>Not available</p>}
+                  {!phones.length && <p>Not available</p>}
                 </InfoCard>
 
                 {/* Email */}
@@ -247,7 +252,7 @@ export default function ContactDetails() {
                   delay={0.16}
                   shouldReduceMotion={shouldReduceMotion}
                 >
-                  {info?.email?.flatMap((e) => [e.email1, e.email2]).map((addr, i) => (
+                  {emails.map((addr, i) => (
                     <p key={i}>
                       <a
                         href={`mailto:${addr}`}
@@ -258,7 +263,7 @@ export default function ContactDetails() {
                       </a>
                     </p>
                   ))}
-                  {!info?.email?.length && <p>Not available</p>}
+                  {!emails.length && <p>Not available</p>}
                 </InfoCard>
 
                 {/* Office Hours */}
@@ -276,14 +281,14 @@ export default function ContactDetails() {
                       <span>{oh.time}</span>
                     </div>
                   ))}
-                  {!info?.officeHours?.length && <p>Mon – Fri: 8:00am – 5:00pm</p>}
+                  {!info?.officeHours?.length && <p>Not available</p>}
                 </InfoCard>
               </div>
 
               {/* ── Department offices ── */}
-              {(info?.admissionOffice?.length ||
-                info?.researchOffice?.length ||
-                info?.studentSupport?.length) ? (
+              {(hasDept(info?.admissionOffice) ||
+                hasDept(info?.researchOffice) ||
+                hasDept(info?.studentSupport)) ? (
                 <div className="space-y-6">
                   <div className="flex items-center gap-3">
                     <div className="h-px flex-1 bg-border" />
@@ -294,35 +299,35 @@ export default function ContactDetails() {
                   </div>
 
                   <div className="grid sm:grid-cols-3 gap-4">
-                    {info?.admissionOffice?.[0] && (
+                    {info && hasDept(info.admissionOffice) && (
                       <DeptCard
                         icon={<GraduationCap className="w-5 h-5 text-primary" />}
                         title="Admissions Office"
                         accent="bg-primary/10"
-                        email={info.admissionOffice[0].email}
-                        tel={info.admissionOffice[0].tel}
+                        email={info.admissionOffice?.[0]?.email}
+                        tel={info.admissionOffice?.[0]?.tel}
                         delay={0}
                         shouldReduceMotion={shouldReduceMotion}
                       />
                     )}
-                    {info?.researchOffice?.[0] && (
+                    {info && hasDept(info.researchOffice) && (
                       <DeptCard
                         icon={<BookOpen className="w-5 h-5 text-indigo-600" />}
                         title="Research Office"
                         accent="bg-indigo-50 dark:bg-indigo-950"
-                        email={info.researchOffice[0].email}
-                        tel={info.researchOffice[0].tel}
+                        email={info.researchOffice?.[0]?.email}
+                        tel={info.researchOffice?.[0]?.tel}
                         delay={0.1}
                         shouldReduceMotion={shouldReduceMotion}
                       />
                     )}
-                    {info?.studentSupport?.[0] && (
+                    {info && hasDept(info.studentSupport) && (
                       <DeptCard
                         icon={<HeartHandshake className="w-5 h-5 text-emerald-600" />}
                         title="Student Support"
                         accent="bg-emerald-50 dark:bg-emerald-950"
-                        email={info.studentSupport[0].email}
-                        tel={info.studentSupport[0].tel}
+                        email={info.studentSupport?.[0]?.email}
+                        tel={info.studentSupport?.[0]?.tel}
                         delay={0.2}
                         shouldReduceMotion={shouldReduceMotion}
                       />

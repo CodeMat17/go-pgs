@@ -18,7 +18,6 @@ import {
   GraduationCap,
   Newspaper,
   Search,
-  Sparkles,
   Users2,
 } from "lucide-react";
 import { liveAssetUrl } from "@/lib/assets";
@@ -187,120 +186,87 @@ export default function HomeContent({
             sizes='100vw'
             className='object-cover object-center opacity-[0.55] mix-blend-luminosity'
           />
-          {/* Keep the copy side darker for legibility; let the photo breathe behind the arch */}
-          <div className='absolute inset-0 bg-gradient-to-r from-brand-950/90 via-brand-950/45 to-brand-950/10' />
-          <div className='absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-brand-950/30' />
+          {/* Even veil with a soft vignette so the centred copy stays legible */}
+          <div className='absolute inset-0 bg-brand-950/70' />
+          <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(11,8,34,0.55)_70%)]' />
+          <div className='absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-brand-950/40' />
         </div>
-        <div className='absolute inset-0 -z-10 bg-grid bg-grid-fade opacity-40' aria-hidden='true' />
-        <div className='absolute -left-40 top-1/3 -z-10 h-[28rem] w-[28rem] rounded-full bg-brand-500/25 blur-3xl' aria-hidden='true' />
-        <div className='absolute -right-20 -top-20 -z-10 h-[30rem] w-[30rem] rounded-full bg-gold/15 blur-3xl' aria-hidden='true' />
+        <div className='absolute inset-0 -z-10 bg-grid bg-grid-fade opacity-30' aria-hidden='true' />
+        <div className='absolute left-1/2 top-1/3 -z-10 h-[32rem] w-[48rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-500/20 blur-3xl' aria-hidden='true' />
+        <div className='absolute -right-32 -top-32 -z-10 h-[26rem] w-[26rem] rounded-full bg-gold/10 blur-3xl' aria-hidden='true' />
+        <div className='absolute -left-32 bottom-0 -z-10 h-[22rem] w-[22rem] rounded-full bg-gold/[0.07] blur-3xl' aria-hidden='true' />
 
-        <div className='container-page grid items-center gap-10 pb-24 pt-12 sm:pt-16 lg:min-h-[min(calc(100vh-72px),860px)] lg:grid-cols-12 lg:gap-6 lg:pb-32 lg:pt-10'>
-          {/* Copy */}
-          <div className='text-center lg:col-span-6 lg:text-left xl:col-span-6'>
-            <div
-              className='motion-safe:animate-fade-in inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 py-1.5 pl-2 pr-4 backdrop-blur'>
-              <span className='relative flex h-2 w-2'>
-                <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60' />
-                <span className='relative inline-flex h-2 w-2 rounded-full bg-gold' />
-              </span>
-              <span className='text-xs font-extrabold uppercase tracking-[0.16em] text-gold'>
-                Admissions now open
-              </span>
-            </div>
-
-            <h1
-              className='motion-safe:animate-fade-up mt-6 text-balance text-[2.6rem] font-black leading-[1.02] tracking-tight sm:text-6xl xl:text-7xl'>
-              Elevate your{" "}
-              <span className='relative whitespace-nowrap text-gold'>
-                academic
-                <svg
-                  aria-hidden='true'
-                  viewBox='0 0 300 20'
-                  preserveAspectRatio='none'
-                  className='absolute -bottom-2 left-0 h-3 w-full text-gold/60'>
-                  <path d='M2 15 C 80 3, 220 3, 298 13' fill='none' stroke='currentColor' strokeWidth='4' strokeLinecap='round' />
-                </svg>
-              </span>{" "}
-              journey.
-            </h1>
-
-            <p
-              className='motion-safe:animate-fade-up [animation-delay:120ms] mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg lg:mx-0'>
-              The School of Postgraduate Studies at{" "}
-              <span className='font-bold text-white'>Godfrey Okoye University</span>{" "}
-              offers accredited PGD, Masters and PhD programmes, taught by
-              scholars who are shaping research across Africa.
-            </p>
-
-            <div
-              className='motion-safe:animate-fade-up [animation-delay:240ms] mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start'>
-              <Link href='/courses' className='btn-gold group'>
-                Explore programmes
-                <ArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Link>
-              <Link href='/requirements' className='btn-ghost-light'>
-                How to apply
-              </Link>
-            </div>
-
-            <div
-              className='motion-safe:animate-fade-in [animation-delay:400ms] mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-semibold text-white/55 lg:justify-start'>
-              <span className='flex items-center gap-2'>
-                <Award className='h-4 w-4 text-gold' /> NUC-accredited
-              </span>
-              <span className='flex items-center gap-2'>
-                <GraduationCap className='h-4 w-4 text-gold' /> PGD · Masters · PhD
-              </span>
-              <span className='flex items-center gap-2'>
-                <Globe2 className='h-4 w-4 text-gold' /> Enugu, Nigeria
-              </span>
-            </div>
+        <div className='container-page flex flex-col items-center justify-center pb-32 pt-16 text-center sm:pt-24 lg:min-h-[min(calc(100vh-72px),820px)] lg:pb-40 lg:pt-16'>
+          <div
+            className='motion-safe:animate-fade-in inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 py-1.5 pl-2 pr-4 backdrop-blur'>
+            <span className='relative flex h-2 w-2'>
+              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60' />
+              <span className='relative inline-flex h-2 w-2 rounded-full bg-gold' />
+            </span>
+            <span className='text-xs font-extrabold uppercase tracking-[0.16em] text-gold'>
+              Admissions now open
+            </span>
           </div>
 
-          {/* Visual */}
+          <p className='motion-safe:animate-fade-up mt-8 text-xs font-bold uppercase tracking-[0.32em] text-white/50 sm:text-sm'>
+            School of Postgraduate Studies
+          </p>
+
+          <h1
+            className='motion-safe:animate-fade-up mt-5 max-w-5xl text-balance text-[2.75rem] font-black leading-[1.02] tracking-tight sm:text-7xl xl:text-8xl'>
+            Elevate your{" "}
+            <span className='relative whitespace-nowrap text-gold'>
+              academic
+              <svg
+                aria-hidden='true'
+                viewBox='0 0 300 20'
+                preserveAspectRatio='none'
+                className='absolute -bottom-2 left-0 h-3 w-full text-gold/60'>
+                <path d='M2 15 C 80 3, 220 3, 298 13' fill='none' stroke='currentColor' strokeWidth='4' strokeLinecap='round' />
+              </svg>
+            </span>{" "}
+            journey.
+          </h1>
+
+          {/* Ornamental divider */}
+          <div className='motion-safe:animate-fade-in [animation-delay:100ms] mt-10 flex items-center gap-4' aria-hidden='true'>
+            <span className='h-px w-12 bg-gradient-to-r from-transparent to-gold/60 sm:w-20' />
+            <span className='h-1.5 w-1.5 rotate-45 bg-gold' />
+            <span className='h-px w-12 bg-gradient-to-l from-transparent to-gold/60 sm:w-20' />
+          </div>
+
+          <p
+            className='motion-safe:animate-fade-up [animation-delay:120ms] mt-8 max-w-2xl text-pretty text-base leading-relaxed text-white/70 sm:text-lg lg:text-xl'>
+            The School of Postgraduate Studies at{" "}
+            <span className='font-bold text-white'>Godfrey Okoye University</span>{" "}
+            offers accredited PGD, Masters and PhD programmes, taught by
+            scholars who are shaping research across Africa.
+          </p>
+
           <div
-            className='motion-safe:animate-fade-up [animation-delay:150ms] relative mx-auto w-full max-w-[30rem] sm:max-w-[36rem] lg:col-span-6 lg:max-w-none'>
-            <div className='relative mx-auto w-full max-w-[600px] py-8 sm:py-10'>
-              {/* Offset gold panel + outline frame behind the photo */}
-              <div className='absolute inset-y-8 -right-3 left-6 translate-y-4 rounded-3xl bg-gradient-to-br from-gold-300 via-gold to-gold-500 shadow-[0_40px_80px_-30px_rgba(255,220,85,0.45)] sm:inset-y-10 sm:-right-5 sm:translate-y-5' aria-hidden='true' />
-              <div className='absolute inset-y-8 -left-3 right-6 -translate-y-4 rounded-3xl border border-white/15 sm:inset-y-10 sm:-left-5 sm:-translate-y-5' aria-hidden='true' />
-              {/* Photo: 600×400 source, framed at its native 3:2 ratio so nothing is cropped */}
-              <div className='relative aspect-[3/2] overflow-hidden rounded-3xl ring-1 ring-white/20 shadow-[0_30px_60px_-20px_rgba(10,6,40,0.6)]'>
-                <Image
-                  src='/pg-students.webp'
-                  alt='Postgraduate graduands in gowns outside the School of Postgraduate Studies, Godfrey Okoye University'
-                  fill
-                  priority
-                  sizes='(max-width: 640px) 90vw, (max-width: 1024px) 30rem, 600px'
-                  className='object-cover object-center'
-                />
-                <div className='absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-brand-950/40 to-transparent' aria-hidden='true' />
-              </div>
-            </div>
+            className='motion-safe:animate-fade-up [animation-delay:240ms] mt-10 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row'>
+            <Link href='/courses' className='btn-gold group'>
+              Explore programmes
+              <ArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-1' />
+            </Link>
+            <Link href='/requirements' className='btn-ghost-light'>
+              How to apply
+            </Link>
+          </div>
 
-            {/* Floating cards */}
-            <div
-              className='motion-safe:animate-fade-in [animation-delay:500ms] absolute -left-2 top-0 hidden items-center sm:flex gap-3 rounded-2xl border border-white/15 bg-brand-900/85 p-3 pr-5 shadow-2xl backdrop-blur-xl sm:-left-6'>
-              <span className='flex h-10 w-10 items-center justify-center rounded-xl bg-gold text-brand-950'>
-                <Users2 className='h-5 w-5' />
-              </span>
-              <span className='text-left'>
-                <span className='block text-lg font-black leading-none'>400+</span>
-                <span className='text-xs font-semibold text-white/65'>Graduate students</span>
-              </span>
-            </div>
-
-            <div
-              className='motion-safe:animate-fade-in [animation-delay:600ms] absolute -bottom-2 right-0 flex items-center gap-3 rounded-2xl border border-black/5 bg-white p-3 pr-5 text-brand-950 shadow-2xl sm:-right-2'>
-              <span className='flex h-10 w-10 items-center justify-center rounded-xl bg-brand-800 text-gold'>
-                <Sparkles className='h-5 w-5' />
-              </span>
-              <span className='text-left'>
-                <span className='block text-sm font-black leading-tight'>Research-driven</span>
-                <span className='text-xs font-semibold text-brand-950/60'>200+ publications</span>
-              </span>
-            </div>
+          <div
+            className='motion-safe:animate-fade-in [animation-delay:400ms] mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-white/10 pt-8 text-sm font-semibold text-white/55'>
+            <span className='flex items-center gap-2'>
+              <Award className='h-4 w-4 text-gold' /> NUC-accredited
+            </span>
+            <span className='hidden h-4 w-px bg-white/15 sm:block' aria-hidden='true' />
+            <span className='flex items-center gap-2'>
+              <GraduationCap className='h-4 w-4 text-gold' /> PGD · Masters · PhD
+            </span>
+            <span className='hidden h-4 w-px bg-white/15 sm:block' aria-hidden='true' />
+            <span className='flex items-center gap-2'>
+              <Globe2 className='h-4 w-4 text-gold' /> Enugu, Nigeria
+            </span>
           </div>
         </div>
       </section>

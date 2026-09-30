@@ -16,6 +16,7 @@ import type {
 import type * as admissionRequirements from "../admissionRequirements.js";
 import type * as alternativeAdmissions from "../alternativeAdmissions.js";
 import type * as alumni from "../alumni.js";
+import type * as cloudinary from "../cloudinary.js";
 import type * as contactUs from "../contactUs.js";
 import type * as courses from "../courses.js";
 import type * as faculties from "../faculties.js";
@@ -24,6 +25,7 @@ import type * as getAllContent from "../getAllContent.js";
 import type * as gpc from "../gpc.js";
 import type * as hero from "../hero.js";
 import type * as howToApply from "../howToApply.js";
+import type * as imageMigration from "../imageMigration.js";
 import type * as lectureTimetable from "../lectureTimetable.js";
 import type * as materials from "../materials.js";
 import type * as mission from "../mission.js";
@@ -47,6 +49,7 @@ declare const fullApi: ApiFromModules<{
   admissionRequirements: typeof admissionRequirements;
   alternativeAdmissions: typeof alternativeAdmissions;
   alumni: typeof alumni;
+  cloudinary: typeof cloudinary;
   contactUs: typeof contactUs;
   courses: typeof courses;
   faculties: typeof faculties;
@@ -55,6 +58,7 @@ declare const fullApi: ApiFromModules<{
   gpc: typeof gpc;
   hero: typeof hero;
   howToApply: typeof howToApply;
+  imageMigration: typeof imageMigration;
   lectureTimetable: typeof lectureTimetable;
   materials: typeof materials;
   mission: typeof mission;

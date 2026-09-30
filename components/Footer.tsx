@@ -145,7 +145,7 @@ export default function Footer() {
                 <span className='pt-1.5'>{footer.address}</span>
               </li>
             )}
-            {footer?.phone?.[0] && (
+            {footer?.phone?.[0]?.tel1 && (
               <li className='flex items-center gap-3'>
                 <IconBadge><Phone className='h-4 w-4' /></IconBadge>
                 <a href={`tel:${footer.phone[0].tel1}`} className='transition-colors hover:text-gold'>
@@ -153,7 +153,7 @@ export default function Footer() {
                 </a>
               </li>
             )}
-            {footer?.email?.[0] && (
+            {footer?.email?.[0]?.email1 && (
               <li className='flex items-center gap-3'>
                 <IconBadge><Mail className='h-4 w-4' /></IconBadge>
                 <a

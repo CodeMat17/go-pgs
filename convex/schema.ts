@@ -36,7 +36,10 @@ export default defineSchema({
 
   alumni: defineTable({
     name: v.string(),
+    // Cloudinary URL + public_id. storageId is legacy Convex storage, cleared
+    // by imageMigration:migrateAlumni.
     photo: v.optional(v.string()),
+    photoPublicId: v.optional(v.string()),
     degree: v.string(),
     year: v.optional(v.number()),
     currentPosition: v.string(),
@@ -66,7 +69,10 @@ export default defineSchema({
         twitter: v.string(),
       }),
     ),
+    // Cloudinary URL + public_id. body/imageStorageId are legacy Convex
+    // storage, cleared by imageMigration:migrateStaff.
     image: v.optional(v.string()),
+    imagePublicId: v.optional(v.string()),
   }),
 
   whyChoose: defineTable({
@@ -151,12 +157,16 @@ export default defineSchema({
     views: v.number(),
     updatedOn: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
+    // Legacy Convex-storage cover; cleared by imageMigration:migrateNews.
     storageId: v.optional(v.id("_storage")),
+    // Photos are hosted on Cloudinary (url + publicId). storageId only remains
+    // on records not yet moved by imageMigration:migrateNews.
     images: v.optional(
       v.array(
         v.object({
           url: v.string(),
-          storageId: v.id("_storage"),
+          publicId: v.optional(v.string()),
+          storageId: v.optional(v.id("_storage")),
         }),
       ),
     ),
@@ -287,10 +297,13 @@ export default defineSchema({
     faculty: v.string(),
     bio: v.string(),
     achievement: v.optional(v.string()),
+    // Cloudinary-hosted; storageId only remains on photos not yet moved by
+    // imageMigration:migrateSpotlight.
     photos: v.array(
       v.object({
         url: v.string(),
-        storageId: v.id("_storage"),
+        publicId: v.optional(v.string()),
+        storageId: v.optional(v.id("_storage")),
       }),
     ),
   }),
