@@ -2,7 +2,8 @@ import HomeContent from "@/components/home/HomeContent";
 import { getNewsList } from "@/lib/server-data";
 import { Metadata } from "next";
 
-export const revalidate = 60;
+// Static; rebuilt only when /api/revalidate expires a tag this route reads.
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: "Home | Premier Postgraduate Education in Nigeria",

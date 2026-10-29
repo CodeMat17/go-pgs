@@ -7,8 +7,10 @@ import {
   sanitizeBasicHtml,
 } from "@/lib/server-data";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-export const revalidate = 60;
+// Static; rebuilt only when /api/revalidate expires a tag this route reads.
+export const revalidate = false;
 
 export async function generateStaticParams() {
   const courses = await getAllCourses();
@@ -76,6 +78,8 @@ export default async function ProgramDetail({
     getCourseBySlug(slug),
     getHowToApply(),
   ]);
+  // A real 404 instead of a cached 200 "not found" page for every probed slug.
+  if (!course) notFound();
 
   const jsonLd = course && {
     "@context": "https://schema.org",

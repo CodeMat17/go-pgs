@@ -1,6 +1,7 @@
 import { getAllCourses, getNewsList } from "@/lib/server-data";
 
-export const revalidate = 3600;
+// Static; rebuilt only when /api/revalidate expires a tag this route reads.
+export const revalidate = false;
 
 const baseUrl = "https://pg.gouni.edu.ng";
 

@@ -2,7 +2,8 @@ import CourseBrowser from "@/components/courses/CourseBrower";
 import { getAllCourses, getFaculties } from "@/lib/server-data";
 import { Metadata } from "next";
 
-export const revalidate = 60;
+// Static; rebuilt only when /api/revalidate expires a tag this route reads.
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: "Our Courses | GO University Postgraduate School",
@@ -50,7 +51,7 @@ export default async function ProgramsPage() {
   return (
     <div className='min-h-screen bg-background'>
       {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
+      <section className='hero-brand py-16 sm:py-20 lg:py-24'>
         <div
           className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none'
           aria-hidden='true'

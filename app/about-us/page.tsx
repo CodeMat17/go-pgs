@@ -2,7 +2,8 @@ import AboutUsContent from '@/components/aboutUs/AboutUsContent'
 import { getMission, getVision } from "@/lib/server-data";
 import { Metadata } from "next";
 
-export const revalidate = 60;
+// Static; rebuilt only when /api/revalidate expires a tag this route reads.
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: "About Our Postgraduate School",
